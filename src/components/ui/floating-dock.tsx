@@ -127,10 +127,11 @@ const FloatingDock: React.FC<FloatingDockProps> = ({
           exit={{ y: 100, opacity: 0 }}
           transition={{ duration: 0.3, ease: 'easeOut' }}
           className={cn(
-            'fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50',
+            'fixed bottom-6 left-0 right-0 z-50',
             className
           )}
         >
+          <div className="max-w-7xl mx-auto px-6 flex justify-center">
           {/* Main Dock */}
           <div className="glass-panel px-4 py-3 rounded-full shadow-card">
             <div className="flex items-center gap-2">
@@ -187,6 +188,7 @@ const FloatingDock: React.FC<FloatingDockProps> = ({
           >
             <ChevronUp className="w-4 h-4 text-muted-foreground hover:text-accent smooth-transition" />
           </motion.button>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
