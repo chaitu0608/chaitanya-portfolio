@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Download, Github, Linkedin, Mail, Phone, MapPin } from "lucide-react";
+import { Download, Github, Linkedin, MapPin } from "lucide-react";
 import GlassCard from "@/components/ui/glass-card";
 import { personalInfo, contactInfo } from "@/data/portfolio";
 
@@ -56,7 +56,7 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
         {/* Left Content */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
@@ -113,16 +113,27 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
             </p>
           </motion.div>
 
-          {/* Status Badge */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.8 }}
-            className="inline-flex items-center gap-3 px-4 py-2 rounded-full glass-panel border border-accent/20"
-          >
-            <div className="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
-            <span className="text-accent font-mono text-sm">Available for new projects</span>
-          </motion.div>
+                {/* Status Badge */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.8 }}
+                  className="inline-flex items-center gap-3 px-4 py-2 rounded-full glass-panel border border-accent/20"
+                >
+                  <div className="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
+                  <span className="text-accent font-mono text-sm">Available for new projects</span>
+                </motion.div>
+
+                {/* Location Info */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 1.0 }}
+                  className="flex items-center gap-2 text-base"
+                >
+                  <MapPin className="w-5 h-5 text-accent" />
+                  <span className="text-muted-foreground font-medium">Mumbai, India</span>
+                </motion.div>
 
           {/* Action Buttons */}
           <motion.div 
@@ -159,26 +170,6 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
             </Button>
           </motion.div>
 
-          {/* Contact Info */}
-                      <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1.2 }}
-            className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm"
-          >
-            <div className="flex items-center gap-2">
-              <Phone className="w-4 h-4 text-accent" />
-              <span className="text-muted-foreground">{contactInfo.phone}</span>
-                  </div>
-            <div className="flex items-center gap-2">
-              <Mail className="w-4 h-4 text-accent" />
-              <span className="text-muted-foreground">{contactInfo.email}</span>
-                </div>
-            <div className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-accent" />
-              <span className="text-muted-foreground">{contactInfo.location}</span>
-              </div>
-          </motion.div>
 
 
           {/* Interests */}
