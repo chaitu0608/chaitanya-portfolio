@@ -12,10 +12,9 @@ interface NavigationProps {
 const Navigation: React.FC<NavigationProps> = ({ onContactClick }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState("home");
+  const [activeSection, setActiveSection] = useState("about");
 
   const navIcons = {
-    home: Home,
     about: User,
     experience: Briefcase,
     projects: Code,
@@ -68,20 +67,7 @@ const Navigation: React.FC<NavigationProps> = ({ onContactClick }) => {
       }`}
     >
       <div className="max-w-7xl mx-auto px-6">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <motion.div 
-            className="flex items-center gap-3"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <div className="w-10 h-10 bg-gradient-accent rounded-full flex items-center justify-center glow">
-              <span className="text-lg">👨‍💻</span>
-            </div>
-            <div className="text-xl font-display font-bold text-gradient">
-              Chaitanya
-            </div>
-          </motion.div>
+        <div className="flex items-center justify-center h-16">
           
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-1">
@@ -104,23 +90,6 @@ const Navigation: React.FC<NavigationProps> = ({ onContactClick }) => {
                 </motion.button>
               );
             })}
-          </div>
-          
-          {/* Status & Contact */}
-          <div className="hidden lg:flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
-              <span className="text-accent font-mono text-xs">AVAILABLE</span>
-            </div>
-            
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onContactClick}
-              className="btn-secondary text-xs"
-            >
-              Get in touch
-            </Button>
           </div>
           
           {/* Mobile Menu Button */}
@@ -162,18 +131,6 @@ const Navigation: React.FC<NavigationProps> = ({ onContactClick }) => {
                     </button>
                   );
                 })}
-                
-                {/* Mobile Contact Button */}
-                <div className="pt-2 border-t border-accent/20">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={onContactClick}
-                    className="w-full btn-secondary text-xs"
-                  >
-                    Get in touch
-                  </Button>
-                </div>
               </div>
             </motion.div>
           )}

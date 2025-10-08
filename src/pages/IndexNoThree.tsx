@@ -1,35 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navigation from "@/components/Navigation";
-import Hero from "@/components/Hero";
 import About from "@/components/About";
 import Projects from "@/components/Projects";
+import Experience from "@/components/Experience";
 import Skills from "@/components/Skills";
 import Footer from "@/components/Footer";
 import ContactModal from "@/components/ContactModal";
-import FunFactsModal from "@/components/FunFactsModal";
+import PhotoAlbum from "@/components/PhotoAlbum";
 import DeveloperModeModal from "@/components/DeveloperModeModal";
 import FloatingDock from "@/components/ui/floating-dock";
+import CustomCursor from "@/components/CustomCursor";
 
 const IndexNoThree = () => {
   console.log('IndexNoThree component is rendering...');
   
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-  const [isFunFactsModalOpen, setIsFunFactsModalOpen] = useState(false);
+  const [isPhotoAlbumOpen, setIsPhotoAlbumOpen] = useState(false);
   const [isDeveloperModeOpen, setIsDeveloperModeOpen] = useState(false);
-  const [avatarClickCount, setAvatarClickCount] = useState(0);
   const [konamiCode, setKonamiCode] = useState<string[]>([]);
 
-  // Handle avatar clicks for easter egg
+  // Handle avatar clicks for photo album
   const handleAvatarClick = () => {
-    setAvatarClickCount(prev => {
-      const newCount = prev + 1;
-      if (newCount >= 3) {
-        setIsFunFactsModalOpen(true);
-        return 0;
-      }
-      return newCount;
-    });
+    setIsPhotoAlbumOpen(true);
   };
 
   // Konami code easter egg
@@ -63,6 +56,9 @@ const IndexNoThree = () => {
 
   return (
     <div className="min-h-screen gradient-primary">
+      {/* Custom Cursor */}
+      <CustomCursor />
+      
       {/* Simple background without Three.js */}
       <div className="fixed inset-0 -z-10">
         <div className="absolute inset-0 bokeh-bg opacity-40" />
@@ -82,13 +78,11 @@ const IndexNoThree = () => {
           <Navigation onContactClick={() => setIsContactModalOpen(true)} />
 
           <main>
-            <section id="home">
-              <Hero onAvatarClick={handleAvatarClick} />
-            </section>
-
-            <About />
+            <About onAvatarClick={handleAvatarClick} />
 
             <Projects />
+
+            <Experience />
 
             <Skills />
           </main>
@@ -106,9 +100,9 @@ const IndexNoThree = () => {
         onClose={() => setIsContactModalOpen(false)}
       />
 
-      <FunFactsModal
-        isOpen={isFunFactsModalOpen}
-        onClose={() => setIsFunFactsModalOpen(false)}
+      <PhotoAlbum
+        isOpen={isPhotoAlbumOpen}
+        onClose={() => setIsPhotoAlbumOpen(false)}
       />
 
       <DeveloperModeModal

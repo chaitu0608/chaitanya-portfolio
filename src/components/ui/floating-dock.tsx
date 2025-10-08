@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { 
-  Home, 
   User, 
   Briefcase, 
   Code, 
+  Star,
   Mail, 
   Github,
   Linkedin,
@@ -35,14 +35,14 @@ const FloatingDock: React.FC<FloatingDockProps> = ({
 
   const dockItems: DockItem[] = [
     {
-      icon: Home,
-      label: 'Home',
-      href: '#home',
-    },
-    {
       icon: User,
       label: 'About',
       href: '#about',
+    },
+    {
+      icon: Code,
+      label: 'Projects',
+      href: '#projects',
     },
     {
       icon: Briefcase,
@@ -50,9 +50,9 @@ const FloatingDock: React.FC<FloatingDockProps> = ({
       href: '#experience',
     },
     {
-      icon: Code,
-      label: 'Projects',
-      href: '#projects',
+      icon: Star,
+      label: 'Skills',
+      href: '#skills',
     },
     {
       icon: Mail,

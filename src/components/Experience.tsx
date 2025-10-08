@@ -5,8 +5,17 @@ import { experiences } from "@/data/portfolio";
 
 const Experience = () => {
   return (
-    <Section id="experience">
-      <Container>
+    <Section id="experience" className="relative">
+      {/* Background Effects */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bokeh-bg opacity-20" />
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/3 left-1/4 w-80 h-80 bg-gradient-accent opacity-5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }} />
+          <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-gradient-gold opacity-5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '3.5s' }} />
+        </div>
+      </div>
+      
+      <Container className="relative z-10">
         <SectionHeader 
           title={<>Experience & <span className="text-gradient">Leadership</span></>}
         />

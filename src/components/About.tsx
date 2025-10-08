@@ -1,157 +1,375 @@
 import React from 'react';
 import { motion } from "framer-motion";
-import { User, Target, Zap, Heart, Code, Rocket, Award, Coffee } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Download, Github, Linkedin, Mail, Phone, MapPin } from "lucide-react";
 import GlassCard from "@/components/ui/glass-card";
-import { personalInfo } from "@/data/portfolio";
+import { personalInfo, contactInfo } from "@/data/portfolio";
 
-const About = () => {
-  const stats = [
-    { label: "Projects Built", value: "5+", icon: Rocket },
-    { label: "Technologies", value: "20+", icon: Zap },
-    { label: "Hackathons", value: "3", icon: Target },
-    { label: "Students Mentored", value: "50+", icon: User }
-  ];
+interface AboutProps {
+  onAvatarClick: () => void;
+}
+
+const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
+  // Simple PDF export function
+  const exportToPDF = async () => {
+    // For now, just open the resume URL if available
+    const resumeUrl = "/resume.pdf"; // You can update this path
+    if (resumeUrl) {
+      window.open(resumeUrl, '_blank');
+    }
+  };
+
+  const handleOpenLink = (url: string) => {
+    window.open(url, '_blank');
+  };
+
 
   const interests = [
     "Full-Stack Development", "Competitive Programming", "Web3 Technologies", 
     "Machine Learning", "Open Source", "Tech Mentoring", "UI/UX Design", "DevOps"
   ];
 
-  const funFacts = [
-    "Fixed an infinite loop at 3 AM",
-    "Believes console.log() is therapy",
-    "Can debug CSS in dreams",
-    "Once deployed to production on first try",
-    "Coffee-powered coding sessions",
-    "Always learning something new"
-  ];
-
   return (
-    <section id="about" className="py-20 px-4">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
+    <section id="about" className="min-h-screen flex items-center px-4 pt-32 pb-20 relative">
+      {/* Bokeh Background */}
+      <div className="absolute inset-0 bokeh-bg opacity-40"></div>
+      
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <motion.div 
+          className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-accent opacity-5 rounded-full blur-3xl"
+          animate={{ 
+            scale: [1, 1.2, 1],
+            opacity: [0.05, 0.1, 0.05]
+          }}
+          transition={{ duration: 8, repeat: Infinity }}
+        />
+        <motion.div 
+          className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-gold opacity-5 rounded-full blur-3xl"
+          animate={{ 
+            scale: [1.2, 1, 1.2],
+            opacity: [0.1, 0.05, 0.1]
+          }}
+          transition={{ duration: 10, repeat: Infinity, delay: 2 }}
+        />
+      </div>
+
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+        {/* Left Content */}
+        <motion.div 
+          initial={{ opacity: 0, x: -50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+          className="space-y-8"
         >
-          <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
-            About <span className="text-gradient">Me</span>
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Passionate developer crafting digital experiences with modern technologies
-          </p>
-        </motion.div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Left Content - Text */}
+          {/* Greeting */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="space-y-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="space-y-4"
           >
-            <div className="space-y-6">
-              <h3 className="text-3xl font-display font-semibold">
-                I'm <span className="text-gradient">Chaitanya</span>
-              </h3>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                {personalInfo.description}
-              </p>
-              <p className="text-muted-foreground leading-relaxed">
-                I'm passionate about creating innovative solutions that solve real-world problems. 
-                With a strong foundation in computer engineering and hands-on experience in full-stack development, 
-                I enjoy building scalable applications and mentoring others in their coding journey.
-              </p>
-            </div>
+            <motion.p 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="text-accent font-mono text-sm tracking-wider"
+            >
+              Hello, I'm
+            </motion.p>
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.8 }}
+              className="text-4xl md:text-6xl font-display font-bold leading-tight"
+            >
+              <span className="text-gradient typing-animation">Chaitanya Dhamdhere</span>
+            </motion.h1>
+            <motion.h2 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1.0 }}
+              className="text-lg md:text-xl text-muted-foreground font-light leading-relaxed max-w-lg"
+            >
+              Software Engineering student passionate about turning ideas into impactful solutions through code.
+            </motion.h2>
+        </motion.div>
+        
+          {/* Description */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="text-sm md:text-base text-muted-foreground leading-relaxed max-w-xl space-y-3"
+          >
+            <p>
+              Currently pursuing a B.Tech in Computer Engineering at KJ Somaiya College of Engineering, I'm passionate about building things and solving challenging problems.
+            </p>
+            <p>
+              Somewhere between coding projects and crates of mangoes, I discovered how much I enjoy mixing innovation with real-world entrepreneurship.
+            </p>
+            <p className="text-accent/90 font-medium text-center italic">
+              Just a guy trying to make sense of tech and life - learning, building, and exploring along the way.
+            </p>
+          </motion.div>
 
-            {/* Stats */}
-            <div className="grid grid-cols-2 gap-4">
-              {stats.map((stat, index) => {
-                const Icon = stat.icon;
-                return (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.3 + index * 0.1 }}
-                    viewport={{ once: true }}
-                  >
-                    <GlassCard className="p-4 text-center">
-                      <Icon className="w-6 h-6 text-accent mx-auto mb-2" />
-                      <div className="text-2xl font-display font-bold text-accent mb-1">
-                        {stat.value}
-                      </div>
-                      <div className="text-sm text-muted-foreground">{stat.label}</div>
-                    </GlassCard>
-                  </motion.div>
-                );
-              })}
-            </div>
+          {/* Status Badge */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, delay: 0.8 }}
+            className="inline-flex items-center gap-3 px-4 py-2 rounded-full glass-panel border border-accent/20"
+          >
+            <div className="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
+            <span className="text-accent font-mono text-sm">Available for new projects</span>
+          </motion.div>
 
-            {/* Interests */}
-            <div className="space-y-4">
-              <h4 className="text-xl font-display font-semibold">What I'm passionate about</h4>
+          {/* Action Buttons */}
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1 }}
+            className="flex flex-wrap gap-3"
+          >
+            <Button 
+              size="lg" 
+              className="btn-primary"
+              onClick={exportToPDF}
+            >
+              <Download className="w-5 h-5 mr-2" />
+              Download CV
+            </Button>
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="btn-secondary"
+              onClick={() => handleOpenLink(contactInfo.githubUrl)}
+            >
+              <Github className="w-5 h-5 mr-2" />
+              GitHub
+            </Button>
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="btn-secondary"
+              onClick={() => handleOpenLink(contactInfo.linkedinUrl)}
+            >
+              <Linkedin className="w-5 h-5 mr-2" />
+              LinkedIn
+            </Button>
+          </motion.div>
+
+          {/* Contact Info */}
+                      <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.2 }}
+            className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-sm"
+          >
+            <div className="flex items-center gap-2">
+              <Phone className="w-4 h-4 text-accent" />
+              <span className="text-muted-foreground">{contactInfo.phone}</span>
+                  </div>
+            <div className="flex items-center gap-2">
+              <Mail className="w-4 h-4 text-accent" />
+              <span className="text-muted-foreground">{contactInfo.email}</span>
+                </div>
+            <div className="flex items-center gap-2">
+              <MapPin className="w-4 h-4 text-accent" />
+              <span className="text-muted-foreground">{contactInfo.location}</span>
+              </div>
+          </motion.div>
+
+
+          {/* Interests */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1.4 }}
+            className="space-y-3"
+          >
+            <h4 className="text-lg font-display font-semibold">What I'm passionate about</h4>
               <div className="flex flex-wrap gap-2">
                 {interests.map((interest, index) => (
-                  <motion.span
+                <motion.span
                     key={index}
                     initial={{ opacity: 0, scale: 0.8 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.3, delay: 0.4 + index * 0.05 }}
-                    viewport={{ once: true }}
-                    className="px-3 py-1 bg-muted/50 text-muted-foreground rounded-full text-sm"
-                  >
-                    {interest}
-                  </motion.span>
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3, delay: 1.5 + index * 0.05 }}
+                  className="px-3 py-1 bg-muted/50 text-muted-foreground rounded-full text-sm hover:bg-accent/20 hover:text-accent transition-colors duration-300 cursor-pointer"
+                >
+                      {interest}
+                </motion.span>
                 ))}
               </div>
-            </div>
           </motion.div>
+        </motion.div>
 
-          {/* Right Content - Image & Fun Facts */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            viewport={{ once: true }}
-            className="space-y-8"
-          >
-            {/* Profile Image */}
-            <GlassCard className="p-8 premium-glow">
-              <div className="w-full h-80 bg-gradient-accent rounded-2xl flex items-center justify-center">
-                <div className="text-8xl">👨‍💻</div>
-              </div>
-            </GlassCard>
+        {/* Right Content - Professional Image Section */}
+        <motion.div
+          initial={{ opacity: 0, x: 50 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8, delay: 0.4 }}
+          className="flex justify-center lg:justify-end"
+        >
+          <div className="relative">
 
-            {/* Fun Facts */}
-            <GlassCard className="p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <Heart className="w-5 h-5 text-accent" />
-                <h4 className="text-lg font-display font-semibold">Fun Facts</h4>
-              </div>
-              <div className="space-y-3">
-                {funFacts.map((fact, index) => (
+            {/* Main Image Container */}
+            <motion.div
+              whileHover={{ scale: 1.02, rotateY: 5 }}
+              transition={{ duration: 0.3 }}
+              className="relative group cursor-pointer"
+              onClick={onAvatarClick}
+            >
+              {/* Outer Glow Ring */}
+              <div className="absolute -inset-4 bg-gradient-to-r from-accent/20 via-accent/10 to-accent/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500"></div>
+              
+              {/* Main Image Card */}
+              <GlassCard className="p-4 premium-glow relative overflow-hidden">
+                {/* Bigger Image Container */}
+                <div className="w-96 h-96 relative">
+                  {/* Background Pattern */}
+                  <div className="absolute inset-0 bg-gradient-to-br from-accent/10 via-background to-accent/5 rounded-2xl"></div>
+                  
+                  {/* Grid Pattern Overlay */}
+                  <div className="absolute inset-0 opacity-20">
+                    <div className="w-full h-full" style={{
+                      backgroundImage: `
+                        linear-gradient(rgba(32, 227, 178, 0.1) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(32, 227, 178, 0.1) 1px, transparent 1px)
+                      `,
+                      backgroundSize: '20px 20px'
+                    }}></div>
+                </div>
+                
+                  {/* Full Profile Photo */}
+                  <div className="absolute inset-2 bg-gradient-to-br from-accent/20 to-accent/5 rounded-xl overflow-hidden border border-accent/20">
+                    <img 
+                      src="/profile-photo.jpeg?v=2" 
+                      alt="Chaitanya Dhamdhere" 
+                      className="w-full h-full object-cover"
+                      onLoad={() => console.log('Image loaded successfully')}
+                      onError={(e) => {
+                        console.log('Image failed to load, showing fallback');
+                        e.currentTarget.style.display = 'none';
+                        const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
+                        if (nextElement) {
+                          nextElement.style.display = 'flex';
+                        }
+                      }}
+                    />
+                    <div className="w-full h-full bg-gradient-to-br from-accent/30 to-accent/10 flex items-center justify-center text-6xl" style={{display: 'none'}}>
+                      👨‍💻
+                  </div>
+                </div>
+                
+                  {/* Status Indicator - Floating on Photo */}
+                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center gap-2 px-3 py-1 bg-accent/20 rounded-full border border-accent/30 backdrop-blur-sm">
+                    <div className="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
+                    <span className="text-xs text-accent font-mono">This is me</span>
+                  </div>
+
+                  
                   <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: -10 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: 0.5 + index * 0.1 }}
-                    viewport={{ once: true }}
-                    className="flex items-center gap-3 text-sm text-muted-foreground"
+                    className="absolute bottom-6 left-6 w-10 h-10 bg-accent/20 rounded-lg flex items-center justify-center border border-accent/30 backdrop-blur-sm"
+                    animate={{ rotate: [360, 0] }}
+                    transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
                   >
-                    <div className="w-2 h-2 bg-accent rounded-full flex-shrink-0"></div>
-                    {fact}
+                    <span className="text-xl">🚀</span>
                   </motion.div>
-                ))}
+
+                  <motion.div
+                    className="absolute top-1/2 left-4 w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center border border-accent/30 backdrop-blur-sm"
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{ duration: 3, repeat: Infinity }}
+                  >
+                    <span className="text-lg">💻</span>
+                  </motion.div>
+
+                  <motion.div
+                    className="absolute top-1/2 right-4 w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center border border-accent/30 backdrop-blur-sm"
+                    animate={{ y: [0, 10, 0] }}
+                    transition={{ duration: 3, repeat: Infinity, delay: 1.5 }}
+                  >
+                    <span className="text-lg">⚡</span>
+                  </motion.div>
+
+                  <motion.div
+                    className="absolute top-6 left-6 w-10 h-10 bg-accent/20 rounded-lg flex items-center justify-center border border-accent/30 backdrop-blur-sm"
+                    animate={{ rotate: [0, -360] }}
+                    transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                  >
+                    <span className="text-xl">⚛️</span>
+                  </motion.div>
+
+                  {/* Minimal Tech Emojis - Key Ones Only */}
+                  <motion.div
+                    className="absolute top-4 left-1/2 w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center border border-accent/30 backdrop-blur-sm"
+                    animate={{ scale: [1, 1.2, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    <span className="text-lg">📊</span>
+                  </motion.div>
+
+                  <motion.div
+                    className="absolute bottom-8 right-8 w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center border border-accent/30 backdrop-blur-sm"
+                    animate={{ y: [0, -8, 0] }}
+                    transition={{ duration: 2.5, repeat: Infinity, delay: 0.5 }}
+                  >
+                    <span className="text-lg">📱</span>
+                  </motion.div>
+
+                  <motion.div
+                    className="absolute bottom-4 left-1/2 w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center border border-accent/30 backdrop-blur-sm"
+                    animate={{ x: [0, 5, 0] }}
+                    transition={{ duration: 3, repeat: Infinity, delay: 1 }}
+                  >
+                    <span className="text-lg">🌐</span>
+                  </motion.div>
+
+                  <motion.div
+                    className="absolute top-1/2 left-1/4 w-6 h-6 bg-accent/20 rounded-full flex items-center justify-center border border-accent/30 backdrop-blur-sm"
+                    animate={{ rotate: [0, 360] }}
+                    transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                  >
+                    <span className="text-xs">💡</span>
+                  </motion.div>
+                </div>
+
+                {/* Hover Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-accent/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl flex items-end justify-center pb-6">
+                  <motion.div
+                    initial={{ y: 20, opacity: 0 }}
+                    whileHover={{ y: 0, opacity: 1 }}
+                    className="text-center"
+                  >
+                    <div className="text-sm text-accent font-mono">Click for Photo Album!</div>
+                  </motion.div>
+                </div>
+              </GlassCard>
+
+              {/* Decorative Elements */}
+              <motion.div
+                className="absolute -top-2 -left-2 w-4 h-4 bg-gradient-accent rounded-full"
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [0.5, 1, 0.5]
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+              <motion.div
+                className="absolute -bottom-2 -right-2 w-3 h-3 bg-gradient-gold rounded-full"
+                animate={{
+                  scale: [1, 1.3, 1],
+                  opacity: [0.5, 1, 0.5]
+                }}
+                transition={{ duration: 2.5, repeat: Infinity, delay: 0.5 }}
+              />
+            </motion.div>
+
               </div>
-            </GlassCard>
           </motion.div>
         </div>
-      </div>
     </section>
   );
 };

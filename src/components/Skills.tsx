@@ -44,8 +44,17 @@ const Skills = () => {
   };
 
   return (
-    <section id="skills" className="py-20 px-4">
-      <div className="max-w-7xl mx-auto">
+    <section id="skills" className="py-20 px-4 relative">
+      {/* Background Effects */}
+      <div className="absolute inset-0 -z-10">
+        <div className="absolute inset-0 bokeh-bg opacity-20" />
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/4 left-1/3 w-96 h-96 bg-gradient-accent opacity-5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
+          <div className="absolute bottom-1/4 right-1/3 w-80 h-80 bg-gradient-gold opacity-5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '4s' }} />
+        </div>
+      </div>
+      
+      <div className="max-w-7xl mx-auto relative z-10">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
