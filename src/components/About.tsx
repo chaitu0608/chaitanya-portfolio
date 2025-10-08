@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Download, Github, Linkedin, MapPin } from "lucide-react";
 import GlassCard from "@/components/ui/glass-card";
@@ -10,6 +10,14 @@ interface AboutProps {
 }
 
 const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
+  const { scrollYProgress } = useScroll();
+  
+  // Transform scroll progress into various animation values
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
+  const backgroundOpacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.4, 0.6, 0.3]);
+  const imageScale = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1.05, 1.1]);
+  const imageRotate = useTransform(scrollYProgress, [0, 1], [0, 5]);
+
   // Simple PDF export function
   const exportToPDF = async () => {
     // For now, just open the resume URL if available
@@ -24,33 +32,70 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
   };
 
 
-  const interests = [
-    "Full-Stack Development", "Competitive Programming", "Web3 Technologies", 
-    "Machine Learning", "Open Source", "Tech Mentoring", "UI/UX Design", "DevOps"
-  ];
 
   return (
-    <section id="about" className="min-h-screen flex items-center px-4 pt-32 pb-20 relative">
-      {/* Bokeh Background */}
-      <div className="absolute inset-0 bokeh-bg opacity-40"></div>
+    <section id="about" className="min-h-screen flex items-center px-4 pt-32 pb-20 relative overflow-hidden">
+      {/* Enhanced Bokeh Background with Scroll Animation */}
+      <motion.div 
+        className="absolute inset-0 bokeh-bg"
+        style={{ 
+          opacity: backgroundOpacity,
+          y: backgroundY 
+        }}
+      />
       
-      {/* Animated Background Elements */}
+      {/* Animated Background Elements with Scroll Effects */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div 
           className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-accent opacity-5 rounded-full blur-3xl"
           animate={{ 
             scale: [1, 1.2, 1],
-            opacity: [0.05, 0.1, 0.05]
+            opacity: [0.05, 0.1, 0.05],
+            x: [0, 20, 0],
+            y: [0, -10, 0]
           }}
           transition={{ duration: 8, repeat: Infinity }}
+          style={{ y: useTransform(scrollYProgress, [0, 1], [0, -50]) }}
         />
         <motion.div 
           className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-gold opacity-5 rounded-full blur-3xl"
           animate={{ 
             scale: [1.2, 1, 1.2],
-            opacity: [0.1, 0.05, 0.1]
+            opacity: [0.1, 0.05, 0.1],
+            x: [0, -15, 0],
+            y: [0, 15, 0]
           }}
           transition={{ duration: 10, repeat: Infinity, delay: 2 }}
+          style={{ y: useTransform(scrollYProgress, [0, 1], [0, 30]) }}
+        />
+        
+        {/* Additional floating elements for more dynamic background */}
+        <motion.div 
+          className="absolute top-1/2 left-1/6 w-64 h-64 bg-gradient-primary opacity-3 rounded-full blur-2xl"
+          animate={{ 
+            scale: [1, 1.3, 1],
+            opacity: [0.03, 0.08, 0.03],
+            rotate: [0, 180, 360]
+          }}
+          transition={{ duration: 12, repeat: Infinity, delay: 1 }}
+          style={{ 
+            y: useTransform(scrollYProgress, [0, 1], [0, -40]),
+            x: useTransform(scrollYProgress, [0, 1], [0, 20])
+          }}
+        />
+        
+        <motion.div 
+          className="absolute bottom-1/3 left-1/3 w-72 h-72 bg-gradient-secondary opacity-4 rounded-full blur-3xl"
+          animate={{ 
+            scale: [1.1, 0.9, 1.1],
+            opacity: [0.04, 0.07, 0.04],
+            rotate: [360, 180, 0]
+          }}
+          transition={{ duration: 15, repeat: Infinity, delay: 3 }}
+          style={{ 
+            y: useTransform(scrollYProgress, [0, 1], [0, 25]),
+            x: useTransform(scrollYProgress, [0, 1], [0, -15])
+          }}
         />
       </div>
 
@@ -136,7 +181,7 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
                 </motion.div>
 
           {/* Action Buttons */}
-          <motion.div 
+                      <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 1 }}
@@ -171,29 +216,6 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
           </motion.div>
 
 
-
-          {/* Interests */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1.4 }}
-            className="space-y-3"
-          >
-            <h4 className="text-lg font-display font-semibold">What I'm passionate about</h4>
-              <div className="flex flex-wrap gap-2">
-                {interests.map((interest, index) => (
-                <motion.span
-                    key={index}
-                    initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3, delay: 1.5 + index * 0.05 }}
-                  className="px-3 py-1 bg-muted/50 text-muted-foreground rounded-full text-sm hover:bg-accent/20 hover:text-accent transition-colors duration-300 cursor-pointer"
-                >
-                      {interest}
-                </motion.span>
-                ))}
-              </div>
-          </motion.div>
         </motion.div>
 
         {/* Right Content - Professional Image Section */}
@@ -205,12 +227,16 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
         >
           <div className="relative">
 
-            {/* Main Image Container */}
+            {/* Main Image Container with Scroll Animation */}
             <motion.div
               whileHover={{ scale: 1.02, rotateY: 5 }}
               transition={{ duration: 0.3 }}
               className="relative group cursor-pointer"
               onClick={onAvatarClick}
+              style={{
+                scale: imageScale,
+                rotateY: imageRotate
+              }}
             >
               {/* Outer Glow Ring */}
               <div className="absolute -inset-4 bg-gradient-to-r from-accent/20 via-accent/10 to-accent/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500"></div>

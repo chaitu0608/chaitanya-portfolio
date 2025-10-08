@@ -78,42 +78,73 @@ export const education: Education[] = [
 // Projects Data
 export const projects: Project[] = [
   {
+    title: "TrustWipe",
+    subtitle: "Secure Data Wiping System",
+    description:
+      "Designed a secure wiping engine implementing NIST SP 800-88 standards with overwrite, secure-erase, and crypto-erase methods. Developed a user-friendly React frontend for easy interaction and status monitoring. Built a robust Node.js backend to manage wipe requests, schedule tasks, and log activities.",
+    tech: ["C++", "Python", "Kotlin", "Swift", "Electron", "Node.js", "Express", "PostgreSQL", "MongoDB", "Firebase", "OpenSSL"],
+    type: "Desktop Application",
+    githubUrl: "https://github.com/chaitu0608/trustwipe",
+    liveUrl: "https://trustwipe-demo.com",
+  },
+  {
+    title: "StarQuest",
+    subtitle: "ETHGlobal Project",
+    description:
+      "A decentralized application built for ETHGlobal hackathon focusing on blockchain integration and smart contract development. Features include user authentication, transaction management, and real-time updates.",
+    tech: ["React", "Solidity", "Web3.js", "Ethereum", "IPFS", "MetaMask"],
+    type: "Web3 Application",
+    githubUrl: "https://github.com/chaitu0608/starquest",
+    liveUrl: "https://starquest-demo.com",
+  },
+  {
     title: "Padhle",
-    subtitle: "Student Portal",
+    subtitle: "Learning Management System",
     description:
       "Role-based system with attendance tracking and course management. AJAX-powered interface with real-time updates. Secure session management and SQL injection prevention.",
     tech: ["AJAX", "PHP", "MySQL", "JavaScript", "HTML/CSS"],
     type: "Web Application",
-    githubUrl: "https://github.com/yourusername/padhle",
+    githubUrl: "https://github.com/chaitu0608/padhle",
     liveUrl: "https://padhle-demo.com",
   },
   {
+    title: "Vertex Cover Simulator",
+    subtitle: "Algorithm Visualization",
+    description:
+      "Interactive visualization tool for understanding vertex cover algorithms. Features step-by-step execution, performance metrics, and educational content for computer science students.",
+    tech: ["JavaScript", "D3.js", "HTML5", "CSS3", "Algorithm Visualization"],
+    type: "Web Application",
+    githubUrl: "https://github.com/chaitu0608/vertex-cover-simulator",
+    liveUrl: "https://vertex-cover-demo.com",
+  },
+  {
     title: "JournalMate",
-    subtitle: "JavaFX",
+    subtitle: "JavaFX Desktop App",
     description:
       "Built a secure and user-friendly digital diary application with a dynamic JavaFX interface, focusing on smooth navigation and interactivity. Implemented robust features like password-protected access and rich-text content editing.",
-    tech: ["JavaFX", "Java", "SQLite", "CSS"],
+    tech: ["JavaFX", "Java", "SQLite", "CSS", "OOPM"],
     type: "Desktop Application",
-    githubUrl: "https://github.com/yourusername/journalmate",
+    githubUrl: "https://github.com/chaitu0608/journalmate",
   },
   {
-    title: "Tutelage",
-    subtitle: "Freelance",
+    title: "Weather App",
+    subtitle: "React Weather Dashboard",
     description:
-      "Collaborated with a cross-functional team to build a production-ready React Native application for a freelance startup. Delivered a responsive, high-performance app with consistent functionality across Android and iOS platforms.",
-    tech: ["React Native", "JavaScript", "Mobile Development"],
-    type: "Mobile Application",
-    githubUrl: "https://github.com/yourusername/tutelage",
+      "A responsive weather application built with React featuring real-time weather data, location-based forecasts, and interactive charts. Includes dark/light mode and offline capabilities.",
+    tech: ["React", "JavaScript", "API Integration", "Chart.js", "CSS3", "Responsive Design"],
+    type: "Web Application",
+    githubUrl: "https://github.com/chaitu0608/weather-app",
+    liveUrl: "https://weather-app-demo.com",
   },
   {
-    title: "Ama-App",
-    subtitle: "Full Stack Auth System",
+    title: "Next-Ama App",
+    subtitle: "Full Stack Authentication",
     description:
       "Built a robust full-stack authentication system using Next.js (App Router), TypeScript, and MongoDB, following best practices from the 'Chai aur Code' Next.js Auth playlist.",
-    tech: ["Next.js", "TypeScript", "MongoDB", "Authentication"],
+    tech: ["Next.js", "TypeScript", "MongoDB", "Authentication", "Tailwind CSS", "Prisma", "NextAuth.js"],
     type: "Full Stack Application",
-    githubUrl: "https://github.com/yourusername/ama-app",
-    liveUrl: "https://ama-app-demo.com",
+    githubUrl: "https://github.com/chaitu0608/next-ama-app",
+    liveUrl: "https://next-ama-demo.com",
   },
 ];
 

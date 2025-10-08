@@ -1,57 +1,85 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Code, Database, Smartphone, Globe } from "lucide-react";
+import { ExternalLink, Github } from "lucide-react";
 import GlassCard from "@/components/ui/glass-card";
-import ProjectCard from "@/components/ui/project-card";
-import { loadProjects, getFeaturedProjects, Project } from "@/lib/content";
+import { projects } from "@/data/portfolio";
 
 const Projects = () => {
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [featuredProjects, setFeaturedProjects] = useState<Project[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<string>('All');
-
-  useEffect(() => {
-    const fetchProjects = async () => {
-      const allProjects = await loadProjects();
-      const featured = await getFeaturedProjects(3);
-      setProjects(allProjects);
-      setFeaturedProjects(featured);
-    };
-
-    fetchProjects();
-  }, []);
-
-  const categories = ['All', 'Web3', 'Web Application', 'Mobile Application', 'Full Stack Application', 'Desktop Application'];
+  const { scrollYProgress } = useScroll();
   
-  const filteredProjects = selectedCategory === 'All' 
-    ? projects 
-    : projects.filter(project => project.category === selectedCategory);
+  // Transform scroll progress into various animation values
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
+  const backgroundOpacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.2, 0.4, 0.2]);
 
-  const getCategoryIcon = (category: string) => {
-    switch (category) {
-      case 'Web3':
-        return <Globe className="w-4 h-4" />;
-      case 'Web Application':
-        return <Code className="w-4 h-4" />;
-      case 'Mobile Application':
-        return <Smartphone className="w-4 h-4" />;
-      case 'Full Stack Application':
-        return <Database className="w-4 h-4" />;
-      default:
-        return <Code className="w-4 h-4" />;
-    }
+  const handleOpenLink = (url: string) => {
+    window.open(url, '_blank');
   };
 
   return (
-    <section id="projects" className="py-20 px-4 relative">
-      {/* Background Effects */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bokeh-bg opacity-20" />
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/3 right-1/4 w-80 h-80 bg-gradient-accent opacity-5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
-          <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-gradient-gold opacity-5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '3s' }} />
-        </div>
+    <section id="projects" className="py-20 px-4 relative overflow-hidden">
+      {/* Enhanced Background Effects with Scroll Animation */}
+      <motion.div 
+        className="absolute inset-0 bokeh-bg"
+        style={{ 
+          opacity: backgroundOpacity,
+          y: backgroundY 
+        }}
+      />
+      
+      {/* Animated Background Elements with Scroll Effects */}
+      <div className="absolute inset-0 overflow-hidden">
+        <motion.div 
+          className="absolute top-1/3 right-1/4 w-80 h-80 bg-gradient-accent opacity-5 rounded-full blur-3xl"
+          animate={{ 
+            scale: [1, 1.2, 1],
+            opacity: [0.05, 0.1, 0.05],
+            x: [0, 20, 0],
+            y: [0, -10, 0]
+          }}
+          transition={{ duration: 8, repeat: Infinity }}
+          style={{ y: useTransform(scrollYProgress, [0, 1], [0, -50]) }}
+        />
+        <motion.div 
+          className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-gradient-gold opacity-5 rounded-full blur-3xl"
+          animate={{ 
+            scale: [1.2, 1, 1.2],
+            opacity: [0.1, 0.05, 0.1],
+            x: [0, -15, 0],
+            y: [0, 15, 0]
+          }}
+          transition={{ duration: 10, repeat: Infinity, delay: 2 }}
+          style={{ y: useTransform(scrollYProgress, [0, 1], [0, 30]) }}
+        />
+        
+        {/* Additional floating elements for more dynamic background */}
+        <motion.div 
+          className="absolute top-1/2 right-1/6 w-64 h-64 bg-gradient-primary opacity-3 rounded-full blur-2xl"
+          animate={{ 
+            scale: [1, 1.3, 1],
+            opacity: [0.03, 0.08, 0.03],
+            rotate: [0, 180, 360]
+          }}
+          transition={{ duration: 12, repeat: Infinity, delay: 1 }}
+          style={{ 
+            y: useTransform(scrollYProgress, [0, 1], [0, -40]),
+            x: useTransform(scrollYProgress, [0, 1], [0, 20])
+          }}
+        />
+        
+        <motion.div 
+          className="absolute bottom-1/2 right-1/3 w-72 h-72 bg-gradient-secondary opacity-4 rounded-full blur-3xl"
+          animate={{ 
+            scale: [1.1, 0.9, 1.1],
+            opacity: [0.04, 0.07, 0.04],
+            rotate: [360, 180, 0]
+          }}
+          transition={{ duration: 15, repeat: Infinity, delay: 3 }}
+          style={{ 
+            y: useTransform(scrollYProgress, [0, 1], [0, 25]),
+            x: useTransform(scrollYProgress, [0, 1], [0, -15])
+          }}
+        />
       </div>
       
       <div className="max-w-7xl mx-auto relative z-10">
@@ -64,135 +92,99 @@ const Projects = () => {
           className="text-center mb-16"
         >
           <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
-            Featured <span className="text-gradient">Projects</span>
+            The things I have <span className="text-gradient">built</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            A showcase of my recent work, featuring innovative solutions and modern technologies
+            I love turning ideas into interactive experiences — here are some of the projects I've brought to life.
           </p>
         </motion.div>
 
-        {/* Project Stats */}
+        {/* Projects Grid */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
           viewport={{ once: true }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-16"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
-          {[
-            { label: 'Projects', value: projects.length },
-            { label: 'Technologies', value: '15+' },
-            { label: 'Success Rate', value: '100%' },
-            { label: 'Client Satisfaction', value: '5.0' }
-          ].map((stat, index) => (
-            <GlassCard key={index} className="p-6 text-center">
-              <div className="text-2xl md:text-3xl font-display font-bold text-accent mb-1">
-                {stat.value}
-              </div>
-              <div className="text-sm text-muted-foreground">{stat.label}</div>
-            </GlassCard>
-          ))}
-        </motion.div>
-
-        {/* Category Filter */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          viewport={{ once: true }}
-          className="flex flex-wrap justify-center gap-2 mb-12"
-        >
-          {categories.map((category) => (
-            <Button
-              key={category}
-              variant={selectedCategory === category ? "default" : "outline"}
-              size="sm"
-              onClick={() => setSelectedCategory(category)}
-              className={`smooth-transition ${
-                selectedCategory === category 
-                  ? "btn-primary" 
-                  : "btn-secondary"
-              }`}
+          {projects.map((project, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.02 }}
+              className="group"
             >
-              {getCategoryIcon(category)}
-              <span className="ml-2">{category}</span>
-            </Button>
+              <GlassCard className="p-6 h-full hover:shadow-card-hover transition-all duration-300">
+                <div className="space-y-4">
+                  {/* Project Screenshot Placeholder */}
+                  <div className="w-full h-48 bg-gradient-to-br from-accent/20 to-accent/5 rounded-lg border border-accent/20 flex items-center justify-center">
+                    <div className="text-4xl opacity-50">
+                      {project.type === 'Desktop Application' ? '💻' : 
+                       project.type === 'Web3 Application' ? '⛓️' : 
+                       project.type === 'Web Application' ? '🌐' : '📱'}
+                    </div>
+                  </div>
+                  
+                  {/* Project Info */}
+                  <div className="space-y-3">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <h4 className="text-xl font-display font-semibold text-foreground group-hover:text-accent transition-colors">
+                          {project.title}
+                        </h4>
+                        <p className="text-sm text-accent font-medium">{project.subtitle}</p>
+                      </div>
+                      <div className="flex gap-2">
+                        {project.githubUrl && (
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => handleOpenLink(project.githubUrl!)}
+                            className="p-2 hover:bg-accent/20"
+                          >
+                            <Github className="w-4 h-4" />
+                          </Button>
+                        )}
+                        {project.liveUrl && (
+                          <Button
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => handleOpenLink(project.liveUrl!)}
+                            className="p-2 hover:bg-accent/20"
+                          >
+                            <ExternalLink className="w-4 h-4" />
+                          </Button>
+                        )}
+                      </div>
+                    </div>
+                    
+                    <p className="text-muted-foreground text-sm leading-relaxed">
+                      {project.description}
+                    </p>
+                    
+                    <div className="flex flex-wrap gap-2">
+                      {project.tech.slice(0, 4).map((tech, techIndex) => (
+                        <span
+                          key={techIndex}
+                          className="px-2 py-1 bg-accent/10 text-accent text-xs rounded-full border border-accent/20"
+                        >
+                          {tech}
+                        </span>
+                      ))}
+                      {project.tech.length > 4 && (
+                        <span className="px-2 py-1 bg-muted/50 text-muted-foreground text-xs rounded-full">
+                          +{project.tech.length - 4}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </GlassCard>
+            </motion.div>
           ))}
-        </motion.div>
-
-        {/* Featured Projects */}
-        {selectedCategory === 'All' && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            viewport={{ once: true }}
-            className="mb-16"
-          >
-            <h3 className="text-2xl font-display font-semibold mb-8 text-center">
-              Featured Work
-            </h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {featuredProjects.map((project, index) => (
-                <motion.div
-                  key={project.slug}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                >
-                  <ProjectCard project={project} />
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        )}
-
-        {/* All Projects */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
-          viewport={{ once: true }}
-        >
-          <h3 className="text-2xl font-display font-semibold mb-8 text-center">
-            {selectedCategory === 'All' ? 'All Projects' : `${selectedCategory} Projects`}
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredProjects.map((project, index) => (
-              <motion.div
-                key={project.slug}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <ProjectCard project={project} />
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Call to Action */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mt-16"
-        >
-          <GlassCard className="p-8 max-w-2xl mx-auto">
-            <h3 className="text-2xl font-display font-semibold mb-4">
-              Interested in working together?
-            </h3>
-            <p className="text-muted-foreground mb-6">
-              I'm always excited to take on new challenges and create amazing digital experiences.
-            </p>
-            <Button className="btn-primary">
-              Let's discuss your project
-              <ArrowRight className="w-4 h-4 ml-2" />
-            </Button>
-          </GlassCard>
         </motion.div>
       </div>
     </section>

@@ -16,8 +16,8 @@ const Navigation: React.FC<NavigationProps> = ({ onContactClick }) => {
 
   const navIcons = {
     about: User,
-    experience: Briefcase,
     projects: Code,
+    experience: Briefcase,
     skills: Star,
     contact: Mail
   };
