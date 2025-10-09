@@ -139,8 +139,28 @@ const Projects = () => {
                   <div className="w-full lg:w-80 flex-shrink-0">
                     <div className="w-full h-48 bg-gradient-to-br from-accent/20 via-accent/10 to-accent/5 rounded-2xl border border-accent/20 flex items-center justify-center relative overflow-hidden">
                       {/* Device Frame Effect */}
-                      <div className="absolute inset-3 bg-gradient-to-br from-background/95 to-background/85 rounded-xl border border-accent/10 flex items-center justify-center">
-                        <div className="text-4xl opacity-60 group-hover:opacity-80 transition-opacity duration-300">
+                      <div className="absolute inset-3 bg-gradient-to-br from-background/95 to-background/85 rounded-xl border border-accent/10 flex items-center justify-center overflow-hidden">
+                        {project.thumbnail ? (
+                          <img
+                            src={project.thumbnail}
+                            alt={project.title}
+                            className={`w-full h-full rounded-lg ${
+                              project.title === 'StarQuest' 
+                                ? 'object-contain' 
+                                : 'object-cover'
+                            }`}
+                            onError={(e) => {
+                              // Fallback to emoji if image fails to load
+                              e.currentTarget.style.display = 'none';
+                              const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                              if (fallback) fallback.style.display = 'flex';
+                            }}
+                          />
+                        ) : null}
+                        <div 
+                          className="text-4xl opacity-60 group-hover:opacity-80 transition-opacity duration-300"
+                          style={{ display: project.thumbnail ? 'none' : 'flex' }}
+                        >
                           {project.type === 'Desktop Application' ? '💻' : 
                            project.type === 'Web3 Application' ? '⛓️' : 
                            project.type === 'Web Application' ? '🌐' : '📱'}

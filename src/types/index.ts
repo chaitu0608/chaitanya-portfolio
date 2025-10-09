@@ -27,6 +27,7 @@ export interface Project {
   githubUrl?: string;
   liveUrl?: string;
   imageUrl?: string;
+  thumbnail?: string;
 }
 
 export interface TechCategory {

@@ -38,7 +38,27 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       >
         {/* Project Image */}
         <div className="relative h-48 overflow-hidden">
-          <div className="w-full h-full bg-gradient-accent flex items-center justify-center">
+          {project.thumbnail ? (
+            <img
+              src={project.thumbnail}
+              alt={project.title}
+              className={`w-full h-full ${
+                project.title === 'StarQuest' 
+                  ? 'object-contain' 
+                  : 'object-cover'
+              }`}
+              onError={(e) => {
+                // Fallback to gradient background if image fails to load
+                e.currentTarget.style.display = 'none';
+                const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                if (fallback) fallback.style.display = 'flex';
+              }}
+            />
+          ) : null}
+          <div 
+            className="w-full h-full bg-gradient-accent flex items-center justify-center"
+            style={{ display: project.thumbnail ? 'none' : 'flex' }}
+          >
             <div className="text-4xl">🚀</div>
           </div>
           

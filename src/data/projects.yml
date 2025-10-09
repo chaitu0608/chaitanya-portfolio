@@ -52,7 +52,7 @@
     Padhle is a full-featured learning management system designed specifically for educational institutions. The platform streamlines academic operations and enhances the learning experience for both students and faculty.
     
     The system features role-based access control, real-time notifications, and comprehensive analytics to help institutions make data-driven decisions about their academic programs.
-  thumbnail: /assets/projects/padhle.png
+  thumbnail: /padhle.png
   gallery:
     - /assets/projects/padhle-1.png
     - /assets/projects/padhle-2.png

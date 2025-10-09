@@ -100,7 +100,7 @@ export const loadProjects = async (): Promise<Project[]> => {
         title: 'Padhle',
         subtitle: 'Student Portal & Learning Management System',
         description: 'A comprehensive student portal with attendance tracking, course management, and real-time communication features.',
-        thumbnail: '/assets/projects/padhle.png',
+        thumbnail: '/padhle.png',
         date: '2024-03',
         status: 'Completed',
         role: 'Full Stack Developer',
@@ -158,6 +158,28 @@ export const loadProjects = async (): Promise<Project[]> => {
           { metric: 'App Store Rating', value: '4.6/5' },
           { metric: 'User Retention', value: '78%' },
           { metric: 'Crash Rate', value: '< 0.1%' }
+        ]
+      },
+      {
+        slug: 'trustwipe',
+        title: 'TrustWipe',
+        subtitle: 'Secure Data Wiping System',
+        description: 'Designed a secure wiping engine implementing NIST SP 800-88 standards with overwrite, secure-erase, and crypto-erase methods. Developed a user-friendly React frontend for easy interaction and status monitoring. Built a robust Node.js backend to manage wipe requests, schedule tasks, and log activities.',
+        thumbnail: '/trustwipe.jpg',
+        date: '2024-05',
+        status: 'Completed',
+        role: 'Full Stack Developer & Security Engineer',
+        team: 'Solo project',
+        duration: '3 months',
+        tech: ['C++', 'Python', 'Kotlin', 'Swift', 'Electron', 'Node.js', 'Express', 'PostgreSQL', 'MongoDB', 'Firebase', 'OpenSSL'],
+        category: 'Desktop Application',
+        tags: ['c++', 'python', 'security', 'desktop', 'nodejs'],
+        link: 'https://trustwipe-demo.com',
+        repo: 'https://github.com/chaitu0608/trustwipe',
+        metrics: [
+          { metric: 'Data Wiping Speed', value: '500MB/s' },
+          { metric: 'Security Compliance', value: 'NIST SP 800-88' },
+          { metric: 'Success Rate', value: '99.9%' }
         ]
       },
       {
