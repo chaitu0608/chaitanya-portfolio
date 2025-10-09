@@ -99,94 +99,148 @@ const Projects = () => {
           </p>
         </motion.div>
 
-        {/* Projects Grid */}
+        {/* Projects Grid - Custom Landscape Layout */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
           viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          className="space-y-8 max-w-6xl mx-auto"
         >
           {projects.map((project, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
+              initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50, scale: 0.95 }}
+              whileInView={{ opacity: 1, x: 0, scale: 1 }}
+              transition={{ 
+                duration: 0.7, 
+                delay: index * 0.15,
+                type: "spring",
+                stiffness: 100,
+                damping: 15
+              }}
               viewport={{ once: true }}
-              whileHover={{ scale: 1.02 }}
-              className="group"
+              whileHover={{ 
+                scale: 1.02,
+                y: -6,
+                transition: { duration: 0.3, ease: "easeOut" }
+              }}
+              className="group relative"
             >
-              <GlassCard className="p-6 h-full hover:shadow-card-hover transition-all duration-300">
-                <div className="space-y-4">
-                  {/* Project Screenshot Placeholder */}
-                  <div className="w-full h-48 bg-gradient-to-br from-accent/20 to-accent/5 rounded-lg border border-accent/20 flex items-center justify-center">
-                    <div className="text-4xl opacity-50">
-                      {project.type === 'Desktop Application' ? '💻' : 
-                       project.type === 'Web3 Application' ? '⛓️' : 
-                       project.type === 'Web Application' ? '🌐' : '📱'}
+              {/* Landscape Glassmorphism Card */}
+              <div className="relative p-6 rounded-3xl bg-gradient-to-r from-card/30 via-card/20 to-card/10 backdrop-blur-xl border border-accent/20 shadow-2xl hover:shadow-accent/25 transition-all duration-500 overflow-hidden">
+                {/* Dynamic Neon Glow Effect */}
+                <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-accent/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-transparent via-accent/8 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                {/* Content - Landscape Layout */}
+                <div className="relative z-10 flex flex-col lg:flex-row gap-6 items-start">
+                  {/* Project Visual - Landscape */}
+                  <div className="w-full lg:w-80 flex-shrink-0">
+                    <div className="w-full h-48 bg-gradient-to-br from-accent/20 via-accent/10 to-accent/5 rounded-2xl border border-accent/20 flex items-center justify-center relative overflow-hidden">
+                      {/* Device Frame Effect */}
+                      <div className="absolute inset-3 bg-gradient-to-br from-background/95 to-background/85 rounded-xl border border-accent/10 flex items-center justify-center">
+                        <div className="text-4xl opacity-60 group-hover:opacity-80 transition-opacity duration-300">
+                          {project.type === 'Desktop Application' ? '💻' : 
+                           project.type === 'Web3 Application' ? '⛓️' : 
+                           project.type === 'Web Application' ? '🌐' : '📱'}
+                        </div>
+              </div>
+              
+                      {/* Animated Gradient Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-accent/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                      
+                      {/* Floating Particles Effect */}
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <div className="absolute top-4 left-4 w-2 h-2 bg-accent/60 rounded-full animate-pulse"></div>
+                        <div className="absolute top-8 right-6 w-1.5 h-1.5 bg-accent/40 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+                        <div className="absolute bottom-6 left-8 w-1 h-1 bg-accent/50 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
+                    </div>
                     </div>
                   </div>
                   
-                  {/* Project Info */}
-                  <div className="space-y-3">
+                  {/* Project Information - Landscape */}
+                  <div className="flex-1 space-y-4">
+                    {/* Title and Links */}
                     <div className="flex items-start justify-between">
-                      <div>
-                        <h4 className="text-xl font-display font-semibold text-foreground group-hover:text-accent transition-colors">
+                      <div className="flex-1">
+                        <h3 className="text-2xl font-bold text-foreground group-hover:text-accent transition-colors duration-300 mb-2">
                           {project.title}
-                        </h4>
-                        <p className="text-sm text-accent font-medium">{project.subtitle}</p>
+                        </h3>
+                        <p className="text-accent/80 font-medium text-sm mb-3">{project.subtitle}</p>
                       </div>
-                      <div className="flex gap-2">
+                      
+                      {/* Action Buttons */}
+                      <div className="flex gap-2 ml-4">
                         {project.githubUrl && (
-                          <Button
-                            size="sm"
-                            variant="ghost"
+                          <motion.button
                             onClick={() => handleOpenLink(project.githubUrl!)}
-                            className="p-2 hover:bg-accent/20"
+                            className="p-3 rounded-xl bg-accent/10 hover:bg-accent/20 text-accent border border-accent/20 hover:border-accent/40 transition-all duration-300"
+                            whileHover={{ scale: 1.1, rotate: 5 }}
+                            whileTap={{ scale: 0.95 }}
                           >
-                            <Github className="w-4 h-4" />
-                          </Button>
+                            <Github className="w-5 h-5" />
+                          </motion.button>
                         )}
                         {project.liveUrl && (
-                          <Button
-                            size="sm"
-                            variant="ghost"
+                          <motion.button
                             onClick={() => handleOpenLink(project.liveUrl!)}
-                            className="p-2 hover:bg-accent/20"
+                            className="p-3 rounded-xl bg-accent/10 hover:bg-accent/20 text-accent border border-accent/20 hover:border-accent/40 transition-all duration-300"
+                            whileHover={{ scale: 1.1, rotate: -5 }}
+                            whileTap={{ scale: 0.95 }}
                           >
-                            <ExternalLink className="w-4 h-4" />
-                          </Button>
+                            <ExternalLink className="w-5 h-5" />
+                          </motion.button>
                         )}
                       </div>
-                    </div>
-                    
-                    <p className="text-muted-foreground text-sm leading-relaxed">
-                      {project.description}
-                    </p>
-                    
-                    <div className="flex flex-wrap gap-2">
+                </div>
+                
+                    {/* Description */}
+                    <p className="text-muted-foreground leading-relaxed text-sm">
+                  {project.description}
+                </p>
+                
+                    {/* Technology Tags */}
+                  <div className="flex flex-wrap gap-2">
                       {project.tech.slice(0, 4).map((tech, techIndex) => (
-                        <span
+                        <motion.span
                           key={techIndex}
-                          className="px-2 py-1 bg-accent/10 text-accent text-xs rounded-full border border-accent/20"
-                        >
-                          {tech}
-                        </span>
+                          initial={{ opacity: 0, scale: 0.8, y: 10 }}
+                          whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                          transition={{ duration: 0.4, delay: techIndex * 0.1 }}
+                          viewport={{ once: true }}
+                          className="px-3 py-1.5 bg-accent/15 text-accent text-xs rounded-full border border-accent/30 font-medium hover:bg-accent/25 hover:border-accent/50 transition-all duration-300 cursor-pointer"
+                          whileHover={{ scale: 1.05 }}
+                      >
+                        {tech}
+                        </motion.span>
                       ))}
                       {project.tech.length > 4 && (
-                        <span className="px-2 py-1 bg-muted/50 text-muted-foreground text-xs rounded-full">
+                        <motion.span
+                          initial={{ opacity: 0, scale: 0.8, y: 10 }}
+                          whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                          transition={{ duration: 0.4, delay: 0.4 }}
+                          viewport={{ once: true }}
+                          className="px-3 py-1.5 bg-muted/50 text-muted-foreground text-xs rounded-full border border-muted/50 font-medium"
+                        >
                           +{project.tech.length - 4}
-                        </span>
+                        </motion.span>
                       )}
                     </div>
                   </div>
                 </div>
-              </GlassCard>
+                
+                {/* Enhanced Border Glow */}
+                <div className="absolute inset-0 rounded-3xl border border-accent/10 group-hover:border-accent/40 transition-colors duration-500"></div>
+                
+                {/* Corner Accents */}
+                <div className="absolute top-4 right-4 w-2 h-2 bg-accent/30 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="absolute bottom-4 left-4 w-1.5 h-1.5 bg-accent/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ transitionDelay: '0.1s' }}></div>
+              </div>
             </motion.div>
           ))}
         </motion.div>
-      </div>
+        </div>
     </section>
   );
 };
