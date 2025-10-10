@@ -18,87 +18,165 @@ const Experience = () => {
   const lineOpacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
   return (
-    <section id="experience" className="py-20 px-4 relative overflow-hidden">
-      {/* Enhanced Background Effects */}
-      <div className="absolute inset-0 -z-10">
-        {/* Base gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-background via-background/95 to-background" />
-        
-        {/* Animated gradient orbs */}
-        <div className="absolute inset-0 overflow-hidden">
-          <motion.div 
-            className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-teal-400/20 to-purple-500/20 rounded-full blur-3xl"
-            animate={{
-              x: [0, 50, -30, 0],
-              y: [0, -30, 20, 0],
-              scale: [1, 1.1, 0.9, 1],
-            }}
-            transition={{
-              duration: 20,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
-          <motion.div 
-            className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-500/20 to-teal-400/20 rounded-full blur-3xl"
-            animate={{
-              x: [0, -40, 30, 0],
-              y: [0, 25, -15, 0],
-              scale: [1, 0.8, 1.2, 1],
-            }}
-            transition={{
-              duration: 25,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 5
-            }}
-          />
-          <motion.div 
-            className="absolute top-1/2 right-1/3 w-64 h-64 bg-gradient-to-r from-blue-400/15 to-cyan-400/15 rounded-full blur-2xl"
-            animate={{
-              x: [0, 20, -15, 0],
-              y: [0, -20, 10, 0],
-              scale: [1, 1.3, 0.7, 1],
-            }}
-            transition={{
-              duration: 18,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 10
-            }}
-          />
-        </div>
-        
-        {/* Subtle grid pattern */}
-        <div className="absolute inset-0 opacity-[0.02]">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `
-              linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
-            `,
-            backgroundSize: '50px 50px'
-          }} />
-        </div>
-        
-        {/* Floating particles */}
-        {[...Array(6)].map((_, i) => (
+    <section id="experience" className="py-20 px-4 relative overflow-hidden continuous-bg section-transition">
+      {/* Enhanced Background Effects with Scroll Continuity */}
+      <motion.div 
+        className="absolute inset-0 bokeh-bg"
+        style={{ 
+          opacity: useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.1, 0.3, 0.2, 0.1]),
+          y: useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
+        }}
+      />
+
+      {/* Floating Particles - Enhanced */}
+      <div className="floating-particles">
+        {[...Array(12)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-1 h-1 bg-accent/30 rounded-full"
+            className="particle"
             style={{
-              left: `${20 + i * 15}%`,
-              top: `${30 + i * 10}%`,
+              left: `${5 + i * 8}%`,
+              top: `${10 + (i % 3) * 30}%`,
             }}
             animate={{
-              y: [0, -20, 0],
-              opacity: [0.3, 0.8, 0.3],
-              scale: [1, 1.5, 1],
+              y: [0, -30, 0],
+              x: [0, 15, -10, 0],
+              opacity: [0.2, 0.6, 0.2],
+              scale: [0.8, 1.2, 0.8],
             }}
             transition={{
-              duration: 3 + i * 0.5,
+              duration: 8 + i * 0.5,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: i * 0.5
+              delay: i * 0.3
+            }}
+          />
+        ))}
+      </div>
+      
+      {/* Animated Background Elements with Enhanced Scroll Effects */}
+      <div className="absolute inset-0 overflow-hidden">
+        <motion.div 
+          className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-accent opacity-5 rounded-full blur-3xl"
+          animate={{ 
+            scale: [1, 1.3, 0.8, 1],
+            opacity: [0.05, 0.15, 0.08, 0.05],
+            x: [0, 40, -20, 0],
+            y: [0, -30, 20, 0],
+            rotate: [0, 180, 360]
+          }}
+          transition={{
+            duration: 25,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        <motion.div 
+          className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-500/10 to-teal-400/10 rounded-full blur-3xl"
+          animate={{ 
+            scale: [0.8, 1.2, 1, 0.8],
+            opacity: [0.08, 0.12, 0.06, 0.08],
+            x: [0, -30, 25, 0],
+            y: [0, 35, -15, 0],
+            rotate: [360, 180, 0]
+          }}
+          transition={{
+            duration: 30,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 8
+          }}
+        />
+        <motion.div 
+          className="absolute top-1/2 right-1/3 w-64 h-64 bg-gradient-to-r from-blue-400/8 to-cyan-400/8 rounded-full blur-2xl"
+          animate={{ 
+            scale: [1, 1.4, 0.6, 1],
+            opacity: [0.06, 0.1, 0.04, 0.06],
+            x: [0, 25, -15, 0],
+            y: [0, -25, 15, 0],
+            rotate: [0, 90, 180, 270, 360]
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 15
+          }}
+        />
+        
+        {/* Additional floating orbs for depth */}
+        <motion.div 
+          className="absolute top-1/6 right-1/6 w-48 h-48 bg-gradient-to-r from-teal-400/6 to-purple-500/6 rounded-full blur-2xl"
+          animate={{ 
+            scale: [0.5, 1.1, 0.7, 0.5],
+            opacity: [0.03, 0.08, 0.05, 0.03],
+            x: [0, 20, -10, 0],
+            y: [0, -20, 10, 0]
+          }}
+          transition={{
+            duration: 18,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 5
+          }}
+        />
+        <motion.div 
+          className="absolute bottom-1/6 left-1/6 w-56 h-56 bg-gradient-to-r from-purple-500/6 to-blue-400/6 rounded-full blur-2xl"
+          animate={{ 
+            scale: [0.7, 1.2, 0.8, 0.7],
+            opacity: [0.04, 0.09, 0.06, 0.04],
+            x: [0, -25, 15, 0],
+            y: [0, 25, -15, 0]
+          }}
+          transition={{
+            duration: 22,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 12
+          }}
+        />
+      </div>
+      
+      {/* Enhanced Grid Pattern with Animation */}
+      <motion.div 
+        className="absolute inset-0 opacity-[0.015]"
+        animate={{
+          opacity: [0.01, 0.02, 0.01]
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      >
+        <div className="absolute inset-0" style={{
+          backgroundImage: `
+            linear-gradient(rgba(32, 227, 178, 0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(32, 227, 178, 0.1) 1px, transparent 1px)
+          `,
+          backgroundSize: '60px 60px'
+        }} />
+      </motion.div>
+      
+      {/* Dynamic Light Rays */}
+      <div className="absolute inset-0 overflow-hidden">
+        {[...Array(4)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-px h-full bg-gradient-to-b from-transparent via-teal-400/20 to-transparent"
+            style={{
+              left: `${20 + i * 20}%`,
+              transform: `rotate(${15 + i * 10}deg)`,
+            }}
+            animate={{
+              opacity: [0, 0.3, 0],
+              scaleY: [0.5, 1, 0.5],
+            }}
+            transition={{
+              duration: 6 + i,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 1.5
             }}
           />
         ))}
@@ -143,7 +221,7 @@ const Experience = () => {
             transition={{ duration: 0.8, delay: 0.5 }}
             viewport={{ once: true }}
           >
-            A timeline of my professional growth and key achievements in the tech industry
+            Good engineering isn't just built, it's refined — here's what shaped mine.
           </motion.p>
         </motion.div>
         
@@ -312,49 +390,58 @@ const Experience = () => {
                             <Badge variant="secondary" className="text-xs">
                               {exp.period}
                             </Badge>
-                            {exp.website && (
-                              <motion.div
-                                whileHover={{ scale: 1.05 }}
-                                whileTap={{ scale: 0.95 }}
-                              >
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  className="text-accent hover:text-accent/80 p-2 h-auto group text-xs relative overflow-hidden"
-                                  onClick={() => window.open(exp.website, '_blank')}
-                                >
-                                  <motion.div
-                                    className="absolute inset-0 bg-gradient-to-r from-teal-400/10 to-purple-500/10"
-                                    initial={{ x: "-100%" }}
-                                    whileHover={{ x: "0%" }}
-                                    transition={{ duration: 0.3 }}
-                                  />
-                                  <motion.div
-                                    className="relative flex items-center gap-1"
-                                    whileHover={{ x: 2 }}
-                                  >
-                                    <ExternalLink className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:rotate-12" />
-                                    <span className="relative">
-                                      Visit Website
-                                      <motion.div
-                                        className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-teal-400 to-purple-500"
-                                        initial={{ width: 0 }}
-                                        whileHover={{ width: "100%" }}
-                                        transition={{ duration: 0.3 }}
-                                      />
-                                    </span>
-                                  </motion.div>
-                                </Button>
-                              </motion.div>
-                            )}
                           </div>
-                        </div>
-
+                  </div>
+                  
                         {/* Description */}
                         {exp.description && (
                           <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
                             {exp.description}
                           </p>
+                        )}
+
+                        {/* Visit Website Button */}
+                        {exp.website && (
+                          <motion.div
+                            className="mb-4"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+                            transition={{ delay: 0.3 }}
+                          >
+                            <motion.div
+                              whileHover={{ scale: 1.02 }}
+                              whileTap={{ scale: 0.98 }}
+                            >
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="group relative overflow-hidden border-accent/30 text-accent hover:border-accent/50 hover:bg-accent/5 transition-all duration-300"
+                                onClick={() => window.open(exp.website, '_blank')}
+                              >
+                                <motion.div
+                                  className="absolute inset-0 bg-gradient-to-r from-teal-400/10 to-purple-500/10"
+                                  initial={{ x: "-100%" }}
+                                  whileHover={{ x: "0%" }}
+                                  transition={{ duration: 0.3 }}
+                                />
+                                <motion.div
+                                  className="relative flex items-center gap-2"
+                                  whileHover={{ x: 2 }}
+                                >
+                                  <ExternalLink className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:rotate-12" />
+                                  <span className="relative font-medium">
+                                    Visit Website
+                                    <motion.div
+                                      className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-teal-400 to-purple-500"
+                                      initial={{ width: 0 }}
+                                      whileHover={{ width: "100%" }}
+                                      transition={{ duration: 0.3 }}
+                                    />
+                                  </span>
+                                </motion.div>
+                              </Button>
+                            </motion.div>
+                          </motion.div>
                         )}
 
                         {/* Tech Tags */}
@@ -411,8 +498,8 @@ const Experience = () => {
                             transition={{ duration: 0.3, ease: "easeInOut" }}
                             className="overflow-hidden"
                           >
-                            <ul className="space-y-2">
-                              {exp.achievements.map((achievement, i) => (
+                  <ul className="space-y-2">
+                    {exp.achievements.map((achievement, i) => (
                                 <motion.li
                                   key={i}
                                   initial={{ opacity: 0, x: -20 }}
@@ -421,10 +508,10 @@ const Experience = () => {
                                   className="text-muted-foreground text-sm flex items-start"
                                 >
                                   <span className="text-accent mr-2 mt-1">•</span>
-                                  <span>{achievement}</span>
+                        <span>{achievement}</span>
                                 </motion.li>
-                              ))}
-                            </ul>
+                    ))}
+                  </ul>
                           </motion.div>
                           
                           {hoveredCard !== index && (
@@ -432,8 +519,8 @@ const Experience = () => {
                               Hover to explore key contributions
                             </div>
                           )}
-                        </div>
-                      </div>
+                </div>
+              </div>
                     </motion.div>
                   </motion.div>
                 </motion.div>

@@ -44,10 +44,10 @@ export const experiences: Experience[] = [
     period: "Nov. 2023 - Present",
     logo: "🏢",
     website: "https://kjssecodecell.com/",
+    description: "Technical community at K. J. Somaiya College of Engineering focused on fostering coding culture through workshops, hackathons, and competitive programming.",
     achievements: [
-      "Delivered high-impact tech sessions to 200+ attendees on Competitive Programming, Development, and Web3",
-      "Led organization of national-level hackathons (CodeUnCode, KJSCE HACK 8) with 500+ participants",
-      "Mentored juniors in full-stack technologies, enabling collaborative project work",
+      "Delivered high-impact tech sessions to 200+ attendees on Competitive Programming, Development, and Web3, improving engagement and technical proficiency by designing beginner-friendly workshops and interactive contests.",
+      "Led the organization of national-level hackathons (KJSCE DEVOPIA, KJSCE HACK 8) with 500+ participants and 10K+ online reach by managing cross-functional teams, streamlining operations, and executing strategic marketing campaigns, ensuring maximum outreach and seamless execution.",
     ],
   },
   {
