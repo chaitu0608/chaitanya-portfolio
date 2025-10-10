@@ -21,11 +21,87 @@ const Experience = () => {
     <section id="experience" className="py-20 px-4 relative overflow-hidden">
       {/* Enhanced Background Effects */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bokeh-bg opacity-20" />
+        {/* Base gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-background via-background/95 to-background" />
+        
+        {/* Animated gradient orbs */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/3 left-1/4 w-80 h-80 bg-gradient-to-r from-teal-500/10 to-purple-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }} />
-          <div className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-gradient-to-r from-purple-500/10 to-teal-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '3.5s' }} />
+          <motion.div 
+            className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-teal-400/20 to-purple-500/20 rounded-full blur-3xl"
+            animate={{
+              x: [0, 50, -30, 0],
+              y: [0, -30, 20, 0],
+              scale: [1, 1.1, 0.9, 1],
+            }}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+          <motion.div 
+            className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-500/20 to-teal-400/20 rounded-full blur-3xl"
+            animate={{
+              x: [0, -40, 30, 0],
+              y: [0, 25, -15, 0],
+              scale: [1, 0.8, 1.2, 1],
+            }}
+            transition={{
+              duration: 25,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 5
+            }}
+          />
+          <motion.div 
+            className="absolute top-1/2 right-1/3 w-64 h-64 bg-gradient-to-r from-blue-400/15 to-cyan-400/15 rounded-full blur-2xl"
+            animate={{
+              x: [0, 20, -15, 0],
+              y: [0, -20, 10, 0],
+              scale: [1, 1.3, 0.7, 1],
+            }}
+            transition={{
+              duration: 18,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 10
+            }}
+          />
         </div>
+        
+        {/* Subtle grid pattern */}
+        <div className="absolute inset-0 opacity-[0.02]">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `
+              linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
+            `,
+            backgroundSize: '50px 50px'
+          }} />
+        </div>
+        
+        {/* Floating particles */}
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-accent/30 rounded-full"
+            style={{
+              left: `${20 + i * 15}%`,
+              top: `${30 + i * 10}%`,
+            }}
+            animate={{
+              y: [0, -20, 0],
+              opacity: [0.3, 0.8, 0.3],
+              scale: [1, 1.5, 1],
+            }}
+            transition={{
+              duration: 3 + i * 0.5,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 0.5
+            }}
+          />
+        ))}
       </div>
       
       <div className="max-w-6xl mx-auto relative z-10" ref={containerRef}>
@@ -37,13 +113,38 @@ const Experience = () => {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
-            <span className="text-gradient">Professional Experience</span>
-          </h2>
-          <div className="w-24 h-1 bg-gradient-accent mx-auto rounded-full mb-6"></div>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <motion.h2 
+            className="text-4xl md:text-5xl font-display font-bold mb-4"
+            initial={{ opacity: 0, scale: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            viewport={{ once: true }}
+          >
+            <motion.span 
+              className="text-gradient"
+              initial={{ backgroundPosition: "0% 50%" }}
+              whileInView={{ backgroundPosition: "100% 50%" }}
+              transition={{ duration: 2, ease: "easeInOut" }}
+            >
+              Work Experience
+            </motion.span>
+          </motion.h2>
+          <motion.div 
+            className="w-24 h-1 bg-gradient-accent mx-auto rounded-full mb-6"
+            initial={{ width: 0 }}
+            whileInView={{ width: 96 }}
+            transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
+            viewport={{ once: true }}
+          />
+          <motion.p 
+            className="text-lg text-muted-foreground max-w-2xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            viewport={{ once: true }}
+          >
             A timeline of my professional growth and key achievements in the tech industry
-          </p>
+          </motion.p>
         </motion.div>
         
         {/* Timeline Container */}
@@ -83,52 +184,101 @@ const Experience = () => {
                   className={`relative flex items-center ${isEven ? 'justify-start' : 'justify-end'}`}
                 >
                   {/* Timeline Node */}
-                  <div className="absolute left-6 w-4 h-4 bg-gradient-to-r from-teal-400 to-purple-500 rounded-full border-4 border-background shadow-lg z-10">
+                  <motion.div 
+                    className="absolute left-6 w-4 h-4 bg-gradient-to-r from-teal-400 to-purple-500 rounded-full border-4 border-background shadow-lg z-10"
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={isInView ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    whileHover={{ scale: 1.3 }}
+                  >
                     <motion.div
                       className="absolute inset-0 bg-gradient-to-r from-teal-400 to-purple-500 rounded-full"
                       animate={{
                         scale: [1, 1.2, 1],
-                        opacity: [0.7, 1, 0.7]
+                        opacity: [0.7, 1, 0.7],
+                        rotate: [0, 180, 360]
                       }}
                       transition={{
-                        duration: 2,
+                        duration: 3,
                         repeat: Infinity,
                         ease: "easeInOut"
                       }}
                     />
-                  </div>
+                    {/* Ripple effect */}
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-teal-400/30 to-purple-500/30 rounded-full"
+                      animate={{
+                        scale: [1, 2, 3],
+                        opacity: [0.5, 0.2, 0]
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeOut"
+                      }}
+                    />
+                  </motion.div>
 
                   {/* Experience Card */}
                   <motion.div
                     className={`w-full max-w-2xl ${isEven ? 'ml-16' : 'mr-16'}`}
                     whileHover={{ 
-                      y: -8,
-                      scale: 1.02,
-                      transition: { duration: 0.3, ease: "easeOut" }
+                      y: -12,
+                      scale: 1.03,
+                      rotateY: 2,
+                      transition: { duration: 0.4, ease: "easeOut" }
                     }}
                     onHoverStart={() => setHoveredCard(index)}
                     onHoverEnd={() => setHoveredCard(null)}
                   >
-                    <div className={`
-                      relative overflow-hidden
-                      bg-gradient-to-br from-card/30 via-card/20 to-card/10
-                      backdrop-blur-md border border-accent/20
-                      rounded-2xl shadow-2xl
-                      transition-all duration-500
-                      ${hoveredCard === index 
-                        ? 'shadow-teal-500/25 border-teal-400/40' 
-                        : 'hover:shadow-accent/20 hover:border-accent/30'
-                      }
-                    `}>
+                    <motion.div 
+                      className={`
+                        relative overflow-hidden
+                        bg-gradient-to-br from-card/30 via-card/20 to-card/10
+                        backdrop-blur-md border border-accent/20
+                        rounded-2xl shadow-2xl
+                        transition-all duration-500
+                        ${hoveredCard === index 
+                          ? 'shadow-teal-500/25 border-teal-400/40' 
+                          : 'hover:shadow-accent/20 hover:border-accent/30'
+                        }
+                      `}
+                      animate={{
+                        boxShadow: hoveredCard === index 
+                          ? "0 25px 50px -12px rgba(20, 184, 166, 0.25), 0 0 0 1px rgba(20, 184, 166, 0.4)"
+                          : "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
+                      }}
+                      transition={{ duration: 0.3 }}
+                    >
                       {/* Gradient Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-teal-500/5 via-transparent to-purple-500/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                      <motion.div 
+                        className="absolute inset-0 bg-gradient-to-br from-teal-500/5 via-transparent to-purple-500/5"
+                        animate={{
+                          opacity: hoveredCard === index ? 1 : 0
+                        }}
+                        transition={{ duration: 0.3 }}
+                      />
                       
                       {/* Shimmer Effect */}
                       <motion.div
                         className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
                         initial={{ x: "-100%" }}
                         animate={hoveredCard === index ? { x: "100%" } : { x: "-100%" }}
-                        transition={{ duration: 1.5, ease: "easeInOut" }}
+                        transition={{ duration: 1.2, ease: "easeInOut" }}
+                      />
+                      
+                      {/* Glow Effect */}
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-teal-400/10 via-purple-500/10 to-teal-400/10 rounded-2xl"
+                        animate={{
+                          opacity: hoveredCard === index ? [0, 0.3, 0] : 0,
+                          scale: hoveredCard === index ? [1, 1.05, 1] : 1
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: hoveredCard === index ? Infinity : 0,
+                          ease: "easeInOut"
+                        }}
                       />
 
                       <div className="relative z-10 p-6">
@@ -163,23 +313,39 @@ const Experience = () => {
                               {exp.period}
                             </Badge>
                             {exp.website && (
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="text-accent hover:text-accent/80 p-1 h-auto group text-xs"
-                                onClick={() => window.open(exp.website, '_blank')}
+                              <motion.div
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
                               >
-                                <ExternalLink className="w-4 h-4 mr-1 transition-transform group-hover:translate-x-1" />
-                                <span className="relative">
-                                  Visit Website
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  className="text-accent hover:text-accent/80 p-2 h-auto group text-xs relative overflow-hidden"
+                                  onClick={() => window.open(exp.website, '_blank')}
+                                >
                                   <motion.div
-                                    className="absolute bottom-0 left-0 h-0.5 bg-accent"
-                                    initial={{ width: 0 }}
-                                    whileHover={{ width: "100%" }}
+                                    className="absolute inset-0 bg-gradient-to-r from-teal-400/10 to-purple-500/10"
+                                    initial={{ x: "-100%" }}
+                                    whileHover={{ x: "0%" }}
                                     transition={{ duration: 0.3 }}
                                   />
-                                </span>
-                              </Button>
+                                  <motion.div
+                                    className="relative flex items-center gap-1"
+                                    whileHover={{ x: 2 }}
+                                  >
+                                    <ExternalLink className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:rotate-12" />
+                                    <span className="relative">
+                                      Visit Website
+                                      <motion.div
+                                        className="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-teal-400 to-purple-500"
+                                        initial={{ width: 0 }}
+                                        whileHover={{ width: "100%" }}
+                                        transition={{ duration: 0.3 }}
+                                      />
+                                    </span>
+                                  </motion.div>
+                                </Button>
+                              </motion.div>
                             )}
                           </div>
                         </div>
@@ -197,18 +363,34 @@ const Experience = () => {
                             {exp.tech.map((tech, i) => (
                               <motion.div
                                 key={i}
-                                initial={{ scale: 0, opacity: 0 }}
-                                animate={isInView ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
-                                transition={{ delay: 0.5 + i * 0.1 }}
-                                whileHover={{ scale: 1.05, y: -2 }}
-                                whileTap={{ scale: 0.95 }}
+                                initial={{ scale: 0, opacity: 0, rotate: -10 }}
+                                animate={isInView ? { scale: 1, opacity: 1, rotate: 0 } : { scale: 0, opacity: 0, rotate: -10 }}
+                                transition={{ 
+                                  delay: 0.5 + i * 0.1,
+                                  type: "spring",
+                                  stiffness: 200,
+                                  damping: 15
+                                }}
+                                whileHover={{ 
+                                  scale: 1.1, 
+                                  y: -3,
+                                  rotate: [0, -2, 2, 0],
+                                  transition: { duration: 0.3 }
+                                }}
+                                whileTap={{ scale: 0.9 }}
                               >
-                                <Badge 
-                                  variant="outline" 
-                                  className="bg-gradient-to-r from-teal-400/10 to-purple-500/10 border-accent/30 text-accent hover:border-accent/50 transition-all duration-300 text-xs px-2 py-1"
+                                <motion.div
+                                  whileHover={{
+                                    boxShadow: "0 0 20px rgba(20, 184, 166, 0.4)"
+                                  }}
                                 >
-                                  {tech}
-                                </Badge>
+                                  <Badge 
+                                    variant="outline" 
+                                    className="bg-gradient-to-r from-teal-400/10 to-purple-500/10 border-accent/30 text-accent hover:border-accent/50 transition-all duration-300 text-xs px-3 py-1.5 cursor-pointer"
+                                  >
+                                    {tech}
+                                  </Badge>
+                                </motion.div>
                               </motion.div>
                             ))}
                           </div>
@@ -252,7 +434,7 @@ const Experience = () => {
                           )}
                         </div>
                       </div>
-                    </div>
+                    </motion.div>
                   </motion.div>
                 </motion.div>
               );
