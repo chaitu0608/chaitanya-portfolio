@@ -174,7 +174,7 @@ export const loadProjects = async (): Promise<Project[]> => {
         tech: ['C++', 'Python', 'Kotlin', 'Swift', 'Electron', 'Node.js', 'Express', 'PostgreSQL', 'MongoDB', 'Firebase', 'OpenSSL'],
         category: 'Desktop Application',
         tags: ['c++', 'python', 'security', 'desktop', 'nodejs'],
-        link: 'https://trustwipe-demo.com',
+        link: 'https://trustwipe.vercel.app/',
         repo: 'https://github.com/chaitu0608/trustwipe',
         metrics: [
           { metric: 'Data Wiping Speed', value: '500MB/s' },

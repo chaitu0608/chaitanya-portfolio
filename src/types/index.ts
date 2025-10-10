@@ -7,6 +7,7 @@ export interface Experience {
   period: string;
   logo: string;
   achievements: string[];
+  website?: string;
 }
 
 export interface Education {

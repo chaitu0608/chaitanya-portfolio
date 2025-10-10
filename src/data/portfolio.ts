@@ -43,6 +43,7 @@ export const experiences: Experience[] = [
     location: "Mumbai, India",
     period: "Nov. 2023 - Present",
     logo: "🏢",
+    website: "https://kjssecodecell.com/",
     achievements: [
       "Delivered high-impact tech sessions to 200+ attendees on Competitive Programming, Development, and Web3",
       "Led organization of national-level hackathons (CodeUnCode, KJSCE HACK 8) with 500+ participants",
@@ -56,9 +57,9 @@ export const experiences: Experience[] = [
     period: "2023-24",
     logo: "🏪",
     achievements: [
-      "Spearheaded inventory and procurement strategies, reducing wastage and maximizing profitability",
-      "Analyzed sales trends and seasonal demand for data-driven purchasing decisions",
-      "Improved packaging and presentation to enhance shelf life",
+      "Spearheaded inventory and procurement strategies, significantly reducing wastage and maximizing profitability across both wholesale and retail segments",
+      "Analyzed sales trends and seasonal demand to guide data-driven purchasing decisions and maintain optimal stock levels",
+      "Sourced high-quality domestic and imported fruits while improving packaging to enhance shelf life and presentation",
     ],
   },
 ];
@@ -86,7 +87,7 @@ export const projects: Project[] = [
     type: "Desktop Application",
     thumbnail: "/trustwipe.jpg",
     githubUrl: "https://github.com/chaitu0608/trustwipe",
-    liveUrl: "https://trustwipe-demo.com",
+    liveUrl: "https://trustwipe.vercel.app/",
   },
   {
     title: "StarQuest",
