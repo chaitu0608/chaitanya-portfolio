@@ -8,6 +8,8 @@ export interface Experience {
   logo: string;
   achievements: string[];
   website?: string;
+  description?: string;
+  tech?: string[];
 }
 
 export interface Education {

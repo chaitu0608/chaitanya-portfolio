@@ -17,7 +17,7 @@ const Projects = () => {
   };
 
   return (
-    <section id="projects" className="py-20 px-4 relative overflow-hidden">
+    <section id="projects" className="py-20 px-4 relative overflow-hidden continuous-bg section-transition">
       {/* Enhanced Background Effects with Scroll Animation */}
       <motion.div 
         className="absolute inset-0 bokeh-bg"
@@ -26,6 +26,19 @@ const Projects = () => {
           y: backgroundY 
         }}
       />
+
+      {/* Floating Particles */}
+      <div className="floating-particles">
+        <div className="particle"></div>
+        <div className="particle"></div>
+        <div className="particle"></div>
+        <div className="particle"></div>
+        <div className="particle"></div>
+        <div className="particle"></div>
+        <div className="particle"></div>
+        <div className="particle"></div>
+        <div className="particle"></div>
+      </div>
       
       {/* Animated Background Elements with Scroll Effects */}
       <div className="absolute inset-0 overflow-hidden">
@@ -140,7 +153,29 @@ const Projects = () => {
                     <div className="w-full h-48 bg-gradient-to-br from-accent/20 via-accent/10 to-accent/5 rounded-2xl border border-accent/20 flex items-center justify-center relative overflow-hidden">
                       {/* Device Frame Effect */}
                       <div className="absolute inset-3 bg-gradient-to-br from-background/95 to-background/85 rounded-xl border border-accent/10 flex items-center justify-center overflow-hidden">
-                        {project.thumbnail ? (
+                        {project.title === 'Padhle' ? (
+                          <img 
+                            src="/padhle.png" 
+                            alt="Padhle Learning Management System"
+                            className="w-full h-full object-cover rounded-lg"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                              const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                              if (fallback) fallback.style.display = 'flex';
+                            }}
+                          />
+                        ) : project.title === 'TrustWipe' ? (
+                          <img 
+                            src="/trustwipe.jpg" 
+                            alt="TrustWipe Secure Data Wiping System"
+                            className="w-full h-full object-cover rounded-lg"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                              const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                              if (fallback) fallback.style.display = 'flex';
+                            }}
+                          />
+                        ) : project.thumbnail ? (
                           <img
                             src={project.thumbnail}
                             alt={project.title}

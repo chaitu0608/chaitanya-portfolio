@@ -34,7 +34,7 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
 
 
   return (
-    <section id="about" className="min-h-screen flex items-center px-4 pt-32 pb-20 relative overflow-hidden">
+    <section id="about" className="min-h-screen flex items-center px-4 pt-32 pb-20 relative overflow-hidden continuous-bg section-transition">
       {/* Enhanced Bokeh Background with Scroll Animation */}
       <motion.div 
         className="absolute inset-0 bokeh-bg"
@@ -43,6 +43,19 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
           y: backgroundY 
         }}
       />
+
+      {/* Floating Particles */}
+      <div className="floating-particles">
+        <div className="particle"></div>
+        <div className="particle"></div>
+        <div className="particle"></div>
+        <div className="particle"></div>
+        <div className="particle"></div>
+        <div className="particle"></div>
+        <div className="particle"></div>
+        <div className="particle"></div>
+        <div className="particle"></div>
+      </div>
       
       {/* Animated Background Elements with Scroll Effects */}
       <div className="absolute inset-0 overflow-hidden">
@@ -278,14 +291,14 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
                     <div className="w-full h-full bg-gradient-to-br from-accent/30 to-accent/10 flex items-center justify-center text-6xl" style={{display: 'none'}}>
                       👨‍💻
                   </div>
-                </div>
-                
+                  </div>
+                  
                   {/* Status Indicator - Floating on Photo */}
                   <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex items-center gap-2 px-3 py-1 bg-accent/20 rounded-full border border-accent/30 backdrop-blur-sm">
                     <div className="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
                     <span className="text-xs text-accent font-mono">This is me</span>
                   </div>
-
+                  
                   
                   <motion.div
                     className="absolute bottom-6 left-6 w-10 h-10 bg-accent/20 rounded-lg flex items-center justify-center border border-accent/30 backdrop-blur-sm"
@@ -303,13 +316,13 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
                     <span className="text-lg">💻</span>
                   </motion.div>
 
-                  <motion.div
+                      <motion.div
                     className="absolute top-1/2 right-4 w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center border border-accent/30 backdrop-blur-sm"
                     animate={{ y: [0, 10, 0] }}
                     transition={{ duration: 3, repeat: Infinity, delay: 1.5 }}
                   >
                     <span className="text-lg">⚡</span>
-                  </motion.div>
+                      </motion.div>
 
                   <motion.div
                     className="absolute top-6 left-6 w-10 h-10 bg-accent/20 rounded-lg flex items-center justify-center border border-accent/30 backdrop-blur-sm"
@@ -317,10 +330,10 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
                     transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
                   >
                     <span className="text-xl">⚛️</span>
-                  </motion.div>
+          </motion.div>
 
                   {/* Minimal Tech Emojis - Key Ones Only */}
-                  <motion.div
+          <motion.div
                     className="absolute top-4 left-1/2 w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center border border-accent/30 backdrop-blur-sm"
                     animate={{ scale: [1, 1.2, 1] }}
                     transition={{ duration: 2, repeat: Infinity }}
@@ -328,13 +341,13 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
                     <span className="text-lg">📊</span>
                   </motion.div>
 
-                  <motion.div
+                    <motion.div
                     className="absolute bottom-8 right-8 w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center border border-accent/30 backdrop-blur-sm"
                     animate={{ y: [0, -8, 0] }}
                     transition={{ duration: 2.5, repeat: Infinity, delay: 0.5 }}
                   >
                     <span className="text-lg">📱</span>
-                  </motion.div>
+                    </motion.div>
 
                   <motion.div
                     className="absolute bottom-4 left-1/2 w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center border border-accent/30 backdrop-blur-sm"
@@ -352,7 +365,7 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
                     <span className="text-xs">💡</span>
                   </motion.div>
                 </div>
-
+                
                 {/* Hover Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-accent/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl flex items-end justify-center pb-6">
                   <motion.div
