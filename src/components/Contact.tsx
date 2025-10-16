@@ -1,34 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Label } from '@/components/ui/label';
-import { Button } from '@/components/ui/button';
 import LampContainer from '@/components/ui/lamp';
 import { CardSpotlight } from '@/components/ui/card-spotlight';
-import { Mail, Phone, Github, Linkedin, Send } from 'lucide-react';
+import { Mail, Phone, Github, Linkedin } from 'lucide-react';
 import { contactInfo } from '@/data/portfolio';
 
 const Contact: React.FC = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) return;
-    setSubmitting(true);
-    await new Promise(r => setTimeout(r, 1200));
-    setSubmitting(false);
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 2600);
-    setFormData({ name: '', email: '', message: '' });
-  };
-
   return (
     <section id="contact" className="py-20 px-4 relative overflow-hidden continuous-bg section-transition">
       {/* Background */}
@@ -59,7 +36,7 @@ const Contact: React.FC = () => {
           </div>
         </LampContainer>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Quick contact cards */}
           <div className="space-y-6">
             <CardSpotlight className="p-5">
@@ -101,40 +78,19 @@ const Contact: React.FC = () => {
               </CardSpotlight>
             </div>
           </div>
-
-          {/* Contact form */}
-          <div className="lg:col-span-2">
-            <CardSpotlight className="p-6">
-              <form onSubmit={handleSubmit} className="space-y-5">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                  <div className="space-y-2">
-                    <Label htmlFor="name">Your name</Label>
-                    <Input id="name" name="name" value={formData.name} onChange={handleChange} placeholder="Jane Doe" />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input id="email" name="email" type="email" value={formData.email} onChange={handleChange} placeholder="you@example.com" />
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="message">Message</Label>
-                  <Textarea id="message" name="message" rows={6} value={formData.message} onChange={handleChange} placeholder="Tell me about your project..." />
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <Button type="submit" disabled={submitting} className="btn-primary">
-                    <Send className="w-4 h-4 mr-2" />
-                    {submitting ? 'Sending...' : 'Send message'}
-                  </Button>
-                  {submitted && (
-                    <motion.span initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className="text-accent">
-                      Message sent! I’ll reply soon.
-                    </motion.span>
-                  )}
-                </div>
-              </form>
-            </CardSpotlight>
-          </div>
+          {/* Apple Music Playlist Embed */}
+          <CardSpotlight className="p-3">
+            <div className="w-full h-full rounded-xl overflow-hidden glass-enhanced border border-accent/20">
+              <iframe
+                title="Apple Music Playlist"
+                allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
+                sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation-by-user-activation allow-pointer-lock"
+                className="w-full h-[420px]"
+                data-theme="dark"
+                src={"https://embed.music.apple.com/in/playlist/chaitu101/pl.u-AkAm81pUx87R2zE?theme=dark"}
+              />
+            </div>
+          </CardSpotlight>
         </div>
       </div>
     </section>
