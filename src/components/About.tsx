@@ -43,6 +43,14 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
           y: backgroundY 
         }}
       />
+      
+      {/* Glassmorphism Overlay */}
+      <motion.div 
+        className="absolute inset-0 glass-enhanced opacity-20"
+        style={{ 
+          opacity: useTransform(scrollYProgress, [0, 0.5, 1], [0.1, 0.15, 0.1])
+        }}
+      />
 
       {/* Floating Particles */}
       <div className="floating-particles">
@@ -117,37 +125,68 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          transition={{ 
+            duration: 0.8, 
+            delay: 0.2,
+            ease: [0.25, 0.46, 0.45, 0.94]
+          }}
           className="space-y-8"
         >
           {/* Greeting */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
+            transition={{ 
+              duration: 0.6, 
+              delay: 0.4,
+              ease: [0.25, 0.46, 0.45, 0.94]
+            }}
             className="space-y-4"
           >
             <motion.p 
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              className="text-accent font-mono text-sm tracking-wider"
+              transition={{ 
+                duration: 0.6, 
+                delay: 0.6,
+                ease: [0.25, 0.46, 0.45, 0.94]
+              }}
+              className="text-accent font-mono text-sm tracking-wider smooth-text"
             >
               Hello, I'm
             </motion.p>
             <motion.h1 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.8 }}
+              transition={{ 
+                duration: 0.8, 
+                delay: 0.8,
+                ease: [0.25, 0.46, 0.45, 0.94]
+              }}
               className="text-4xl md:text-6xl font-display font-bold leading-tight"
             >
-              <span className="text-gradient typing-animation">Chaitanya Dhamdhere</span>
+              <motion.span 
+                className="text-gradient smooth-text"
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ 
+                  duration: 0.8, 
+                  delay: 1.0,
+                  ease: [0.25, 0.46, 0.45, 0.94]
+                }}
+              >
+                Chaitanya Dhamdhere
+              </motion.span>
             </motion.h1>
             <motion.h2 
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 1.0 }}
-              className="text-lg md:text-xl text-muted-foreground font-light leading-relaxed max-w-lg"
+              transition={{ 
+                duration: 0.6, 
+                delay: 1.2,
+                ease: [0.25, 0.46, 0.45, 0.94]
+              }}
+              className="text-lg md:text-xl text-muted-foreground font-light leading-relaxed max-w-lg smooth-text"
             >
               Software Engineering student passionate about turning ideas into impactful solutions through code.
             </motion.h2>
@@ -157,7 +196,11 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
+            transition={{ 
+              duration: 0.6, 
+              delay: 1.4,
+              ease: [0.25, 0.46, 0.45, 0.94]
+            }}
             className="text-sm md:text-base text-muted-foreground leading-relaxed max-w-xl space-y-3"
           >
             <p>
@@ -194,38 +237,79 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
                 </motion.div>
 
           {/* Action Buttons */}
-                      <motion.div
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1 }}
+            transition={{ 
+              duration: 0.6, 
+              delay: 1.6,
+              ease: [0.25, 0.46, 0.45, 0.94]
+            }}
             className="flex flex-wrap gap-3"
           >
-            <Button 
-              size="lg" 
-              className="btn-primary"
-              onClick={exportToPDF}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ 
+                duration: 0.5, 
+                delay: 1.8,
+                ease: [0.25, 0.46, 0.45, 0.94]
+              }}
             >
-              <Download className="w-5 h-5 mr-2" />
-              Download CV
-            </Button>
-            <Button 
-              variant="outline" 
-              size="lg" 
-              className="btn-secondary"
-              onClick={() => handleOpenLink(contactInfo.githubUrl)}
+              <Button 
+                size="lg" 
+                className="btn-primary smooth-button"
+                onClick={exportToPDF}
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Download className="w-5 h-5 mr-2 smooth-icon" />
+                <span className="smooth-text">Download CV</span>
+              </Button>
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ 
+                duration: 0.5, 
+                delay: 2.0,
+                ease: [0.25, 0.46, 0.45, 0.94]
+              }}
             >
-              <Github className="w-5 h-5 mr-2" />
-              GitHub
-            </Button>
-            <Button 
-              variant="outline" 
-              size="lg" 
-              className="btn-secondary"
-              onClick={() => handleOpenLink(contactInfo.linkedinUrl)}
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="btn-secondary smooth-button"
+                onClick={() => handleOpenLink(contactInfo.githubUrl)}
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Github className="w-5 h-5 mr-2 smooth-icon" />
+                <span className="smooth-text">GitHub</span>
+              </Button>
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ 
+                duration: 0.5, 
+                delay: 2.2,
+                ease: [0.25, 0.46, 0.45, 0.94]
+              }}
             >
-              <Linkedin className="w-5 h-5 mr-2" />
-              LinkedIn
-            </Button>
+              <Button 
+                variant="outline" 
+                size="lg" 
+                className="btn-secondary smooth-button"
+                onClick={() => handleOpenLink(contactInfo.linkedinUrl)}
+                whileHover={{ scale: 1.05, y: -2 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Linkedin className="w-5 h-5 mr-2 smooth-icon" />
+                <span className="smooth-text">LinkedIn</span>
+              </Button>
+            </motion.div>
           </motion.div>
 
 
@@ -235,16 +319,27 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
         <motion.div
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
+          transition={{ 
+            duration: 0.8, 
+            delay: 0.4,
+            ease: [0.25, 0.46, 0.45, 0.94]
+          }}
           className="flex justify-center lg:justify-end"
         >
           <div className="relative">
 
             {/* Main Image Container with Scroll Animation */}
             <motion.div
-              whileHover={{ scale: 1.02, rotateY: 5 }}
-              transition={{ duration: 0.3 }}
-              className="relative group cursor-pointer"
+              whileHover={{ 
+                scale: 1.05, 
+                rotateY: 5,
+                y: -5
+              }}
+              transition={{ 
+                duration: 0.4,
+                ease: [0.25, 0.46, 0.45, 0.94]
+              }}
+              className="relative group cursor-pointer smooth-card"
               onClick={onAvatarClick}
               style={{
                 scale: imageScale,
