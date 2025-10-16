@@ -114,8 +114,93 @@ const Contact: React.FC = () => {
 
   return (
     <section id="contact" className="py-20 px-4 relative overflow-hidden continuous-bg section-transition">
-      {/* Background */}
+      {/* Enhanced Glassmorphism Background */}
       <motion.div className="absolute inset-0 bokeh-bg" style={{ opacity: 0.2 }} />
+      
+      {/* Glassmorphism Overlay */}
+      <motion.div 
+        className="absolute inset-0 glass-enhanced opacity-20"
+        style={{ 
+          opacity: 0.15
+        }}
+      />
+
+      {/* Floating Particles */}
+      <div className="floating-particles">
+        {[...Array(8)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="particle"
+            style={{
+              left: `${10 + i * 12}%`,
+              top: `${15 + (i % 2) * 40}%`,
+            }}
+            animate={{
+              y: [0, -30, 0],
+              x: [0, 15, -8, 0],
+              opacity: [0.1, 0.4, 0.1],
+              scale: [0.8, 1.2, 0.8],
+            }}
+            transition={{
+              duration: 10 + i * 0.5,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 0.4
+            }}
+          />
+        ))}
+      </div>
+      
+      {/* Enhanced Glassmorphism Orbs */}
+      <div className="absolute inset-0 overflow-hidden">
+        <motion.div 
+          className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-accent opacity-8 rounded-full blur-3xl"
+          animate={{ 
+            scale: [1, 1.3, 0.9, 1],
+            opacity: [0.08, 0.15, 0.1, 0.08],
+            x: [0, 40, -20, 0],
+            y: [0, -30, 15, 0],
+            rotate: [0, 90, 180, 270, 360]
+          }}
+          transition={{
+            duration: 25,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+        <motion.div 
+          className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-500/10 to-teal-400/10 rounded-full blur-3xl"
+          animate={{ 
+            scale: [0.8, 1.2, 1, 0.8],
+            opacity: [0.1, 0.15, 0.12, 0.1],
+            x: [0, -30, 25, 0],
+            y: [0, 35, -15, 0],
+            rotate: [360, 270, 180, 90, 0]
+          }}
+          transition={{
+            duration: 30,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 8
+          }}
+        />
+        <motion.div 
+          className="absolute top-1/2 right-1/3 w-64 h-64 bg-gradient-to-r from-blue-400/8 to-cyan-400/8 rounded-full blur-2xl"
+          animate={{ 
+            scale: [1, 1.4, 0.7, 1],
+            opacity: [0.08, 0.12, 0.06, 0.08],
+            x: [0, 25, -12, 0],
+            y: [0, -25, 12, 0],
+            rotate: [0, 45, 90, 135, 180, 225, 270, 315, 360]
+          }}
+          transition={{
+            duration: 20,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 12
+          }}
+        />
+      </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Header with Lamp */}
@@ -143,60 +228,132 @@ const Contact: React.FC = () => {
         </LampContainer>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Quick contact cards */}
+          {/* Enhanced Contact Cards */}
           <div className="space-y-6">
-            <CardSpotlight className="p-5">
-              <div className="flex items-start gap-3">
-                <Mail className="w-5 h-5 text-accent mt-1" />
-                <div>
-                  <div className="text-sm text-muted-foreground">Email</div>
-                  <a href={`mailto:${contactInfo.email}`} className="text-foreground hover:text-accent smooth-transition">
-                    {contactInfo.email}
-                  </a>
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              viewport={{ once: true }}
+            >
+              <CardSpotlight className="p-6 hover:scale-105 transition-all duration-300 group">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 rounded-full bg-gradient-to-r from-blue-500/20 to-blue-600/20 group-hover:scale-110 transition-transform duration-300">
+                    <Mail className="w-6 h-6 text-blue-400" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm text-muted-foreground mb-1">Email</div>
+                    <a 
+                      href={`mailto:${contactInfo.email}`} 
+                      className="text-foreground hover:text-blue-400 smooth-transition font-medium"
+                    >
+                      {contactInfo.email}
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </CardSpotlight>
+              </CardSpotlight>
+            </motion.div>
 
-            <CardSpotlight className="p-5">
-              <div className="flex items-start gap-3">
-                <Phone className="w-5 h-5 text-accent mt-1" />
-                <div>
-                  <div className="text-sm text-muted-foreground">Phone</div>
-                  <a href={`tel:${contactInfo.phone}`} className="text-foreground hover:text-accent smooth-transition">
-                    {contactInfo.phone}
-                  </a>
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              viewport={{ once: true }}
+            >
+              <CardSpotlight className="p-6 hover:scale-105 transition-all duration-300 group">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 rounded-full bg-gradient-to-r from-green-500/20 to-green-600/20 group-hover:scale-110 transition-transform duration-300">
+                    <Phone className="w-6 h-6 text-green-400" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-sm text-muted-foreground mb-1">Phone</div>
+                    <a 
+                      href={`tel:${contactInfo.phone}`} 
+                      className="text-foreground hover:text-green-400 smooth-transition font-medium"
+                    >
+                      {contactInfo.phone}
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </CardSpotlight>
+              </CardSpotlight>
+            </motion.div>
 
             <div className="grid grid-cols-2 gap-6">
-              <CardSpotlight className="p-4 cursor-pointer" >
-                <a href={contactInfo.githubUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2">
-                  <Github className="w-5 h-5 text-accent" />
-                  <span>GitHub</span>
-                </a>
-              </CardSpotlight>
-              <CardSpotlight className="p-4 cursor-pointer" >
-                <a href={contactInfo.linkedinUrl} target="_blank" rel="noreferrer" className="flex items-center gap-2">
-                  <Linkedin className="w-5 h-5 text-accent" />
-                  <span>LinkedIn</span>
-                </a>
-              </CardSpotlight>
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                viewport={{ once: true }}
+              >
+                <CardSpotlight className="p-6 cursor-pointer hover:scale-105 transition-all duration-300 group">
+                  <a href={contactInfo.githubUrl} target="_blank" rel="noreferrer" className="flex flex-col items-center gap-3 text-center">
+                    <div className="p-4 rounded-full bg-gradient-to-r from-gray-500/20 to-gray-600/20 group-hover:scale-110 transition-transform duration-300">
+                      <Github className="w-8 h-8 text-gray-400" />
+                    </div>
+                    <span className="font-semibold">GitHub</span>
+                    <span className="text-xs text-muted-foreground">Check out my projects</span>
+                  </a>
+                </CardSpotlight>
+              </motion.div>
+              
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                viewport={{ once: true }}
+              >
+                <CardSpotlight className="p-6 cursor-pointer hover:scale-105 transition-all duration-300 group">
+                  <a href={contactInfo.linkedinUrl} target="_blank" rel="noreferrer" className="flex flex-col items-center gap-3 text-center">
+                    <div className="p-4 rounded-full bg-gradient-to-r from-blue-500/20 to-blue-600/20 group-hover:scale-110 transition-transform duration-300">
+                      <Linkedin className="w-8 h-8 text-blue-400" />
+                    </div>
+                    <span className="font-semibold">LinkedIn</span>
+                    <span className="text-xs text-muted-foreground">Let's connect</span>
+                  </a>
+                </CardSpotlight>
+              </motion.div>
             </div>
           </div>
-          {/* Apple Music Playlist Embed */}
-          <CardSpotlight className="p-3">
-            <div className="w-full h-full rounded-xl overflow-hidden glass-enhanced border border-accent/20">
-              <iframe
-                title="Apple Music Playlist"
-                allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
-                sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation-by-user-activation allow-pointer-lock"
-                className="w-full h-[420px]"
-                data-theme="dark"
-                src={"https://embed.music.apple.com/in/playlist/chaitu101/pl.u-AkAm81pUx87R2zE?theme=dark"}
-              />
-            </div>
-          </CardSpotlight>
+          {/* Enhanced Apple Music Playlist Embed */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            viewport={{ once: true }}
+          >
+            <CardSpotlight className="p-6 hover:scale-105 transition-all duration-300">
+              <div className="text-center mb-6">
+                <motion.h3 
+                  className="text-2xl font-bold text-gradient mb-2"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.6, delay: 0.3 }}
+                  viewport={{ once: true }}
+                >
+                  My Vibe 🎶
+                </motion.h3>
+                <motion.p 
+                  className="text-muted-foreground text-sm"
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.4 }}
+                  viewport={{ once: true }}
+                >
+                  What I'm listening to right now
+                </motion.p>
+              </div>
+              <div className="w-full h-full rounded-xl overflow-hidden glass-enhanced border border-accent/20 shadow-2xl">
+                <iframe
+                  title="Apple Music Playlist"
+                  allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
+                  sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation-by-user-activation allow-pointer-lock"
+                  className="w-full h-[420px]"
+                  data-theme="dark"
+                  src={"https://embed.music.apple.com/in/playlist/chaitu101/pl.u-AkAm81pUx87R2zE?theme=dark"}
+                />
+              </div>
+            </CardSpotlight>
+          </motion.div>
         </div>
       </div>
 

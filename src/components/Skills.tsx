@@ -58,9 +58,17 @@ const Skills = () => {
 
   return (
     <section id="skills" className="py-20 px-4 relative overflow-hidden continuous-bg section-transition">
-      {/* Enhanced Background Effects */}
+      {/* Enhanced Glassmorphism Background */}
       <motion.div 
         className="absolute inset-0 bokeh-bg"
+        style={{ 
+          opacity: 0.2
+        }}
+      />
+      
+      {/* Glassmorphism Overlay */}
+      <motion.div 
+        className="absolute inset-0 glass-enhanced opacity-25"
         style={{ 
           opacity: 0.15
         }}
@@ -92,13 +100,13 @@ const Skills = () => {
         ))}
       </div>
       
-      {/* Animated Background Elements */}
+      {/* Enhanced Glassmorphism Orbs */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div 
-          className="absolute top-1/3 left-1/4 w-80 h-80 bg-gradient-accent opacity-5 rounded-full blur-3xl"
+          className="absolute top-1/3 left-1/4 w-80 h-80 bg-gradient-accent opacity-8 rounded-full blur-3xl"
           animate={{ 
             scale: [1, 1.2, 0.9, 1],
-            opacity: [0.05, 0.12, 0.08, 0.05],
+            opacity: [0.08, 0.15, 0.1, 0.08],
             x: [0, 30, -15, 0],
             y: [0, -20, 15, 0],
             rotate: [0, 90, 180, 270, 360]
@@ -110,16 +118,64 @@ const Skills = () => {
           }}
         />
         <motion.div 
-          className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-gradient-to-r from-purple-500/8 to-teal-400/8 rounded-full blur-3xl"
+          className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-gradient-to-r from-purple-500/12 to-teal-400/12 rounded-full blur-3xl"
           animate={{ 
             scale: [0.8, 1.1, 1, 0.8],
-            opacity: [0.06, 0.1, 0.08, 0.06],
+            opacity: [0.1, 0.15, 0.12, 0.1],
             x: [0, -25, 20, 0],
             y: [0, 30, -10, 0],
             rotate: [360, 270, 180, 90, 0]
           }}
           transition={{
             duration: 25,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 8
+          }}
+        />
+        <motion.div 
+          className="absolute top-1/2 right-1/3 w-64 h-64 bg-gradient-to-r from-blue-400/10 to-cyan-400/10 rounded-full blur-2xl"
+          animate={{ 
+            scale: [1, 1.3, 0.8, 1],
+            opacity: [0.08, 0.12, 0.06, 0.08],
+            x: [0, 20, -10, 0],
+            y: [0, -20, 10, 0],
+            rotate: [0, 45, 90, 135, 180, 225, 270, 315, 360]
+          }}
+          transition={{
+            duration: 18,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 10
+          }}
+        />
+        
+        {/* Floating Glass Orbs */}
+        <motion.div 
+          className="absolute top-1/6 right-1/6 w-48 h-48 bg-gradient-to-r from-teal-400/8 to-purple-500/8 rounded-full blur-2xl"
+          animate={{ 
+            scale: [0.8, 1.1, 0.9, 0.8],
+            opacity: [0.06, 0.1, 0.08, 0.06],
+            x: [0, 15, -8, 0],
+            y: [0, -15, 8, 0]
+          }}
+          transition={{
+            duration: 15,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 3
+          }}
+        />
+        <motion.div 
+          className="absolute bottom-1/6 left-1/6 w-56 h-56 bg-gradient-to-r from-purple-500/8 to-blue-400/8 rounded-full blur-2xl"
+          animate={{ 
+            scale: [0.9, 1.2, 1, 0.9],
+            opacity: [0.07, 0.11, 0.09, 0.07],
+            x: [0, -20, 12, 0],
+            y: [0, 20, -12, 0]
+          }}
+          transition={{
+            duration: 22,
             repeat: Infinity,
             ease: "easeInOut",
             delay: 8
