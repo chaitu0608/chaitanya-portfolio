@@ -12,7 +12,7 @@ interface PhotoAlbumProps {
 const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ isOpen, onClose }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Photo album data - you can add more photos here
+  // Photo album data
   const photos = [
     {
       id: 1,
@@ -22,21 +22,21 @@ const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ isOpen, onClose }) => {
     },
     {
       id: 2,
-      src: '/coding-photo-1.jpg', // You can add more coding photos
-      title: 'Coding Session',
-      description: 'Working on a React project'
+      src: '/codecell25.png',
+      title: 'CodeCell Team',
+      description: 'KJSCE CodeCell team photo - Building the future together'
     },
     {
       id: 3,
-      src: '/coding-photo-2.jpg', // You can add more coding photos
-      title: 'Development Environment',
-      description: 'My coding setup and workspace'
+      src: '/profile2.PNG',
+      title: 'Exploring, learning, and growing every day',
+      description: '2025-2026'
     },
     {
       id: 4,
-      src: '/coding-photo-3.jpg', // You can add more coding photos
-      title: 'Hackathon',
-      description: 'Building innovative solutions'
+      src: '/profile3.jpg',
+      title: 'Yes,I overcame my stage fright',
+      description: '2024-2025'
     }
   ];
 
@@ -90,8 +90,10 @@ const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ isOpen, onClose }) => {
                   alt={photos[currentIndex].title}
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                    e.currentTarget.nextElementSibling.style.display = 'flex';
+                    const target = e.currentTarget as HTMLImageElement;
+                    target.style.display = 'none';
+                    const fallback = target.nextElementSibling as HTMLElement;
+                    if (fallback) fallback.style.display = 'flex';
                   }}
                 />
                 <div className="w-full h-full bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center text-6xl" style={{display: 'none'}}>
@@ -150,8 +152,10 @@ const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ isOpen, onClose }) => {
                     alt={photo.title}
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                      e.currentTarget.nextElementSibling.style.display = 'flex';
+                      const target = e.currentTarget as HTMLImageElement;
+                      target.style.display = 'none';
+                      const fallback = target.nextElementSibling as HTMLElement;
+                      if (fallback) fallback.style.display = 'flex';
                     }}
                   />
                   <div className="w-full h-full bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center text-lg" style={{display: 'none'}}>

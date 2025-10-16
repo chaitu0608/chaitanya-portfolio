@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import LampContainer from '@/components/ui/lamp';
 import { CardSpotlight } from '@/components/ui/card-spotlight';
@@ -6,6 +6,112 @@ import { Mail, Phone, Github, Linkedin } from 'lucide-react';
 import { contactInfo } from '@/data/portfolio';
 
 const Contact: React.FC = () => {
+  const [typedText, setTypedText] = useState('');
+  const [showEasterEgg, setShowEasterEgg] = useState(false);
+  const [showPaajiEgg, setShowPaajiEgg] = useState(false);
+  const [showEthGlobalEgg, setShowEthGlobalEgg] = useState(false);
+  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+  const [paajiAudio, setPaajiAudio] = useState<HTMLAudioElement | null>(null);
+  const [paajiVideo, setPaajiVideo] = useState<HTMLVideoElement | null>(null);
+  const [ethGlobalVideo, setEthGlobalVideo] = useState<HTMLVideoElement | null>(null);
+
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      setTypedText(prev => {
+        const newText = prev + e.key.toLowerCase();
+        if (newText.includes('pushpak')) {
+          setShowEasterEgg(true);
+          if (audio) {
+            audio.currentTime = 0;
+            audio.play().catch(console.error);
+          }
+          return '';
+        }
+        if (newText.includes('paaji')) {
+          setShowPaajiEgg(true);
+          if (paajiAudio && paajiVideo) {
+            paajiAudio.currentTime = 0;
+            paajiVideo.currentTime = 0;
+            paajiAudio.play().catch(console.error);
+            paajiVideo.play().catch(console.error);
+          }
+          return '';
+        }
+        if (newText.includes('ethglobal')) {
+          setShowEthGlobalEgg(true);
+          if (ethGlobalVideo) {
+            ethGlobalVideo.currentTime = 0;
+            ethGlobalVideo.play().catch(console.error);
+          }
+          return '';
+        }
+        return newText.slice(-10); // Keep only last 10 characters
+      });
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [audio, paajiAudio, paajiVideo, ethGlobalVideo]);
+
+  useEffect(() => {
+    const audioElement = new Audio('/pushpa.m4a');
+    audioElement.preload = 'auto';
+    setAudio(audioElement);
+    return () => {
+      if (audioElement) {
+        audioElement.pause();
+        audioElement.currentTime = 0;
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const paajiAudioElement = new Audio('/amandeep.m4a');
+    const paajiVideoElement = document.createElement('video');
+    paajiVideoElement.src = '/amandeep.MOV';
+    paajiVideoElement.preload = 'auto';
+    paajiVideoElement.muted = true; // Mute video since we're playing audio separately
+    
+    paajiAudioElement.addEventListener('ended', () => {
+      setShowPaajiEgg(false);
+      paajiVideoElement.pause();
+      paajiVideoElement.currentTime = 0;
+    });
+
+    setPaajiAudio(paajiAudioElement);
+    setPaajiVideo(paajiVideoElement);
+    
+    return () => {
+      if (paajiAudioElement) {
+        paajiAudioElement.pause();
+        paajiAudioElement.currentTime = 0;
+      }
+      if (paajiVideoElement) {
+        paajiVideoElement.pause();
+        paajiVideoElement.currentTime = 0;
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    const ethGlobalVideoElement = document.createElement('video');
+    ethGlobalVideoElement.src = '/ethglobal.MOV';
+    ethGlobalVideoElement.preload = 'auto';
+    
+    ethGlobalVideoElement.addEventListener('ended', () => {
+      setShowEthGlobalEgg(false);
+    });
+
+    setEthGlobalVideo(ethGlobalVideoElement);
+    
+    return () => {
+      if (ethGlobalVideoElement) {
+        ethGlobalVideoElement.pause();
+        ethGlobalVideoElement.currentTime = 0;
+      }
+    };
+  }, []);
+
   return (
     <section id="contact" className="py-20 px-4 relative overflow-hidden continuous-bg section-transition">
       {/* Background */}
@@ -93,6 +199,209 @@ const Contact: React.FC = () => {
           </CardSpotlight>
         </div>
       </div>
+
+      {/* Easter Egg */}
+      {showEasterEgg && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8, y: 50 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.8, y: 50 }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+          onClick={() => setShowEasterEgg(false)}
+        >
+          <motion.div
+            initial={{ rotate: -5 }}
+            animate={{ rotate: 5 }}
+            transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
+            className="relative"
+          >
+            <CardSpotlight className="p-6 max-w-md">
+              <div className="text-center space-y-4">
+                <motion.img
+                  src="/pushpak.png"
+                  alt="Pushpak"
+                  className="w-48 h-48 mx-auto rounded-2xl object-cover"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+                />
+                <motion.h3
+                  className="text-2xl font-bold text-gradient"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.4 }}
+                >
+                  Pushpa Don
+                </motion.h3>
+                <motion.p
+                  className="text-muted-foreground"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.6 }}
+                >
+                  Mai toh chaitu ki kutiya hu..bhowbhow
+                </motion.p>
+                <motion.button
+                  onClick={() => {
+                    setShowEasterEgg(false);
+                    if (audio) {
+                      audio.pause();
+                      audio.currentTime = 0;
+                    }
+                  }}
+                  className="btn-secondary mt-4"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8 }}
+                >
+                  Close
+                </motion.button>
+              </div>
+            </CardSpotlight>
+          </motion.div>
+        </motion.div>
+      )}
+
+      {/* Paaji Easter Egg */}
+      {showPaajiEgg && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
+        >
+          <motion.div
+            className="relative max-w-lg w-full mx-4"
+            initial={{ rotate: -2 }}
+            animate={{ rotate: 2 }}
+            transition={{ duration: 0.8, repeat: Infinity, repeatType: "reverse" }}
+          >
+            <CardSpotlight className="p-4">
+              <div className="relative">
+                <video
+                  ref={(el) => {
+                    if (el && paajiVideo) {
+                      el.src = paajiVideo.src;
+                      el.currentTime = paajiVideo.currentTime;
+                      if (!paajiVideo.paused) {
+                        el.play().catch(console.error);
+                      }
+                    }
+                  }}
+                  className="w-full h-auto rounded-xl"
+                  muted
+                  loop={false}
+                />
+                <motion.div
+                  className="absolute top-4 left-4 bg-black/50 backdrop-blur-sm rounded-lg px-3 py-2"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <h3 className="text-white font-bold text-lg">Paaji! 🎬</h3>
+                </motion.div>
+                <motion.div
+                  className="absolute bottom-4 right-4 bg-black/50 backdrop-blur-sm rounded-lg px-3 py-2"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                >
+                  <p className="text-white text-sm">jatt da muqabla</p>
+                </motion.div>
+                <motion.button
+                  onClick={() => {
+                    setShowPaajiEgg(false);
+                    if (paajiAudio) {
+                      paajiAudio.pause();
+                      paajiAudio.currentTime = 0;
+                    }
+                    if (paajiVideo) {
+                      paajiVideo.pause();
+                      paajiVideo.currentTime = 0;
+                    }
+                  }}
+                  className="absolute top-4 right-4 bg-red-500/80 hover:bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center backdrop-blur-sm transition-colors"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.3 }}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  ×
+                </motion.button>
+              </div>
+            </CardSpotlight>
+          </motion.div>
+        </motion.div>
+      )}
+
+      {/* ETHGlobal Easter Egg */}
+      {showEthGlobalEgg && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
+        >
+          <motion.div
+            className="relative max-w-lg w-full mx-4"
+            initial={{ rotate: -2 }}
+            animate={{ rotate: 2 }}
+            transition={{ duration: 0.8, repeat: Infinity, repeatType: "reverse" }}
+          >
+            <CardSpotlight className="p-4">
+              <div className="relative">
+                <video
+                  ref={(el) => {
+                    if (el && ethGlobalVideo) {
+                      el.src = ethGlobalVideo.src;
+                      el.currentTime = ethGlobalVideo.currentTime;
+                      if (!ethGlobalVideo.paused) {
+                        el.play().catch(console.error);
+                      }
+                    }
+                  }}
+                  className="w-full h-auto rounded-xl"
+                  loop={false}
+                />
+                <motion.div
+                  className="absolute top-4 left-4 bg-black/50 backdrop-blur-sm rounded-lg px-3 py-2"
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <h3 className="text-white font-bold text-lg">ETHGlobal! 🚀</h3>
+                </motion.div>
+                <motion.div
+                  className="absolute bottom-4 right-4 bg-black/50 backdrop-blur-sm rounded-lg px-3 py-2"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                >
+                  <p className="text-white text-sm">Type "ethglobal" to trigger this easter egg</p>
+                </motion.div>
+                <motion.button
+                  onClick={() => {
+                    setShowEthGlobalEgg(false);
+                    if (ethGlobalVideo) {
+                      ethGlobalVideo.pause();
+                      ethGlobalVideo.currentTime = 0;
+                    }
+                  }}
+                  className="absolute top-4 right-4 bg-red-500/80 hover:bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center backdrop-blur-sm transition-colors"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.3 }}
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  ×
+                </motion.button>
+              </div>
+            </CardSpotlight>
+          </motion.div>
+        </motion.div>
+      )}
     </section>
   );
 };
