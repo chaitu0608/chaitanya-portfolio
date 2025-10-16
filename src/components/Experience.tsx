@@ -28,27 +28,27 @@ const Experience = () => {
         }}
       />
 
-      {/* Floating Particles - Enhanced */}
+      {/* Floating Particles - Subtle for cohesion */}
       <div className="floating-particles">
-        {[...Array(12)].map((_, i) => (
+        {[...Array(6)].map((_, i) => (
           <motion.div
             key={i}
             className="particle"
             style={{
-              left: `${5 + i * 8}%`,
-              top: `${10 + (i % 3) * 30}%`,
+              left: `${10 + i * 12}%`,
+              top: `${15 + (i % 2) * 40}%`,
             }}
             animate={{
-              y: [0, -30, 0],
-              x: [0, 15, -10, 0],
-              opacity: [0.2, 0.6, 0.2],
-              scale: [0.8, 1.2, 0.8],
+              y: [0, -20, 0],
+              x: [0, 10, -5, 0],
+              opacity: [0.15, 0.35, 0.15],
+              scale: [0.8, 1.05, 0.8],
             }}
             transition={{
-              duration: 8 + i * 0.5,
+              duration: 10 + i * 0.4,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: i * 0.3
+              delay: i * 0.5
             }}
           />
         ))}
@@ -299,7 +299,7 @@ const Experience = () => {
 
                   {/* Experience Card */}
                   <motion.div
-                    className={`w-full max-w-2xl ${isEven ? 'ml-16' : 'mr-16'}`}
+                    className={`w-full max-w-2xl ${isEven ? 'ml-16' : 'mr-16'} group`}
                     whileHover={{ 
                       y: -12,
                       scale: 1.03,
@@ -310,17 +310,7 @@ const Experience = () => {
                     onHoverEnd={() => setHoveredCard(null)}
                   >
                     <motion.div 
-                      className={`
-                        relative overflow-hidden
-                        bg-gradient-to-br from-card/30 via-card/20 to-card/10
-                        backdrop-blur-md border border-accent/20
-                        rounded-2xl shadow-2xl
-                        transition-all duration-500
-                        ${hoveredCard === index 
-                          ? 'shadow-teal-500/25 border-teal-400/40' 
-                          : 'hover:shadow-accent/20 hover:border-accent/30'
-                        }
-                      `}
+                      className="relative p-6 rounded-3xl bg-gradient-to-r from-card/30 via-card/20 to-card/10 backdrop-blur-xl border border-accent/20 shadow-2xl hover:shadow-accent/25 transition-all duration-500 overflow-hidden"
                       animate={{
                         boxShadow: hoveredCard === index 
                           ? "0 25px 50px -12px rgba(20, 184, 166, 0.25), 0 0 0 1px rgba(20, 184, 166, 0.4)"
@@ -328,14 +318,9 @@ const Experience = () => {
                       }}
                       transition={{ duration: 0.3 }}
                     >
-                      {/* Gradient Overlay */}
-                      <motion.div 
-                        className="absolute inset-0 bg-gradient-to-br from-teal-500/5 via-transparent to-purple-500/5"
-                        animate={{
-                          opacity: hoveredCard === index ? 1 : 0
-                        }}
-                        transition={{ duration: 0.3 }}
-                      />
+                      {/* Dynamic Neon Glow Overlay for cohesion with Projects */}
+                      <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-accent/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                      <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-transparent via-accent/8 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                       
                       {/* Shimmer Effect */}
                       <motion.div
@@ -345,12 +330,12 @@ const Experience = () => {
                         transition={{ duration: 1.2, ease: "easeInOut" }}
                       />
                       
-                      {/* Glow Effect */}
+                      {/* Subtle Glow */}
                       <motion.div
                         className="absolute inset-0 bg-gradient-to-r from-teal-400/10 via-purple-500/10 to-teal-400/10 rounded-2xl"
                         animate={{
-                          opacity: hoveredCard === index ? [0, 0.3, 0] : 0,
-                          scale: hoveredCard === index ? [1, 1.05, 1] : 1
+                          opacity: hoveredCard === index ? [0, 0.25, 0] : 0,
+                          scale: hoveredCard === index ? [1, 1.03, 1] : 1
                         }}
                         transition={{
                           duration: 2,

@@ -41,7 +41,7 @@ export const experiences: Experience[] = [
     title: "Core Team Member",
     company: "KJSCE CodeCell",
     location: "Mumbai, India",
-    period: "Nov. 2023 - Present",
+    period: "July 2024 - Present",
     logo: "🏢",
     website: "https://kjssecodecell.com/",
     description: "Technical community at K. J. Somaiya College of Engineering focused on fostering coding culture through workshops, hackathons, and competitive programming.",
@@ -78,6 +78,16 @@ export const education: Education[] = [
 
 // Projects Data
 export const projects: Project[] = [
+  {
+    title: "ShieldEye",
+    subtitle: "Advanced Threat Detection System",
+    description:
+      "Production-ready, full-stack cyberattack detection and visualization platform that identifies, analyzes, and classifies 12+ URL-based attacks in real time. Built for SIH 2025 | Team ShieldEye. Detects SQL Injection (error/union/time/blind), XSS (reflected/stored/DOM), SSRF, Directory Traversal, Command Injection, LFI/RFI, XXE, Web Shell Upload, Credential Stuffing, Brute Force, HTTP Parameter Pollution, and Typosquatting.",
+    tech: ["Full-Stack", "Real-time", "Security", "AI/ML", "Visualization"],
+    type: "Web Application",
+    thumbnail: "/shieldeye.png",
+    liveUrl: "https://shieldeye.vercel.app",
+  },
   {
     title: "TrustWipe",
     subtitle: "Secure Data Wiping System",
@@ -180,6 +190,8 @@ export const techCategories: TechCategory[] = [
       "Node.js",
       "Express.js",
       "Web3.js",
+      "Ethers.js",
+      "Solidity",
       "Tailwind CSS",
       "Bootstrap",
       "FastAPI",
@@ -191,20 +203,23 @@ export const techCategories: TechCategory[] = [
     skills: [
       "MongoDB",
       "PostgreSQL",
+      "MySQL",
       "Firebase",
       "Supabase",
+      "Vercel",
+      "Cloudflare",
       "Microsoft Azure",
     ],
     color: "bg-gradient-accent",
   },
   {
     category: "Tools",
-    skills: ["Git", "GitHub", "Docker", "Arduino"],
+    skills: ["Git", "GitHub", "Docker", "Arduino", "Notion"],
     color: "bg-gradient-primary",
   },
   {
     category: "Data Science & AI",
-    skills: ["NumPy", "pandas", "OpenCV", "Matplotlib"],
+    skills: ["NumPy", "pandas", "OpenCV", "Matplotlib", "Jupyter Notebook"],
     color: "bg-gradient-secondary",
   },
   {
