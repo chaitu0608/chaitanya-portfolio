@@ -21,13 +21,13 @@ const Footer: React.FC<FooterProps> = ({ onContactClick }) => {
   };
 
   return (
-    <footer className="py-16 px-4 relative">
+    <footer className="py-16 px-4 relative continuous-bg section-transition">
       {/* Background Grid */}
       <div className="absolute inset-0 grid-bg opacity-20"></div>
       
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Main Footer Content */}
-        <Card className="glass-panel border-2 border-cyan-400 p-8 mb-8">
+        <Card className="glass-enhanced border border-accent/20 p-8 mb-8">
           <div className="text-center space-y-6">
             <div className="flex items-center justify-center gap-3 mb-4">
               <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
@@ -49,7 +49,7 @@ const Footer: React.FC<FooterProps> = ({ onContactClick }) => {
               <Button 
                 variant="outline" 
                 size="lg"
-                className="border-cyan-400/50 text-cyan-400 hover:bg-cyan-400/10 hover:border-cyan-400 transition-all"
+                className="btn-secondary"
                 onClick={() => handleOpenLink(contactInfo.githubUrl)}
               >
                 <Github className="w-5 h-5 mr-2" />
@@ -58,7 +58,7 @@ const Footer: React.FC<FooterProps> = ({ onContactClick }) => {
               <Button 
                 variant="outline" 
                 size="lg"
-                className="border-cyan-400/50 text-cyan-400 hover:bg-cyan-400/10 hover:border-cyan-400 transition-all"
+                className="btn-secondary"
                 onClick={() => handleOpenLink(contactInfo.linkedinUrl)}
               >
                 <Linkedin className="w-5 h-5 mr-2" />
@@ -67,7 +67,7 @@ const Footer: React.FC<FooterProps> = ({ onContactClick }) => {
               <Button 
                 variant="outline" 
                 size="lg"
-                className="border-cyan-400/50 text-cyan-400 hover:bg-cyan-400/10 hover:border-cyan-400 transition-all"
+                className="btn-secondary"
                 onClick={handleEmail}
               >
                 <Mail className="w-5 h-5 mr-2" />
@@ -76,7 +76,7 @@ const Footer: React.FC<FooterProps> = ({ onContactClick }) => {
               <Button 
                 variant="outline" 
                 size="lg"
-                className="border-cyan-400/50 text-cyan-400 hover:bg-cyan-400/10 hover:border-cyan-400 transition-all"
+                className="btn-secondary"
                 onClick={handlePhone}
               >
                 <Phone className="w-5 h-5 mr-2" />
@@ -85,7 +85,7 @@ const Footer: React.FC<FooterProps> = ({ onContactClick }) => {
               <Button 
                 variant="default" 
                 size="lg"
-                className="cosmic-cyber hover:scale-105 transition-all glow"
+                className="btn-primary hover:scale-105"
                 onClick={onContactClick}
               >
                 <MessageCircle className="w-5 h-5 mr-2" />
@@ -97,7 +97,7 @@ const Footer: React.FC<FooterProps> = ({ onContactClick }) => {
 
         {/* System Status */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <Card className="glass-panel border border-cyan-400 p-4 text-center">
+          <Card className="glass-enhanced border border-accent/20 p-4 text-center">
             <div className="flex items-center justify-center gap-2 mb-2">
               <Wifi className="w-4 h-4 text-green-400" />
               <span className="text-cyan-400 font-mono text-sm">NETWORK_STATUS</span>
@@ -105,7 +105,7 @@ const Footer: React.FC<FooterProps> = ({ onContactClick }) => {
             <div className="text-green-400 font-mono">ONLINE</div>
           </Card>
           
-          <Card className="glass-panel border border-cyan-400 p-4 text-center">
+          <Card className="glass-enhanced border border-accent/20 p-4 text-center">
             <div className="flex items-center justify-center gap-2 mb-2">
               <Terminal className="w-4 h-4 text-yellow-400" />
               <span className="text-cyan-400 font-mono text-sm">SYSTEM_STATUS</span>
@@ -113,7 +113,7 @@ const Footer: React.FC<FooterProps> = ({ onContactClick }) => {
             <div className="text-yellow-400 font-mono">ACTIVE</div>
           </Card>
           
-          <Card className="glass-panel border border-cyan-400 p-4 text-center">
+          <Card className="glass-enhanced border border-accent/20 p-4 text-center">
             <div className="flex items-center justify-center gap-2 mb-2">
               <Zap className="w-4 h-4 text-blue-400" />
               <span className="text-cyan-400 font-mono text-sm">POWER_LEVEL</span>

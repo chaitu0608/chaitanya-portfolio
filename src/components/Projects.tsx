@@ -141,7 +141,7 @@ const Projects = () => {
               className="group relative"
             >
               {/* Landscape Glassmorphism Card */}
-              <div className="relative p-6 rounded-3xl bg-gradient-to-r from-card/30 via-card/20 to-card/10 backdrop-blur-xl border border-accent/20 shadow-2xl hover:shadow-accent/25 transition-all duration-500 overflow-hidden">
+              <div className="relative p-6 rounded-3xl glass-enhanced border border-accent/20 shadow-2xl hover:shadow-accent/25 smooth-transition-slow overflow-hidden">
                 {/* Dynamic Neon Glow Effect */}
                 <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-accent/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                 <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-transparent via-accent/8 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -150,7 +150,7 @@ const Projects = () => {
                 <div className="relative z-10 flex flex-col lg:flex-row gap-6 items-start">
                   {/* Project Visual - Landscape */}
                   <div className="w-full lg:w-80 flex-shrink-0">
-                    <div className="w-full h-48 bg-gradient-to-br from-accent/20 via-accent/10 to-accent/5 rounded-2xl border border-accent/20 flex items-center justify-center relative overflow-hidden">
+                    <div className="w-full h-48 bg-gradient-to-br from-accent/20 via-accent/10 to-accent/5 rounded-2xl border border-accent/20 flex items-center justify-center relative overflow-hidden glass">
                       {/* Device Frame Effect */}
                       <div className="absolute inset-3 bg-gradient-to-br from-background/95 to-background/85 rounded-xl border border-accent/10 flex items-center justify-center overflow-hidden">
                         {project.title === 'Padhle' ? (

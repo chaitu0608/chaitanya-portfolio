@@ -7,6 +7,7 @@ import Experience from "@/components/Experience";
 import Skills from "@/components/Skills";
 import Footer from "@/components/Footer";
 import ContactModal from "@/components/ContactModal";
+import Contact from "@/components/Contact";
 import PhotoAlbum from "@/components/PhotoAlbum";
 import DeveloperModeModal from "@/components/DeveloperModeModal";
 import FloatingDock from "@/components/ui/floating-dock";
@@ -85,6 +86,8 @@ const IndexNoThree = () => {
             <Experience />
 
             <Skills />
+
+            <Contact />
           </main>
 
           <Footer onContactClick={() => setIsContactModalOpen(true)} />

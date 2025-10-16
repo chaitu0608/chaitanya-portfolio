@@ -63,7 +63,7 @@ const Navigation: React.FC<NavigationProps> = ({ onContactClick }) => {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, delay: 0.5 }}
       className={`fixed top-6 left-0 right-0 z-50 transition-all duration-300 ${
-        scrolled ? "glass-panel border border-accent/20" : "bg-transparent"
+        scrolled ? "glass-enhanced border border-accent/20" : "bg-transparent"
       }`}
     >
       <div className="max-w-7xl mx-auto px-6">

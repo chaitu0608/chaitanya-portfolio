@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import LampContainer from '@/components/ui/lamp';
+import { CardSpotlight } from '@/components/ui/card-spotlight';
 
 const Skills = () => {
   const [isHovered, setIsHovered] = useState(false);
@@ -127,38 +129,33 @@ const Skills = () => {
       
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Header */}
-        <motion.div 
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-        >
-          <motion.h2 
-            className="text-4xl md:text-5xl font-display font-bold mb-4"
-            initial={{ opacity: 0, scale: 0.8 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
+        <LampContainer>
+          <motion.div 
+            className="text-center mb-16"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <motion.span 
-              className="text-gradient"
-              initial={{ backgroundPosition: "0% 50%" }}
-              whileInView={{ backgroundPosition: "100% 50%" }}
-              transition={{ duration: 2, ease: "easeInOut" }}
+            <motion.h2 
+              className="text-4xl md:text-5xl font-display font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-br from-slate-200 to-slate-500"
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              viewport={{ once: true }}
             >
               Skills & Technologies
-            </motion.span>
-          </motion.h2>
-          <motion.div 
-            className="w-24 h-1 bg-gradient-accent mx-auto rounded-full mb-6"
-            initial={{ width: 0 }}
-            whileInView={{ width: 96 }}
-            transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
-            viewport={{ once: true }}
-          />
-          <TypewriterSubtitle />
-        </motion.div>
+            </motion.h2>
+            <motion.div 
+              className="w-24 h-1 bg-gradient-accent mx-auto rounded-full mb-6"
+              initial={{ width: 0 }}
+              whileInView={{ width: 96 }}
+              transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
+              viewport={{ once: true }}
+            />
+            <TypewriterSubtitle />
+          </motion.div>
+        </LampContainer>
 
         {/* Skills Container */}
         <div className="space-y-8">
@@ -195,49 +192,44 @@ const Skills = () => {
                     transition: { duration: 0.3 }
                   }}
                 >
-                  <div className="rounded-2xl p-4 w-20 h-20 flex flex-col items-center justify-center group cursor-pointer relative overflow-hidden bg-gradient-to-br from-card/30 via-card/20 to-card/10 backdrop-blur-xl border border-accent/20 shadow-2xl">
-                    {/* Shimmer Effect */}
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
-                      initial={{ x: "-100%" }}
-                      whileHover={{ x: "100%" }}
-                      transition={{ duration: 0.8, ease: "easeInOut" }}
-                    />
-                    
-                    {/* Glow Effect */}
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-teal-400/10 via-purple-500/10 to-teal-400/10 rounded-2xl"
-                      animate={{
-                        opacity: [0, 0.3, 0],
-                        scale: [1, 1.05, 1]
-                      }}
-                      transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                      }}
-                    />
-
-                    <motion.img 
-                      src={skill.logo}
-                      alt={skill.name}
-                      className="w-8 h-8 mb-1 relative z-10 object-contain"
-                      whileHover={{ rotate: 360 }}
-                      transition={{ duration: 0.6, ease: "easeInOut" }}
-                      onError={(e) => {
-                        // Fallback to a simple colored div if image fails to load
-                        e.currentTarget.style.display = 'none';
-                        e.currentTarget.nextElementSibling.style.display = 'block';
-                      }}
-                    />
-                    <div 
-                      className="w-8 h-8 mb-1 relative z-10 bg-gradient-to-br from-teal-400 to-purple-500 rounded-full hidden"
-                      style={{ display: 'none' }}
-                    />
-                    <span className="text-xs text-muted-foreground text-center leading-tight relative z-10">
-                      {skill.name}
-                    </span>
-                  </div>
+                  <CardSpotlight className="w-20 h-20 p-4">
+                    <div className="flex flex-col items-center justify-center h-full">
+                      <motion.img 
+                        src={skill.logo}
+                        alt={skill.name}
+                        className="w-8 h-8 mb-1 object-contain"
+                        whileHover={{ 
+                          rotate: 360,
+                          scale: 1.2,
+                          filter: "brightness(1.2) saturate(1.3)"
+                        }}
+                        transition={{ 
+                          duration: 0.6, 
+                          ease: "easeInOut",
+                          scale: { duration: 0.3 }
+                        }}
+                        onError={(e) => {
+                          // Fallback to a simple colored div if image fails to load
+                          e.currentTarget.style.display = 'none';
+                          e.currentTarget.nextElementSibling.style.display = 'block';
+                        }}
+                      />
+                      <div 
+                        className="w-8 h-8 mb-1 bg-gradient-to-br from-teal-400 to-purple-500 rounded-full hidden"
+                        style={{ display: 'none' }}
+                      />
+                      <motion.span 
+                        className="text-xs text-muted-foreground text-center leading-tight"
+                        whileHover={{ 
+                          color: "hsl(var(--accent))",
+                          scale: 1.1
+                        }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        {skill.name}
+                      </motion.span>
+                    </div>
+                  </CardSpotlight>
                 </motion.div>
               ))}
             </motion.div>
@@ -276,50 +268,44 @@ const Skills = () => {
                     transition: { duration: 0.3 }
                   }}
                 >
-                  <div className="rounded-2xl p-4 w-20 h-20 flex flex-col items-center justify-center group cursor-pointer relative overflow-hidden bg-gradient-to-br from-card/30 via-card/20 to-card/10 backdrop-blur-xl border border-accent/20 shadow-2xl">
-                    {/* Shimmer Effect */}
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
-                      initial={{ x: "-100%" }}
-                      whileHover={{ x: "100%" }}
-                      transition={{ duration: 0.8, ease: "easeInOut" }}
-                    />
-                    
-                    {/* Glow Effect */}
-                    <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-teal-400/10 to-purple-500/10 rounded-2xl"
-                      animate={{
-                        opacity: [0, 0.3, 0],
-                        scale: [1, 1.05, 1]
-                      }}
-                      transition={{
-                        duration: 4,
-                        repeat: Infinity,
-                        ease: "easeInOut",
-                        delay: 1
-                      }}
-                    />
-
-                    <motion.img 
-                      src={skill.logo}
-                      alt={skill.name}
-                      className="w-8 h-8 mb-1 relative z-10 object-contain"
-                      whileHover={{ rotate: 360 }}
-                      transition={{ duration: 0.6, ease: "easeInOut" }}
-                      onError={(e) => {
-                        // Fallback to a simple colored div if image fails to load
-                        e.currentTarget.style.display = 'none';
-                        e.currentTarget.nextElementSibling.style.display = 'block';
-                      }}
-                    />
-                    <div 
-                      className="w-8 h-8 mb-1 relative z-10 bg-gradient-to-br from-teal-400 to-purple-500 rounded-full hidden"
-                      style={{ display: 'none' }}
-                    />
-                    <span className="text-xs text-muted-foreground text-center leading-tight relative z-10">
-                      {skill.name}
-                    </span>
-                  </div>
+                  <CardSpotlight className="w-20 h-20 p-4">
+                    <div className="flex flex-col items-center justify-center h-full">
+                      <motion.img 
+                        src={skill.logo}
+                        alt={skill.name}
+                        className="w-8 h-8 mb-1 object-contain"
+                        whileHover={{ 
+                          rotate: 360,
+                          scale: 1.2,
+                          filter: "brightness(1.2) saturate(1.3)"
+                        }}
+                        transition={{ 
+                          duration: 0.6, 
+                          ease: "easeInOut",
+                          scale: { duration: 0.3 }
+                        }}
+                        onError={(e) => {
+                          // Fallback to a simple colored div if image fails to load
+                          e.currentTarget.style.display = 'none';
+                          e.currentTarget.nextElementSibling.style.display = 'block';
+                        }}
+                      />
+                      <div 
+                        className="w-8 h-8 mb-1 bg-gradient-to-br from-teal-400 to-purple-500 rounded-full hidden"
+                        style={{ display: 'none' }}
+                      />
+                      <motion.span 
+                        className="text-xs text-muted-foreground text-center leading-tight"
+                        whileHover={{ 
+                          color: "hsl(var(--accent))",
+                          scale: 1.1
+                        }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        {skill.name}
+                      </motion.span>
+                    </div>
+                  </CardSpotlight>
                 </motion.div>
               ))}
             </motion.div>
