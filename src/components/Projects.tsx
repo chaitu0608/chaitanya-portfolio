@@ -27,12 +27,8 @@ const Projects = () => {
         }}
       />
 
-      {/* Floating Particles */}
+      {/* Optimized Floating Particles */}
       <div className="floating-particles">
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
         <div className="particle"></div>
         <div className="particle"></div>
         <div className="particle"></div>

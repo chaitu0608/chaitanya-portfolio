@@ -1,25 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const CustomCursor: React.FC = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
+  const rafRef = useRef<number>();
 
   useEffect(() => {
+    let mouseX = 0;
+    let mouseY = 0;
+
     const updateMousePosition = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
+      
+      rafRef.current = requestAnimationFrame(() => {
+        setMousePosition({ x: mouseX, y: mouseY });
+      });
     };
 
     const handleMouseEnter = () => setIsHovering(true);
     const handleMouseLeave = () => setIsHovering(false);
 
-    // Add event listeners
-    window.addEventListener('mousemove', updateMousePosition);
+    // Add event listeners with passive option for better performance
+    window.addEventListener('mousemove', updateMousePosition, { passive: true });
     
     // Add hover listeners to interactive elements
     const interactiveElements = document.querySelectorAll('a, button, [role="button"], .cursor-pointer');
     interactiveElements.forEach(el => {
-      el.addEventListener('mouseenter', handleMouseEnter);
-      el.addEventListener('mouseleave', handleMouseLeave);
+      el.addEventListener('mouseenter', handleMouseEnter, { passive: true });
+      el.addEventListener('mouseleave', handleMouseLeave, { passive: true });
     });
 
     return () => {
@@ -28,6 +41,9 @@ const CustomCursor: React.FC = () => {
         el.removeEventListener('mouseenter', handleMouseEnter);
         el.removeEventListener('mouseleave', handleMouseLeave);
       });
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current);
+      }
     };
   }, []);
 
