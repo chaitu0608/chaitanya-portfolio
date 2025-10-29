@@ -375,7 +375,7 @@ const Contact: React.FC = () => {
             <CardSpotlight className="p-6 max-w-md">
               <div className="text-center space-y-4">
                 <motion.img
-                  src="/pushpak.png"
+                  src="/pushpak.jpeg"
                   alt="Pushpak"
                   className="w-48 h-48 mx-auto rounded-2xl object-cover"
                   initial={{ scale: 0 }}

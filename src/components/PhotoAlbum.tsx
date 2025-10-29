@@ -22,13 +22,13 @@ const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ isOpen, onClose }) => {
     },
     {
       id: 2,
-      src: '/codecell25.png',
+      src: '/codecell25.jpeg',
       title: 'CodeCell Team',
       description: 'KJSCE CodeCell team photo - Building the future together'
     },
     {
       id: 3,
-      src: '/profile2.PNG',
+      src: '/profile2.jpeg',
       title: 'Exploring, learning, and growing every day',
       description: '2025-2026'
     },
