@@ -34,7 +34,7 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
 
 
   return (
-    <section id="about" className="min-h-screen flex items-center px-4 pt-32 pb-20 relative overflow-hidden continuous-bg section-transition">
+    <section id="about" className="min-h-screen flex items-center px-4 md:px-6 lg:px-8 pt-32 pb-24 relative overflow-hidden continuous-bg section-transition">
       {/* Enhanced Bokeh Background with Scroll Animation */}
       <motion.div 
         className="absolute inset-0 bokeh-bg"
@@ -120,7 +120,7 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
         />
       </div>
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center relative z-10">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-14 items-center relative z-10">
         {/* Left Content */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
@@ -130,7 +130,7 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
             delay: 0.2,
             ease: [0.25, 0.46, 0.45, 0.94]
           }}
-          className="space-y-8"
+          className="space-y-9 md:space-y-10"
         >
           {/* Greeting */}
           <motion.div
@@ -163,7 +163,7 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
                 delay: 0.8,
                 ease: [0.25, 0.46, 0.45, 0.94]
               }}
-              className="text-4xl md:text-6xl font-display font-bold leading-tight"
+              className="text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-tight"
             >
               <motion.span 
                 className="text-gradient smooth-text"
@@ -186,7 +186,7 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
                 delay: 1.2,
                 ease: [0.25, 0.46, 0.45, 0.94]
               }}
-              className="text-lg md:text-xl text-muted-foreground font-light leading-relaxed max-w-lg smooth-text"
+              className="text-xl md:text-xl lg:text-2xl text-muted-foreground font-light leading-relaxed max-w-xl smooth-text"
             >
               Software Engineering student passionate about turning ideas into impactful solutions through code.
             </motion.h2>
@@ -201,7 +201,7 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
               delay: 1.4,
               ease: [0.25, 0.46, 0.45, 0.94]
             }}
-            className="text-sm md:text-base text-muted-foreground leading-relaxed max-w-xl space-y-3"
+            className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl space-y-4"
           >
             <p>
               Currently pursuing a B.Tech in Computer Engineering at KJ Somaiya College of Engineering, I'm passionate about building things and solving challenging problems.
@@ -352,7 +352,7 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
               {/* Main Image Card */}
               <GlassCard className="p-4 premium-glow relative overflow-hidden">
                 {/* Bigger Image Container */}
-                <div className="w-96 h-96 relative">
+                <div className="w-96 h-96 md:w-[28rem] md:h-[28rem] lg:w-[30rem] lg:h-[30rem] relative">
                   {/* Background Pattern */}
                   <div className="absolute inset-0 bg-gradient-to-br from-accent/10 via-background to-accent/5 rounded-2xl"></div>
                   
@@ -370,7 +370,7 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
                   {/* Full Profile Photo */}
                   <div className="absolute inset-2 bg-gradient-to-br from-accent/20 to-accent/5 rounded-xl overflow-hidden border border-accent/20">
                     <img 
-                      src="/profile-photo.jpeg?v=2" 
+                      src="/profile-photo.png?v=2" 
                       alt="Chaitanya Dhamdhere" 
                       className="w-full h-full object-cover"
                       onLoad={() => console.log('Image loaded successfully')}

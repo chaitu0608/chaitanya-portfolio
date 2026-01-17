@@ -16,7 +16,7 @@ const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ isOpen, onClose }) => {
   const photos = [
     {
       id: 1,
-      src: '/profile-photo.jpeg',
+      src: '/profile-photo.png',
       title: 'Professional Headshot',
       description: 'Chaitanya at ETHGlobal New Delhi'
     },
