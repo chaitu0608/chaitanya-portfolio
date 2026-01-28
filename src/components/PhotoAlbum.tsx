@@ -16,7 +16,7 @@ const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ isOpen, onClose }) => {
   const photos = [
     {
       id: 1,
-      src: '/profile-photo.png',
+      src: '/profilephoto.webp',
       title: 'Professional Headshot',
       description: 'Chaitanya at ETHGlobal New Delhi'
     },
@@ -89,6 +89,8 @@ const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ isOpen, onClose }) => {
                   src={photos[currentIndex].src}
                   alt={photos[currentIndex].title}
                   className="w-full h-full object-cover"
+                  loading="lazy"
+                  decoding="async"
                   onError={(e) => {
                     const target = e.currentTarget as HTMLImageElement;
                     target.style.display = 'none';
@@ -151,6 +153,8 @@ const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ isOpen, onClose }) => {
                     src={photo.src}
                     alt={photo.title}
                     className="w-full h-full object-cover"
+                    loading="lazy"
+                    decoding="async"
                     onError={(e) => {
                       const target = e.currentTarget as HTMLImageElement;
                       target.style.display = 'none';

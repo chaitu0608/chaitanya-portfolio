@@ -127,6 +127,10 @@
     background-attachment: fixed;
     font-family: 'Inter', sans-serif;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
   
   /* Premium Typography */
@@ -258,15 +262,17 @@
     will-change: transform, opacity;
   }
   
-  /* Optimized Hover Effects */
-  .buttery-hover {
-    transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    will-change: transform;
-  }
-  
-  .buttery-hover:hover {
-    transform: translateY(-2px) scale(1.01);
-  }
+/* Optimized Hover Effects */
+.buttery-hover {
+  transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.buttery-hover:hover {
+  transform: translateY(-2px) scale(1.01) translateZ(0);
+}
   
   /* Smooth Scale Animations */
   .smooth-scale {
@@ -418,19 +424,23 @@
   }
 }
 
-/* Smooth Scroll */
+/* Smooth Scroll - Enhanced Global */
 html {
   scroll-behavior: smooth;
-}
-
-/* Custom Cursor Styles */
-* {
-  cursor: none;
+  scroll-padding-top: 100px;
+  -webkit-overflow-scrolling: touch;
+  contain: layout;
 }
 
 body {
-  cursor: none;
-  contain: layout style paint;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Smooth scrolling for all scrollable containers */
+.scroll-smooth {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Performance optimizations */
@@ -438,10 +448,66 @@ body {
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-  contain: layout;
+/* Global Smooth Transitions - Optimized */
+* {
+  transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
+
+/* Smooth Hover Effects - Enhanced */
+a, button, [role="button"], .cursor-pointer, [class*="hover"], 
+.card, .glass-card, .glass-enhanced, [class*="card"] {
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+a:hover, button:hover, [role="button"]:hover, 
+.card:hover, .glass-card:hover, .glass-enhanced:hover {
+  transform: translateZ(0);
+}
+
+/* GPU Acceleration for Smooth Animations */
+.gpu-accelerated,
+[class*="motion"],
+[class*="animate"],
+motion.div,
+motion.button,
+motion.span {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+  will-change: transform, opacity;
+}
+
+/* Smooth Scroll Snap */
+main {
+  scroll-snap-type: y proximity;
+  scroll-behavior: smooth;
+}
+
+section {
+  scroll-snap-align: start;
+  scroll-margin-top: 100px;
+}
+
+/* Custom Cursor Styles - Only applied when custom cursor is enabled */
+/* To enable custom cursor, set ENABLE_CUSTOM_CURSOR to true in IndexNoThree.tsx */
+/* 
+* {
+  cursor: none !important;
+}
+
+body {
+  cursor: none !important;
+  contain: layout style paint;
+}
+
+.custom-cursor,
+.custom-cursor-dot {
+  cursor: none !important;
+}
+*/
 
 .custom-cursor {
   position: fixed;
@@ -450,10 +516,12 @@ html {
   background: linear-gradient(135deg, #20E3B2, #4FD1C7);
   border-radius: 50%;
   pointer-events: none;
-  z-index: 9999;
+  z-index: 99999;
   mix-blend-mode: difference;
-  will-change: transform;
-  transition: transform 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform, left, top;
+  transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform-origin: center;
+  opacity: 1;
 }
 
 .custom-cursor-dot {
@@ -463,12 +531,14 @@ html {
   background: #20E3B2;
   border-radius: 50%;
   pointer-events: none;
-  z-index: 9999;
-  will-change: transform;
-  transition: transform 0.15s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 99999;
+  will-change: transform, left, top;
+  transition: transform 0.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  opacity: 1;
 }
 
-/* Cursor hover effects */
+/* Cursor hover effects - Disabled when custom cursor is off */
+/* 
 a, button, [role="button"], .cursor-pointer {
   cursor: none !important;
 }
@@ -476,6 +546,7 @@ a, button, [role="button"], .cursor-pointer {
 a:hover, button:hover, [role="button"]:hover, .cursor-pointer:hover {
   cursor: none !important;
 }
+*/
 
 /* Typing Animation */
 .typing-animation {
@@ -655,6 +726,8 @@ a:hover, button:hover, [role="button"]:hover, .cursor-pointer:hover {
 .section-transition {
   position: relative;
   z-index: 10;
+  scroll-margin-top: 100px;
+  scroll-snap-align: start;
 }
 
 .section-transition::before {
@@ -683,6 +756,8 @@ a:hover, button:hover, [role="button"]:hover, .cursor-pointer:hover {
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   will-change: transform, box-shadow, background;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .glass-enhanced:hover {
@@ -699,10 +774,12 @@ a:hover, button:hover, [role="button"]:hover, .cursor-pointer:hover {
 .smooth-card {
   transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   will-change: transform, box-shadow;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .smooth-card:hover {
-  transform: translateY(-5px) scale(1.02);
+  transform: translateY(-5px) scale(1.02) translateZ(0);
   box-shadow: 
     0 20px 60px rgba(0, 0, 0, 0.3),
     0 0 30px rgba(32, 227, 178, 0.15);
@@ -721,10 +798,12 @@ a:hover, button:hover, [role="button"]:hover, .cursor-pointer:hover {
 /* Smooth Icon Animations */
 .smooth-icon {
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform, filter;
+  transform: translateZ(0);
 }
 
 .smooth-icon:hover {
-  transform: scale(1.1) rotate(5deg);
+  transform: scale(1.1) rotate(5deg) translateZ(0);
   filter: brightness(1.2) saturate(1.3);
 }
 
@@ -733,6 +812,9 @@ a:hover, button:hover, [role="button"]:hover, .cursor-pointer:hover {
   transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   position: relative;
   overflow: hidden;
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .smooth-button::before {
@@ -1119,6 +1201,12 @@ a:hover, button:hover, [role="button"]:hover, .cursor-pointer:hover {
 
 .will-change-auto {
   will-change: auto;
+}
+
+/* Image lazy loading optimization */
+img {
+  content-visibility: auto;
+  contain-intrinsic-size: 300px;
 }
 
 /* Smooth Focus States */

@@ -17,7 +17,7 @@ const Projects = () => {
   };
 
   return (
-    <section id="projects" className="py-20 px-4 relative overflow-hidden continuous-bg section-transition">
+    <section id="projects" className="py-20 px-4 relative overflow-hidden continuous-bg section-transition scroll-smooth">
       {/* Enhanced Background Effects with Scroll Animation */}
       <motion.div 
         className="absolute inset-0 bokeh-bg"
@@ -144,71 +144,113 @@ const Projects = () => {
                 
                 {/* Content - Landscape Layout */}
                 <div className="relative z-10 flex flex-col lg:flex-row gap-6 items-start">
-                  {/* Project Visual - Landscape */}
-                  <div className="w-full lg:w-80 flex-shrink-0">
-                    <div className="w-full h-48 bg-gradient-to-br from-accent/20 via-accent/10 to-accent/5 rounded-2xl border border-accent/20 flex items-center justify-center relative overflow-hidden glass">
-                      {/* Device Frame Effect */}
-                      <div className="absolute inset-3 bg-gradient-to-br from-background/95 to-background/85 rounded-xl border border-accent/10 flex items-center justify-center overflow-hidden">
-                        {project.title === 'Padhle' ? (
-                          <img 
-                            src="/padhle.png" 
-                            alt="Padhle Learning Management System"
-                            className="w-full h-full object-cover rounded-lg"
-                            onError={(e) => {
-                              e.currentTarget.style.display = 'none';
-                              const fallback = e.currentTarget.nextElementSibling as HTMLElement;
-                              if (fallback) fallback.style.display = 'flex';
-                            }}
-                          />
-                        ) : project.title === 'TrustWipe' ? (
-                          <img 
-                            src="/trustwipe.jpg" 
-                            alt="TrustWipe Secure Data Wiping System"
-                            className="w-full h-full object-cover rounded-lg"
-                            onError={(e) => {
-                              e.currentTarget.style.display = 'none';
-                              const fallback = e.currentTarget.nextElementSibling as HTMLElement;
-                              if (fallback) fallback.style.display = 'flex';
-                            }}
-                          />
-                        ) : project.thumbnail ? (
-                          <img
-                            src={project.thumbnail}
-                            alt={project.title}
-                            className={`w-full h-full rounded-lg ${
-                              project.title === 'StarQuest' 
-                                ? 'object-contain' 
-                                : 'object-cover'
-                            }`}
-                            onError={(e) => {
-                              // Fallback to emoji if image fails to load
-                              e.currentTarget.style.display = 'none';
-                              const fallback = e.currentTarget.nextElementSibling as HTMLElement;
-                              if (fallback) fallback.style.display = 'flex';
-                            }}
-                          />
-                        ) : null}
-                        <div 
-                          className="text-4xl opacity-60 group-hover:opacity-80 transition-opacity duration-300"
-                          style={{ display: project.thumbnail ? 'none' : 'flex' }}
-                        >
-                          {project.type === 'Desktop Application' ? '💻' : 
-                           project.type === 'Web3 Application' ? '⛓️' : 
-                           project.type === 'Web Application' ? '🌐' : '📱'}
+                  {/* Project Visual - Portrait Card for StarQuest & Tutelage */}
+                  {(project.title === 'StarQuest' || project.title === 'Tutelage') ? (
+                    <div className="w-full lg:w-64 flex-shrink-0 flex justify-center">
+                      <div className="w-full max-w-[240px] bg-gradient-to-br from-accent/20 via-accent/10 to-accent/5 rounded-2xl border border-accent/20 flex items-center justify-center relative overflow-hidden glass shadow-lg">
+                        {/* Portrait Card Frame */}
+                        <div className="w-full aspect-[3/4] bg-gradient-to-br from-background/95 to-background/85 rounded-xl border border-accent/10 flex items-center justify-center overflow-hidden p-2">
+                          {project.thumbnail ? (
+                            <img
+                              src={project.thumbnail}
+                              alt={project.title}
+                              className="w-full h-full object-contain rounded-lg"
+                              loading="lazy"
+                              decoding="async"
+                              onError={(e) => {
+                                e.currentTarget.style.display = 'none';
+                                const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                                if (fallback) fallback.style.display = 'flex';
+                              }}
+                            />
+                          ) : null}
+                          <div 
+                            className="w-full h-full bg-gradient-to-br from-accent/10 to-accent/5 flex items-center justify-center text-4xl rounded-lg"
+                            style={{ display: project.thumbnail ? 'none' : 'flex' }}
+                          >
+                            {project.type === 'Desktop Application' ? '💻' : 
+                             project.type === 'Web3 Application' ? '⛓️' : 
+                             project.type === 'Web Application' ? '🌐' : '📱'}
+                          </div>
                         </div>
-              </div>
-              
-                      {/* Animated Gradient Overlay */}
-                      <div className="absolute inset-0 bg-gradient-to-br from-accent/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                      
-                      {/* Floating Particles Effect */}
-                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                        <div className="absolute top-4 left-4 w-2 h-2 bg-accent/60 rounded-full animate-pulse"></div>
-                        <div className="absolute top-8 right-6 w-1.5 h-1.5 bg-accent/40 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
-                        <div className="absolute bottom-6 left-8 w-1 h-1 bg-accent/50 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
+                        
+                        {/* Animated Gradient Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-accent/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
+                        
+                        {/* Floating Particles Effect */}
+                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                          <div className="absolute top-4 left-4 w-2 h-2 bg-accent/60 rounded-full animate-pulse"></div>
+                          <div className="absolute top-8 right-6 w-1.5 h-1.5 bg-accent/40 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+                          <div className="absolute bottom-6 left-8 w-1 h-1 bg-accent/50 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
+                        </div>
+                      </div>
                     </div>
+                  ) : (
+                    /* Standard Landscape Layout for other projects */
+                    <div className="w-full lg:w-80 flex-shrink-0">
+                      <div className="w-full h-48 bg-gradient-to-br from-accent/20 via-accent/10 to-accent/5 rounded-2xl border border-accent/20 flex items-center justify-center relative overflow-hidden glass">
+                        {/* Device Frame Effect */}
+                        <div className="absolute inset-3 bg-gradient-to-br from-background/95 to-background/85 rounded-xl border border-accent/10 flex items-center justify-center overflow-hidden">
+                          {project.title === 'Padhle' ? (
+                            <img 
+                              src="/padhle.png" 
+                              alt="Padhle Learning Management System"
+                              className="w-full h-full object-cover rounded-lg"
+                              onError={(e) => {
+                                e.currentTarget.style.display = 'none';
+                                const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                                if (fallback) fallback.style.display = 'flex';
+                              }}
+                            />
+                          ) : project.title === 'TrustWipe' ? (
+                            <img 
+                              src="/trustwipe.jpg" 
+                              alt="TrustWipe Secure Data Wiping System"
+                              className="w-full h-full object-cover rounded-lg"
+                              loading="lazy"
+                              decoding="async"
+                              onError={(e) => {
+                                e.currentTarget.style.display = 'none';
+                                const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                                if (fallback) fallback.style.display = 'flex';
+                              }}
+                            />
+                          ) : project.thumbnail ? (
+                            <img
+                              src={project.thumbnail}
+                              alt={project.title}
+                              className="w-full h-full object-cover rounded-lg"
+                              loading="lazy"
+                              decoding="async"
+                              onError={(e) => {
+                                e.currentTarget.style.display = 'none';
+                                const fallback = e.currentTarget.nextElementSibling as HTMLElement;
+                                if (fallback) fallback.style.display = 'flex';
+                              }}
+                            />
+                          ) : null}
+                          <div 
+                            className="text-4xl opacity-60 group-hover:opacity-80 transition-opacity duration-300"
+                            style={{ display: project.thumbnail ? 'none' : 'flex' }}
+                          >
+                            {project.type === 'Desktop Application' ? '💻' : 
+                             project.type === 'Web3 Application' ? '⛓️' : 
+                             project.type === 'Web Application' ? '🌐' : '📱'}
+                          </div>
+                        </div>
+                        
+                        {/* Animated Gradient Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-accent/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        
+                        {/* Floating Particles Effect */}
+                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                          <div className="absolute top-4 left-4 w-2 h-2 bg-accent/60 rounded-full animate-pulse"></div>
+                          <div className="absolute top-8 right-6 w-1.5 h-1.5 bg-accent/40 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+                          <div className="absolute bottom-6 left-8 w-1 h-1 bg-accent/50 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  )}
                   
                   {/* Project Information - Landscape */}
                   <div className="flex-1 space-y-4">
@@ -223,7 +265,7 @@ const Projects = () => {
                       
                       {/* Action Buttons */}
                       <div className="flex gap-2 ml-4">
-                        {project.githubUrl && (
+                        {project.githubUrl ? (
                           <motion.button
                             onClick={() => handleOpenLink(project.githubUrl!)}
                             className="p-3 rounded-xl bg-accent/10 hover:bg-accent/20 text-accent border border-accent/20 hover:border-accent/40 transition-all duration-300"
@@ -232,8 +274,8 @@ const Projects = () => {
                           >
                             <Github className="w-5 h-5" />
                           </motion.button>
-                        )}
-                        {project.liveUrl && (
+                        ) : null}
+                        {project.liveUrl ? (
                           <motion.button
                             onClick={() => handleOpenLink(project.liveUrl!)}
                             className="p-3 rounded-xl bg-accent/10 hover:bg-accent/20 text-accent border border-accent/20 hover:border-accent/40 transition-all duration-300"
@@ -242,6 +284,11 @@ const Projects = () => {
                           >
                             <ExternalLink className="w-5 h-5" />
                           </motion.button>
+                        ) : null}
+                        {!project.githubUrl && !project.liveUrl && (
+                          <span className="px-3 py-1.5 text-xs text-muted-foreground border border-border/50 rounded-xl bg-muted/30 font-medium">
+                            Access Restricted
+                          </span>
                         )}
                       </div>
                 </div>

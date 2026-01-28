@@ -48,57 +48,52 @@ const Contact: React.FC = () => {
   
 
   return (
-    <section id="contact" className="py-20 px-4 relative overflow-hidden continuous-bg section-transition">
+    <section id="contact" className="py-20 px-4 relative overflow-hidden continuous-bg section-transition scroll-smooth">
       {/* Enhanced Glassmorphism Background */}
-      <motion.div className="absolute inset-0 bokeh-bg" style={{ opacity: 0.2 }} />
+      <motion.div className="absolute inset-0 bokeh-bg z-0" style={{ opacity: 0.2 }} />
       
       {/* Glassmorphism Overlay */}
       <motion.div 
-        className="absolute inset-0 glass-enhanced opacity-20"
+        className="absolute inset-0 glass-enhanced z-0"
         style={{ 
           opacity: 0.15
         }}
       />
 
-      {/* Floating Particles */}
-      <div className="floating-particles">
-        {[...Array(8)].map((_, i) => (
+      {/* Reduced Floating Particles for better performance */}
+      <div className="floating-particles z-1">
+        {[...Array(4)].map((_, i) => (
           <motion.div
             key={i}
             className="particle"
             style={{
-              left: `${10 + i * 12}%`,
-              top: `${15 + (i % 2) * 40}%`,
+              left: `${15 + i * 25}%`,
+              top: `${20 + (i % 2) * 50}%`,
             }}
             animate={{
-              y: [0, -30, 0],
-              x: [0, 15, -8, 0],
-              opacity: [0.1, 0.4, 0.1],
-              scale: [0.8, 1.2, 0.8],
+              y: [0, -20, 0],
+              opacity: [0.1, 0.3, 0.1],
             }}
             transition={{
-              duration: 10 + i * 0.5,
+              duration: 8 + i * 0.5,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: i * 0.4
+              delay: i * 0.5
             }}
           />
         ))}
       </div>
       
-      {/* Enhanced Glassmorphism Orbs */}
-      <div className="absolute inset-0 overflow-hidden">
+      {/* Reduced Glassmorphism Orbs to prevent overlapping */}
+      <div className="absolute inset-0 overflow-hidden z-0">
         <motion.div 
           className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-accent opacity-8 rounded-full blur-3xl"
           animate={{ 
-            scale: [1, 1.3, 0.9, 1],
-            opacity: [0.08, 0.15, 0.1, 0.08],
-            x: [0, 40, -20, 0],
-            y: [0, -30, 15, 0],
-            rotate: [0, 90, 180, 270, 360]
+            scale: [1, 1.2, 1],
+            opacity: [0.08, 0.12, 0.08],
           }}
           transition={{
-            duration: 25,
+            duration: 20,
             repeat: Infinity,
             ease: "easeInOut"
           }}
@@ -106,38 +101,19 @@ const Contact: React.FC = () => {
         <motion.div 
           className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-500/10 to-teal-400/10 rounded-full blur-3xl"
           animate={{ 
-            scale: [0.8, 1.2, 1, 0.8],
-            opacity: [0.1, 0.15, 0.12, 0.1],
-            x: [0, -30, 25, 0],
-            y: [0, 35, -15, 0],
-            rotate: [360, 270, 180, 90, 0]
+            scale: [0.9, 1.1, 0.9],
+            opacity: [0.1, 0.13, 0.1],
           }}
           transition={{
-            duration: 30,
+            duration: 25,
             repeat: Infinity,
             ease: "easeInOut",
-            delay: 8
-          }}
-        />
-        <motion.div 
-          className="absolute top-1/2 right-1/3 w-64 h-64 bg-gradient-to-r from-blue-400/8 to-cyan-400/8 rounded-full blur-2xl"
-          animate={{ 
-            scale: [1, 1.4, 0.7, 1],
-            opacity: [0.08, 0.12, 0.06, 0.08],
-            x: [0, 25, -12, 0],
-            y: [0, -25, 12, 0],
-            rotate: [0, 45, 90, 135, 180, 225, 270, 315, 360]
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 12
+            delay: 5
           }}
         />
       </div>
 
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto relative z-20">
         {/* Header with Lamp */}
         <LampContainer>
           <div className="text-center mb-16">
@@ -313,6 +289,8 @@ const Contact: React.FC = () => {
                   src="/pushpak.jpeg"
                   alt="Pushpak"
                   className="w-48 h-48 mx-auto rounded-2xl object-cover"
+                  loading="lazy"
+                  decoding="async"
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.2, type: "spring", stiffness: 200 }}

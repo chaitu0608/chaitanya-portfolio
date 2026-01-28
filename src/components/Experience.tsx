@@ -3,10 +3,10 @@ import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { experiences } from "@/data/portfolio";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, ChevronDown } from "lucide-react";
 
 const Experience = () => {
-  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+  const [expandedCard, setExpandedCard] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -17,8 +17,24 @@ const Experience = () => {
   const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
   const lineOpacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
+  const toggleExpand = (index: number) => {
+    setExpandedCard(expandedCard === index ? null : index);
+    
+    // Smooth scroll to the expanded card
+    setTimeout(() => {
+      const cardElement = document.getElementById(`experience-card-${index}`);
+      if (cardElement) {
+        cardElement.scrollIntoView({ 
+          behavior: 'smooth', 
+          block: 'nearest',
+          inline: 'nearest'
+        });
+      }
+    }, 150);
+  };
+
   return (
-    <section id="experience" className="py-20 px-4 relative overflow-hidden continuous-bg section-transition">
+    <section id="experience" className="py-20 px-4 md:px-6 lg:px-8 relative overflow-hidden continuous-bg section-transition scroll-smooth">
       {/* Enhanced Background Effects with Scroll Continuity */}
       <motion.div 
         className="absolute inset-0 bokeh-bg"
@@ -28,45 +44,16 @@ const Experience = () => {
         }}
       />
 
-      {/* Floating Particles - Subtle for cohesion */}
-      <div className="floating-particles">
-        {[...Array(6)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="particle"
-            style={{
-              left: `${10 + i * 12}%`,
-              top: `${15 + (i % 2) * 40}%`,
-            }}
-            animate={{
-              y: [0, -20, 0],
-              x: [0, 10, -5, 0],
-              opacity: [0.15, 0.35, 0.15],
-              scale: [0.8, 1.05, 0.8],
-            }}
-            transition={{
-              duration: 10 + i * 0.4,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: i * 0.5
-            }}
-          />
-        ))}
-      </div>
-      
-      {/* Animated Background Elements with Enhanced Scroll Effects */}
-      <div className="absolute inset-0 overflow-hidden">
+      {/* Reduced Background Elements - No Overlapping */}
+      <div className="absolute inset-0 overflow-hidden z-0">
         <motion.div 
           className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-accent opacity-5 rounded-full blur-3xl"
           animate={{ 
-            scale: [1, 1.3, 0.8, 1],
-            opacity: [0.05, 0.15, 0.08, 0.05],
-            x: [0, 40, -20, 0],
-            y: [0, -30, 20, 0],
-            rotate: [0, 180, 360]
+            scale: [1, 1.2, 1],
+            opacity: [0.05, 0.1, 0.05],
           }}
           transition={{
-            duration: 25,
+            duration: 20,
             repeat: Infinity,
             ease: "easeInOut"
           }}
@@ -74,112 +61,16 @@ const Experience = () => {
         <motion.div 
           className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-500/10 to-teal-400/10 rounded-full blur-3xl"
           animate={{ 
-            scale: [0.8, 1.2, 1, 0.8],
-            opacity: [0.08, 0.12, 0.06, 0.08],
-            x: [0, -30, 25, 0],
-            y: [0, 35, -15, 0],
-            rotate: [360, 180, 0]
+            scale: [0.9, 1.1, 0.9],
+            opacity: [0.08, 0.12, 0.08],
           }}
           transition={{
-            duration: 30,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 8
-          }}
-        />
-        <motion.div 
-          className="absolute top-1/2 right-1/3 w-64 h-64 bg-gradient-to-r from-blue-400/8 to-cyan-400/8 rounded-full blur-2xl"
-          animate={{ 
-            scale: [1, 1.4, 0.6, 1],
-            opacity: [0.06, 0.1, 0.04, 0.06],
-            x: [0, 25, -15, 0],
-            y: [0, -25, 15, 0],
-            rotate: [0, 90, 180, 270, 360]
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 15
-          }}
-        />
-        
-        {/* Additional floating orbs for depth */}
-        <motion.div 
-          className="absolute top-1/6 right-1/6 w-48 h-48 bg-gradient-to-r from-teal-400/6 to-purple-500/6 rounded-full blur-2xl"
-          animate={{ 
-            scale: [0.5, 1.1, 0.7, 0.5],
-            opacity: [0.03, 0.08, 0.05, 0.03],
-            x: [0, 20, -10, 0],
-            y: [0, -20, 10, 0]
-          }}
-          transition={{
-            duration: 18,
+            duration: 25,
             repeat: Infinity,
             ease: "easeInOut",
             delay: 5
           }}
         />
-        <motion.div 
-          className="absolute bottom-1/6 left-1/6 w-56 h-56 bg-gradient-to-r from-purple-500/6 to-blue-400/6 rounded-full blur-2xl"
-          animate={{ 
-            scale: [0.7, 1.2, 0.8, 0.7],
-            opacity: [0.04, 0.09, 0.06, 0.04],
-            x: [0, -25, 15, 0],
-            y: [0, 25, -15, 0]
-          }}
-          transition={{
-            duration: 22,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 12
-          }}
-        />
-      </div>
-      
-      {/* Enhanced Grid Pattern with Animation */}
-      <motion.div 
-        className="absolute inset-0 opacity-[0.015]"
-        animate={{
-          opacity: [0.01, 0.02, 0.01]
-        }}
-        transition={{
-          duration: 10,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      >
-        <div className="absolute inset-0" style={{
-          backgroundImage: `
-            linear-gradient(rgba(32, 227, 178, 0.1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(32, 227, 178, 0.1) 1px, transparent 1px)
-          `,
-          backgroundSize: '60px 60px'
-        }} />
-      </motion.div>
-      
-      {/* Dynamic Light Rays */}
-      <div className="absolute inset-0 overflow-hidden">
-        {[...Array(4)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-px h-full bg-gradient-to-b from-transparent via-teal-400/20 to-transparent"
-            style={{
-              left: `${20 + i * 20}%`,
-              transform: `rotate(${15 + i * 10}deg)`,
-            }}
-            animate={{
-              opacity: [0, 0.3, 0],
-              scaleY: [0.5, 1, 0.5],
-            }}
-            transition={{
-              duration: 6 + i,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: i * 1.5
-            }}
-          />
-        ))}
       </div>
       
       <div className="max-w-6xl mx-auto relative z-10" ref={containerRef}>
@@ -299,50 +190,27 @@ const Experience = () => {
 
                   {/* Experience Card */}
                   <motion.div
+                    id={`experience-card-${index}`}
                     className={`w-full max-w-2xl ${isEven ? 'ml-16' : 'mr-16'} group`}
                     whileHover={{ 
                       y: -12,
                       scale: 1.03,
                       rotateY: 2,
-                      transition: { duration: 0.4, ease: "easeOut" }
+                      transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }
                     }}
-                    onHoverStart={() => setHoveredCard(index)}
-                    onHoverEnd={() => setHoveredCard(null)}
                   >
                     <motion.div 
                       className="relative p-6 rounded-3xl bg-gradient-to-r from-card/30 via-card/20 to-card/10 backdrop-blur-xl border border-accent/20 shadow-2xl hover:shadow-accent/25 transition-all duration-500 overflow-hidden"
                       animate={{
-                        boxShadow: hoveredCard === index 
+                        boxShadow: expandedCard === index 
                           ? "0 25px 50px -12px rgba(20, 184, 166, 0.25), 0 0 0 1px rgba(20, 184, 166, 0.4)"
                           : "0 25px 50px -12px rgba(0, 0, 0, 0.25)"
                       }}
                       transition={{ duration: 0.3 }}
                     >
-                      {/* Dynamic Neon Glow Overlay for cohesion with Projects */}
-                      <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-accent/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                      <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-transparent via-accent/8 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                      
-                      {/* Shimmer Effect */}
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
-                        initial={{ x: "-100%" }}
-                        animate={hoveredCard === index ? { x: "100%" } : { x: "-100%" }}
-                        transition={{ duration: 1.2, ease: "easeInOut" }}
-                      />
-                      
-                      {/* Subtle Glow */}
-                      <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-teal-400/10 via-purple-500/10 to-teal-400/10 rounded-2xl"
-                        animate={{
-                          opacity: hoveredCard === index ? [0, 0.25, 0] : 0,
-                          scale: hoveredCard === index ? [1, 1.03, 1] : 1
-                        }}
-                        transition={{
-                          duration: 2,
-                          repeat: hoveredCard === index ? Infinity : 0,
-                          ease: "easeInOut"
-                        }}
-                      />
+                      {/* Dynamic Neon Glow Overlay */}
+                      <div className={`absolute inset-0 rounded-3xl bg-gradient-to-r from-accent/5 via-transparent to-accent/5 transition-opacity duration-500 ${expandedCard === index ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}></div>
+                      <div className={`absolute inset-0 rounded-3xl bg-gradient-to-br from-transparent via-accent/8 to-transparent transition-opacity duration-500 ${expandedCard === index ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}></div>
 
                       <div className="relative z-10 p-6">
                         {/* Header */}
@@ -468,43 +336,61 @@ const Experience = () => {
                           </div>
                         )}
 
-                        {/* Key Contributions - Hover to Reveal */}
+                        {/* Key Contributions - Expandable with Button */}
                         <div className="border-t border-accent/10 pt-4">
-                          <div className="text-sm font-medium text-muted-foreground mb-2">
-                            Key Contributions
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="text-sm font-medium text-muted-foreground">
+                              Key Contributions
+                            </div>
+                            <motion.button
+                              onClick={() => toggleExpand(index)}
+                              className="p-2 rounded-lg bg-accent/10 hover:bg-accent/20 text-accent border border-accent/20 hover:border-accent/40 transition-all duration-300"
+                              whileHover={{ scale: 1.1 }}
+                              whileTap={{ scale: 0.9 }}
+                              aria-label={expandedCard === index ? "Collapse" : "Expand"}
+                            >
+                              <motion.div
+                                animate={{ rotate: expandedCard === index ? 180 : 0 }}
+                                transition={{ duration: 0.3, ease: "easeInOut" }}
+                              >
+                                <ChevronDown className="w-5 h-5" />
+                              </motion.div>
+                            </motion.button>
                           </div>
                           
                           <motion.div
                             initial={false}
                             animate={{
-                              height: hoveredCard === index ? "auto" : 0,
-                              opacity: hoveredCard === index ? 1 : 0
+                              height: expandedCard === index ? "auto" : 0,
+                              opacity: expandedCard === index ? 1 : 0,
+                              marginTop: expandedCard === index ? "0.5rem" : "0"
                             }}
-                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                            transition={{ 
+                              duration: 0.4, 
+                              ease: [0.25, 0.46, 0.45, 0.94]
+                            }}
                             className="overflow-hidden"
                           >
-                  <ul className="space-y-2">
-                    {exp.achievements.map((achievement, i) => (
+                            <ul className="space-y-2">
+                              {exp.achievements.map((achievement, i) => (
                                 <motion.li
                                   key={i}
                                   initial={{ opacity: 0, x: -20 }}
-                                  animate={hoveredCard === index ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
-                                  transition={{ delay: i * 0.1 }}
+                                  animate={expandedCard === index ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
+                                  transition={{ 
+                                    delay: i * 0.05, 
+                                    duration: 0.3,
+                                    ease: "easeOut"
+                                  }}
                                   className="text-muted-foreground text-sm flex items-start"
                                 >
                                   <span className="text-accent mr-2 mt-1">•</span>
-                        <span>{achievement}</span>
+                                  <span>{achievement}</span>
                                 </motion.li>
-                    ))}
-                  </ul>
+                              ))}
+                            </ul>
                           </motion.div>
-                          
-                          {hoveredCard !== index && (
-                            <div className="text-xs text-muted-foreground/60 italic">
-                              Hover to explore key contributions
-                            </div>
-                          )}
-                </div>
+                        </div>
               </div>
                     </motion.div>
                   </motion.div>

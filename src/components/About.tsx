@@ -20,11 +20,9 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
 
   // Simple PDF export function
   const exportToPDF = async () => {
-    // For now, just open the resume URL if available
-    const resumeUrl = "/resume.pdf"; // You can update this path
-    if (resumeUrl) {
-      window.open(resumeUrl, '_blank');
-    }
+    // Open the CV PDF from public folder
+    const resumeUrl = "/ChaitanyaDhamdhere_CV.pdf";
+    window.open(resumeUrl, '_blank');
   };
 
   const handleOpenLink = (url: string) => {
@@ -34,7 +32,7 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
 
 
   return (
-    <section id="about" className="min-h-screen flex items-center px-4 md:px-6 lg:px-8 pt-32 pb-24 relative overflow-hidden continuous-bg section-transition">
+    <section id="about" className="min-h-screen flex items-center px-4 md:px-6 lg:px-8 pt-32 pb-24 relative overflow-hidden continuous-bg section-transition scroll-smooth">
       {/* Enhanced Bokeh Background with Scroll Animation */}
       <motion.div 
         className="absolute inset-0 bokeh-bg"
@@ -52,75 +50,37 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
         }}
       />
 
-      {/* Floating Particles */}
-      <div className="floating-particles">
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
+      {/* Reduced Floating Particles for better performance */}
+      <div className="floating-particles z-1">
         <div className="particle"></div>
         <div className="particle"></div>
         <div className="particle"></div>
         <div className="particle"></div>
       </div>
       
-      {/* Animated Background Elements with Scroll Effects */}
-      <div className="absolute inset-0 overflow-hidden">
+      {/* Optimized Background Elements - Reduced overlapping */}
+      <div className="absolute inset-0 overflow-hidden z-0">
         <motion.div 
           className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-accent opacity-5 rounded-full blur-3xl"
           animate={{ 
-            scale: [1, 1.2, 1],
-            opacity: [0.05, 0.1, 0.05],
-            x: [0, 20, 0],
-            y: [0, -10, 0]
+            scale: [1, 1.15, 1],
+            opacity: [0.05, 0.08, 0.05],
           }}
-          transition={{ duration: 8, repeat: Infinity }}
-          style={{ y: useTransform(scrollYProgress, [0, 1], [0, -50]) }}
+          transition={{ duration: 10, repeat: Infinity }}
+          style={{ y: useTransform(scrollYProgress, [0, 1], [0, -30]) }}
         />
         <motion.div 
           className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-gold opacity-5 rounded-full blur-3xl"
           animate={{ 
-            scale: [1.2, 1, 1.2],
-            opacity: [0.1, 0.05, 0.1],
-            x: [0, -15, 0],
-            y: [0, 15, 0]
+            scale: [1, 1.1, 1],
+            opacity: [0.05, 0.08, 0.05],
           }}
-          transition={{ duration: 10, repeat: Infinity, delay: 2 }}
-          style={{ y: useTransform(scrollYProgress, [0, 1], [0, 30]) }}
-        />
-        
-        {/* Additional floating elements for more dynamic background */}
-        <motion.div 
-          className="absolute top-1/2 left-1/6 w-64 h-64 bg-gradient-primary opacity-3 rounded-full blur-2xl"
-          animate={{ 
-            scale: [1, 1.3, 1],
-            opacity: [0.03, 0.08, 0.03],
-            rotate: [0, 180, 360]
-          }}
-          transition={{ duration: 12, repeat: Infinity, delay: 1 }}
-          style={{ 
-            y: useTransform(scrollYProgress, [0, 1], [0, -40]),
-            x: useTransform(scrollYProgress, [0, 1], [0, 20])
-          }}
-        />
-        
-        <motion.div 
-          className="absolute bottom-1/3 left-1/3 w-72 h-72 bg-gradient-secondary opacity-4 rounded-full blur-3xl"
-          animate={{ 
-            scale: [1.1, 0.9, 1.1],
-            opacity: [0.04, 0.07, 0.04],
-            rotate: [360, 180, 0]
-          }}
-          transition={{ duration: 15, repeat: Infinity, delay: 3 }}
-          style={{ 
-            y: useTransform(scrollYProgress, [0, 1], [0, 25]),
-            x: useTransform(scrollYProgress, [0, 1], [0, -15])
-          }}
+          transition={{ duration: 12, repeat: Infinity, delay: 3 }}
+          style={{ y: useTransform(scrollYProgress, [0, 1], [0, 20]) }}
         />
       </div>
 
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-14 items-center relative z-10">
+      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-14 items-center relative z-20">
         {/* Left Content */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
@@ -264,7 +224,7 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
                 whileTap={{ scale: 0.95 }}
               >
                 <Download className="w-5 h-5 mr-2 smooth-icon" />
-                <span className="smooth-text">Download CV</span>
+                <span className="smooth-text">Resume</span>
               </Button>
             </motion.div>
             
@@ -373,6 +333,8 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
                       src="/profile-photo.png?v=2" 
                       alt="Chaitanya Dhamdhere" 
                       className="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
                       onLoad={() => console.log('Image loaded successfully')}
                       onError={(e) => {
                         console.log('Image failed to load, showing fallback');

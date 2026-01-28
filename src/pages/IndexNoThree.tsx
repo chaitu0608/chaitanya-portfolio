@@ -1,17 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navigation from "@/components/Navigation";
-import About from "@/components/About";
-import Projects from "@/components/Projects";
-import Experience from "@/components/Experience";
-import Skills from "@/components/Skills";
-import Footer from "@/components/Footer";
-import ContactModal from "@/components/ContactModal";
-import Contact from "@/components/Contact";
-import PhotoAlbum from "@/components/PhotoAlbum";
-import DeveloperModeModal from "@/components/DeveloperModeModal";
-import FloatingDock from "@/components/ui/floating-dock";
 import CustomCursor from "@/components/CustomCursor";
+import FloatingDock from "@/components/ui/floating-dock";
+
+// Lazy load components for better performance
+const About = lazy(() => import("@/components/About"));
+const Projects = lazy(() => import("@/components/Projects"));
+const Experience = lazy(() => import("@/components/Experience"));
+const Skills = lazy(() => import("@/components/Skills"));
+const Footer = lazy(() => import("@/components/Footer"));
+const Contact = lazy(() => import("@/components/Contact"));
+const ContactModal = lazy(() => import("@/components/ContactModal"));
+const PhotoAlbum = lazy(() => import("@/components/PhotoAlbum"));
+const DeveloperModeModal = lazy(() => import("@/components/DeveloperModeModal"));
+
+// Loading fallback component
+const SectionLoader = () => (
+  <div className="min-h-[400px] flex items-center justify-center">
+    <div className="w-8 h-8 border-2 border-accent border-t-transparent rounded-full animate-spin" />
+  </div>
+);
+
+// Custom Cursor Toggle - Set to true to enable custom cursor
+const ENABLE_CUSTOM_CURSOR = false;
 
 const IndexNoThree = () => {
   console.log('IndexNoThree component is rendering...');
@@ -56,9 +68,9 @@ const IndexNoThree = () => {
   }, []);
 
   return (
-    <div className="min-h-screen gradient-primary">
-      {/* Custom Cursor */}
-      <CustomCursor />
+    <div className="min-h-screen gradient-primary scroll-smooth">
+      {/* Custom Cursor - Disabled for now, set ENABLE_CUSTOM_CURSOR to true to enable */}
+      {ENABLE_CUSTOM_CURSOR && <CustomCursor />}
       
       {/* Simple background without Three.js */}
       <div className="fixed inset-0 -z-10">
@@ -70,27 +82,41 @@ const IndexNoThree = () => {
       </div>
 
       {/* Main Content */}
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         <motion.div
+          key="main-content"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.8 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
         >
           <Navigation onContactClick={() => setIsContactModalOpen(true)} />
 
-          <main>
-            <About onAvatarClick={handleAvatarClick} />
+          <main className="scroll-smooth">
+            <Suspense fallback={<SectionLoader />}>
+              <About onAvatarClick={handleAvatarClick} />
+            </Suspense>
 
-            <Projects />
+            <Suspense fallback={<SectionLoader />}>
+              <Projects />
+            </Suspense>
 
-            <Experience />
+            <Suspense fallback={<SectionLoader />}>
+              <Experience />
+            </Suspense>
 
-            <Skills />
+            <Suspense fallback={<SectionLoader />}>
+              <Skills />
+            </Suspense>
 
-            <Contact />
+            <Suspense fallback={<SectionLoader />}>
+              <Contact />
+            </Suspense>
           </main>
 
-          <Footer onContactClick={() => setIsContactModalOpen(true)} />
+          <Suspense fallback={null}>
+            <Footer onContactClick={() => setIsContactModalOpen(true)} />
+          </Suspense>
 
           {/* Floating Dock */}
           <FloatingDock onContactClick={() => setIsContactModalOpen(true)} />
@@ -98,20 +124,22 @@ const IndexNoThree = () => {
       </AnimatePresence>
 
       {/* Modals */}
-      <ContactModal
-        isOpen={isContactModalOpen}
-        onClose={() => setIsContactModalOpen(false)}
-      />
+      <Suspense fallback={null}>
+        <ContactModal
+          isOpen={isContactModalOpen}
+          onClose={() => setIsContactModalOpen(false)}
+        />
 
-      <PhotoAlbum
-        isOpen={isPhotoAlbumOpen}
-        onClose={() => setIsPhotoAlbumOpen(false)}
-      />
+        <PhotoAlbum
+          isOpen={isPhotoAlbumOpen}
+          onClose={() => setIsPhotoAlbumOpen(false)}
+        />
 
-      <DeveloperModeModal
-        isOpen={isDeveloperModeOpen}
-        onClose={() => setIsDeveloperModeOpen(false)}
-      />
+        <DeveloperModeModal
+          isOpen={isDeveloperModeOpen}
+          onClose={() => setIsDeveloperModeOpen(false)}
+        />
+      </Suspense>
     </div>
   );
 };

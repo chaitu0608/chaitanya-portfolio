@@ -23,7 +23,7 @@ export const contactInfo: ContactInfo = {
   location: "Mumbai, India",
   githubUrl: "https://github.com/chaitu0608",
   linkedinUrl: "https://www.linkedin.com/in/chaitanya-dhamdhere/",
-  resumeUrl: "/resume.pdf",
+  resumeUrl: "/ChaitanyaDhamdhere_CV.pdf",
 };
 
 // Navigation Items
@@ -108,7 +108,15 @@ export const projects: Project[] = [
     type: "Web3 Application",
     thumbnail: "/StarQuest.jpeg",
     githubUrl: "https://github.com/chaitu0608/starquest",
-    liveUrl: "https://starquest-demo.com",
+  },
+  {
+    title: "Tutelage",
+    subtitle: "Educational Social Platform",
+    description:
+      "Full-featured educational social platform for Indian professional certification students (CA, CS, CMA). Allows users to share study materials, organize content by books and topics, build personalized learning feeds, connect with mentors, and interact via likes, comments, and bookmarks. Mobile app built with React Native + Expo, backend with Node.js/Express and MongoDB, OTP-based auth, AWS S3 storage and extensive post/topic models.",
+    tech: ["React Native", "Expo", "TypeScript", "Node.js", "Express", "MongoDB", "AWS S3"],
+    type: "Mobile Application",
+    thumbnail: "/tutelage.png",
   },
   {
     title: "Padhle",

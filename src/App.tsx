@@ -10,8 +10,6 @@ import ErrorBoundary from "./components/ErrorBoundary";
 const queryClient = new QueryClient();
 
 const App = () => {
-  console.log('App component is rendering...');
-  
   return (
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>

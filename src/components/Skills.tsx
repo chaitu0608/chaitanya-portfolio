@@ -57,7 +57,7 @@ const Skills = () => {
   const secondRow = skills.slice(Math.ceil(skills.length / 2));
 
   return (
-    <section id="skills" className="py-20 px-4 relative overflow-hidden continuous-bg section-transition">
+    <section id="skills" className="py-20 px-4 relative overflow-hidden continuous-bg section-transition scroll-smooth">
       {/* Enhanced Glassmorphism Background */}
       <motion.div 
         className="absolute inset-0 bokeh-bg"
