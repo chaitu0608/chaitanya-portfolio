@@ -1,10 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import LampContainer from '@/components/ui/lamp';
+import React, { useEffect, useState, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import { CardSpotlight } from '@/components/ui/card-spotlight';
+
+const SMOOTH_EASE = [0.25, 0.46, 0.45, 0.94] as const;
 
 const Skills = () => {
   const [isHovered, setIsHovered] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const headerInView = useInView(sectionRef, { once: true, margin: "-80px" });
+  const firstRowRef = useRef<HTMLDivElement>(null);
+  const secondRowRef = useRef<HTMLDivElement>(null);
+  const firstRowInView = useInView(firstRowRef, { once: true, margin: "-60px" });
+  const secondRowInView = useInView(secondRowRef, { once: true, margin: "-60px" });
 
   // Define all the skill logos with their names and logo URLs
   const skills = [
@@ -42,7 +49,6 @@ const Skills = () => {
     { name: 'MongoDB', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg' },
     { name: 'PostgreSQL', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg' },
     { name: 'MySQL', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg' },
-    { name: 'MySQL', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg' },
     { name: 'PHP', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/php/php-original.svg' },
     { name: 'Rust', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/rust/rust-plain.svg' },
     { name: 'XML', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/xml/xml-original.svg' },
@@ -57,171 +63,59 @@ const Skills = () => {
   const secondRow = skills.slice(Math.ceil(skills.length / 2));
 
   return (
-    <section id="skills" className="py-20 px-4 relative overflow-hidden continuous-bg section-transition scroll-smooth">
-      {/* Enhanced Glassmorphism Background */}
-      <motion.div 
-        className="absolute inset-0 bokeh-bg"
-        style={{ 
-          opacity: 0.2
-        }}
-      />
-      
-      {/* Glassmorphism Overlay */}
-      <motion.div 
-        className="absolute inset-0 glass-enhanced opacity-25"
-        style={{ 
-          opacity: 0.15
-        }}
-      />
+    <section
+      ref={sectionRef}
+      id="skills"
+      className="py-20 px-4 md:px-6 lg:px-8 relative overflow-hidden continuous-bg section-transition scroll-smooth"
+    >
+      {/* Static background – in line with Work Experience */}
+      <div className="absolute inset-0 bokeh-bg opacity-20" />
+      <div className="absolute inset-0 overflow-hidden z-0">
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-accent opacity-5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-500/10 to-teal-400/10 rounded-full blur-3xl" />
+      </div>
 
-      {/* Floating Particles - Enhanced */}
-      <div className="floating-particles">
-        {[...Array(8)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="particle"
-            style={{
-              left: `${10 + i * 12}%`,
-              top: `${15 + (i % 2) * 40}%`,
-            }}
-            animate={{
-              y: [0, -25, 0],
-              x: [0, 10, -5, 0],
-              opacity: [0.2, 0.5, 0.2],
-              scale: [0.8, 1.1, 0.8],
-            }}
-            transition={{
-              duration: 6 + i * 0.3,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: i * 0.4
-            }}
-          />
-        ))}
-      </div>
-      
-      {/* Enhanced Glassmorphism Orbs */}
-      <div className="absolute inset-0 overflow-hidden">
-        <motion.div 
-          className="absolute top-1/3 left-1/4 w-80 h-80 bg-gradient-accent opacity-8 rounded-full blur-3xl"
-          animate={{ 
-            scale: [1, 1.2, 0.9, 1],
-            opacity: [0.08, 0.15, 0.1, 0.08],
-            x: [0, 30, -15, 0],
-            y: [0, -20, 15, 0],
-            rotate: [0, 90, 180, 270, 360]
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-        <motion.div 
-          className="absolute bottom-1/3 right-1/4 w-96 h-96 bg-gradient-to-r from-purple-500/12 to-teal-400/12 rounded-full blur-3xl"
-          animate={{ 
-            scale: [0.8, 1.1, 1, 0.8],
-            opacity: [0.1, 0.15, 0.12, 0.1],
-            x: [0, -25, 20, 0],
-            y: [0, 30, -10, 0],
-            rotate: [360, 270, 180, 90, 0]
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 8
-          }}
-        />
-        <motion.div 
-          className="absolute top-1/2 right-1/3 w-64 h-64 bg-gradient-to-r from-blue-400/10 to-cyan-400/10 rounded-full blur-2xl"
-          animate={{ 
-            scale: [1, 1.3, 0.8, 1],
-            opacity: [0.08, 0.12, 0.06, 0.08],
-            x: [0, 20, -10, 0],
-            y: [0, -20, 10, 0],
-            rotate: [0, 45, 90, 135, 180, 225, 270, 315, 360]
-          }}
-          transition={{
-            duration: 18,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 10
-          }}
-        />
-        
-        {/* Floating Glass Orbs */}
-        <motion.div 
-          className="absolute top-1/6 right-1/6 w-48 h-48 bg-gradient-to-r from-teal-400/8 to-purple-500/8 rounded-full blur-2xl"
-          animate={{ 
-            scale: [0.8, 1.1, 0.9, 0.8],
-            opacity: [0.06, 0.1, 0.08, 0.06],
-            x: [0, 15, -8, 0],
-            y: [0, -15, 8, 0]
-          }}
-          transition={{
-            duration: 15,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 3
-          }}
-        />
-        <motion.div 
-          className="absolute bottom-1/6 left-1/6 w-56 h-56 bg-gradient-to-r from-purple-500/8 to-blue-400/8 rounded-full blur-2xl"
-          animate={{ 
-            scale: [0.9, 1.2, 1, 0.9],
-            opacity: [0.07, 0.11, 0.09, 0.07],
-            x: [0, -20, 12, 0],
-            y: [0, 20, -12, 0]
-          }}
-          transition={{
-            duration: 22,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 8
-          }}
-        />
-      </div>
-      
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* Section Header */}
-        <LampContainer>
-          <motion.div 
-            className="text-center mb-16"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
+        {/* Section header – scroll Y animation, matches Experience */}
+        <motion.div
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          animate={headerInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.8, ease: SMOOTH_EASE }}
+        >
+          <motion.h2
+            className="text-4xl md:text-5xl font-display font-bold mb-4"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={headerInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
           >
-            <motion.h2 
-              className="text-4xl md:text-5xl font-display font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-br from-slate-200 to-slate-500"
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-              viewport={{ once: true }}
+            <motion.span
+              className="text-gradient"
+              initial={{ backgroundPosition: "0% 50%" }}
+              animate={headerInView ? { backgroundPosition: "100% 50%" } : { backgroundPosition: "0% 50%" }}
+              transition={{ duration: 2, ease: "easeInOut" }}
             >
               Skills & Technologies
-            </motion.h2>
-            <motion.div 
-              className="w-24 h-1 bg-gradient-accent mx-auto rounded-full mb-6"
-              initial={{ width: 0 }}
-              whileInView={{ width: 96 }}
-              transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
-              viewport={{ once: true }}
-            />
-            <TypewriterSubtitle />
-          </motion.div>
-        </LampContainer>
+            </motion.span>
+          </motion.h2>
+          <motion.div
+            className="w-24 h-1 bg-gradient-accent mx-auto rounded-full mb-6"
+            initial={{ width: 0 }}
+            animate={headerInView ? { width: 96 } : { width: 0 }}
+            transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
+          />
+          <TypewriterSubtitle inView={headerInView} />
+        </motion.div>
 
-        {/* Skills Container */}
+        {/* Skills rows – scroll Y-axis reveal, smooth */}
         <div className="space-y-8">
-          {/* First Row - Left to Right */}
-          <motion.div 
+          {/* First row – animates up when in view */}
+          <motion.div
+            ref={firstRowRef}
             className="flex gap-6 overflow-hidden"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
+            initial={{ opacity: 0, y: 56 }}
+            animate={firstRowInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 56 }}
+            transition={{ duration: 0.75, ease: SMOOTH_EASE, delay: 0.15 }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
@@ -232,72 +126,23 @@ const Skills = () => {
                 duration: 30,
                 repeat: Infinity,
                 ease: "linear",
-                repeatType: "loop"
+                repeatType: "loop",
               }}
-              style={{
-                animationPlayState: isHovered ? "paused" : "running"
-              }}
+              style={{ animationPlayState: isHovered ? "paused" : "running" }}
             >
               {[...firstRow, ...firstRow].map((skill, index) => (
-                <motion.div
-                  key={`first-${index}`}
-                  className="flex-shrink-0"
-                  whileHover={{ 
-                    scale: 1.1,
-                    y: -5,
-                    transition: { duration: 0.3 }
-                  }}
-                >
-                  <CardSpotlight className="w-20 h-20 p-4">
-                    <div className="flex flex-col items-center justify-center h-full">
-                      <motion.img 
-                        src={skill.logo}
-                        alt={skill.name}
-                        className="w-8 h-8 mb-1 object-contain"
-                        whileHover={{ 
-                          rotate: 360,
-                          scale: 1.2,
-                          filter: "brightness(1.2) saturate(1.3)"
-                        }}
-                        transition={{ 
-                          duration: 0.6, 
-                          ease: "easeInOut",
-                          scale: { duration: 0.3 }
-                        }}
-                        onError={(e) => {
-                          // Fallback to a simple colored div if image fails to load
-                          e.currentTarget.style.display = 'none';
-                          e.currentTarget.nextElementSibling.style.display = 'block';
-                        }}
-                      />
-                      <div 
-                        className="w-8 h-8 mb-1 bg-gradient-to-br from-teal-400 to-purple-500 rounded-full hidden"
-                        style={{ display: 'none' }}
-                      />
-                      <motion.span 
-                        className="text-xs text-muted-foreground text-center leading-tight"
-                        whileHover={{ 
-                          color: "hsl(var(--accent))",
-                          scale: 1.1
-                        }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        {skill.name}
-                      </motion.span>
-                    </div>
-                  </CardSpotlight>
-                </motion.div>
+                <SkillCard key={`first-${index}`} skill={skill} />
               ))}
             </motion.div>
           </motion.div>
 
-          {/* Second Row - Right to Left */}
-          <motion.div 
+          {/* Second row – animates up when in view */}
+          <motion.div
+            ref={secondRowRef}
             className="flex gap-6 overflow-hidden"
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            viewport={{ once: true }}
+            initial={{ opacity: 0, y: 56 }}
+            animate={secondRowInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 56 }}
+            transition={{ duration: 0.75, ease: SMOOTH_EASE, delay: 0.3 }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
@@ -308,61 +153,12 @@ const Skills = () => {
                 duration: 35,
                 repeat: Infinity,
                 ease: "linear",
-                repeatType: "loop"
+                repeatType: "loop",
               }}
-              style={{
-                animationPlayState: isHovered ? "paused" : "running"
-              }}
+              style={{ animationPlayState: isHovered ? "paused" : "running" }}
             >
               {[...secondRow, ...secondRow].map((skill, index) => (
-                <motion.div
-                  key={`second-${index}`}
-                  className="flex-shrink-0"
-                  whileHover={{ 
-                    scale: 1.1,
-                    y: -5,
-                    transition: { duration: 0.3 }
-                  }}
-                >
-                  <CardSpotlight className="w-20 h-20 p-4">
-                    <div className="flex flex-col items-center justify-center h-full">
-                      <motion.img 
-                        src={skill.logo}
-                        alt={skill.name}
-                        className="w-8 h-8 mb-1 object-contain"
-                        whileHover={{ 
-                          rotate: 360,
-                          scale: 1.2,
-                          filter: "brightness(1.2) saturate(1.3)"
-                        }}
-                        transition={{ 
-                          duration: 0.6, 
-                          ease: "easeInOut",
-                          scale: { duration: 0.3 }
-                        }}
-                        onError={(e) => {
-                          // Fallback to a simple colored div if image fails to load
-                          e.currentTarget.style.display = 'none';
-                          e.currentTarget.nextElementSibling.style.display = 'block';
-                        }}
-                      />
-                      <div 
-                        className="w-8 h-8 mb-1 bg-gradient-to-br from-teal-400 to-purple-500 rounded-full hidden"
-                        style={{ display: 'none' }}
-                      />
-                      <motion.span 
-                        className="text-xs text-muted-foreground text-center leading-tight"
-                        whileHover={{ 
-                          color: "hsl(var(--accent))",
-                          scale: 1.1
-                        }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        {skill.name}
-                      </motion.span>
-                    </div>
-                  </CardSpotlight>
-                </motion.div>
+                <SkillCard key={`second-${index}`} skill={skill} />
               ))}
             </motion.div>
           </motion.div>
@@ -374,32 +170,74 @@ const Skills = () => {
 
 export default Skills;
 
-// Simple typewriter effect for the subtitle using React state
-const TypewriterSubtitle: React.FC = () => {
-  const fullText = 'Tools that get the job done.';
-  const [displayed, setDisplayed] = useState('');
+// Single skill card for marquee rows
+const SkillCard: React.FC<{ skill: { name: string; logo: string } }> = ({ skill }) => (
+  <motion.div
+    className="flex-shrink-0"
+    whileHover={{ scale: 1.1, y: -5, transition: { duration: 0.3, ease: SMOOTH_EASE } }}
+  >
+    <CardSpotlight className="w-20 h-20 p-4">
+      <div className="flex flex-col items-center justify-center h-full">
+        <motion.img
+          src={skill.logo}
+          alt={skill.name}
+          className="w-8 h-8 mb-1 object-contain"
+          whileHover={{
+            rotate: 360,
+            scale: 1.2,
+            filter: "brightness(1.2) saturate(1.3)",
+          }}
+          transition={{ duration: 0.6, ease: "easeInOut", scale: { duration: 0.3 } }}
+          onError={(e) => {
+            const el = e.currentTarget;
+            el.style.display = "none";
+            const fallback = el.nextElementSibling as HTMLElement;
+            if (fallback) fallback.style.display = "block";
+          }}
+        />
+        <div
+          className="w-8 h-8 mb-1 bg-gradient-to-br from-teal-400 to-purple-500 rounded-full hidden"
+          style={{ display: "none" }}
+        />
+        <motion.span
+          className="text-xs text-muted-foreground text-center leading-tight"
+          whileHover={{ color: "hsl(var(--accent))", scale: 1.1 }}
+          transition={{ duration: 0.3 }}
+        >
+          {skill.name}
+        </motion.span>
+      </div>
+    </CardSpotlight>
+  </motion.div>
+);
+
+// Subtitle with typewriter; animation synced to header inView
+const TypewriterSubtitle: React.FC<{ inView?: boolean }> = ({ inView = false }) => {
+  const fullText = "Tools that get the job done.";
+  const [displayed, setDisplayed] = useState("");
 
   useEffect(() => {
+    if (!inView) return;
     let i = 0;
     const interval = setInterval(() => {
       setDisplayed((prev) => (i < fullText.length ? fullText.slice(0, ++i) : prev));
-      if (i >= fullText.length) {
-        clearInterval(interval);
-      }
+      if (i >= fullText.length) clearInterval(interval);
     }, 40);
     return () => clearInterval(interval);
-  }, []);
+  }, [inView]);
 
   return (
-    <motion.p 
-      className="text-lg text-muted-foreground max-w-2xl mx-auto font-mono"
+    <motion.p
+      className="text-lg text-muted-foreground max-w-2xl mx-auto"
       initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, delay: 0.5 }}
-      viewport={{ once: true }}
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+      transition={{ duration: 0.8, delay: 0.5, ease: SMOOTH_EASE }}
     >
       {displayed}
-      <span className="inline-block w-3 h-5 align-middle bg-accent ml-1 animate-pulse" style={{ opacity: displayed.length === fullText.length ? 0 : 1 }} />
+      <span
+        className="inline-block w-3 h-5 align-middle bg-accent ml-1 animate-pulse font-mono"
+        style={{ opacity: displayed.length === fullText.length ? 0 : 1 }}
+      />
     </motion.p>
   );
 };

@@ -1,33 +1,24 @@
-import React from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import React, { useCallback, useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { ExternalLink, Github } from "lucide-react";
 import GlassCard from "@/components/ui/glass-card";
 import { projects } from "@/data/portfolio";
 
 const Projects = () => {
-  const { scrollYProgress } = useScroll();
-  
-  // Transform scroll progress into various animation values
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
-  const backgroundOpacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.2, 0.4, 0.2]);
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
-  const handleOpenLink = (url: string) => {
+  const handleOpenLink = useCallback((url: string) => {
     window.open(url, '_blank');
-  };
+  }, []);
 
   return (
-    <section id="projects" className="py-20 px-4 relative overflow-hidden continuous-bg section-transition scroll-smooth">
-      {/* Enhanced Background Effects with Scroll Animation */}
-      <motion.div 
-        className="absolute inset-0 bokeh-bg"
-        style={{ 
-          opacity: backgroundOpacity,
-          y: backgroundY 
-        }}
-      />
+    <section ref={sectionRef} id="projects" className="py-20 px-4 relative overflow-hidden continuous-bg section-transition scroll-smooth">
+      {/* Static Background - No scroll animations */}
+      <div className="absolute inset-0 bokeh-bg opacity-30" />
 
-      {/* Optimized Floating Particles */}
+      {/* Optimized Floating Particles - Static CSS only */}
       <div className="floating-particles">
         <div className="particle"></div>
         <div className="particle"></div>
@@ -36,59 +27,10 @@ const Projects = () => {
         <div className="particle"></div>
       </div>
       
-      {/* Animated Background Elements with Scroll Effects */}
+      {/* Static Background Elements - No animations */}
       <div className="absolute inset-0 overflow-hidden">
-        <motion.div 
-          className="absolute top-1/3 right-1/4 w-80 h-80 bg-gradient-accent opacity-5 rounded-full blur-3xl"
-          animate={{ 
-            scale: [1, 1.2, 1],
-            opacity: [0.05, 0.1, 0.05],
-            x: [0, 20, 0],
-            y: [0, -10, 0]
-          }}
-          transition={{ duration: 8, repeat: Infinity }}
-          style={{ y: useTransform(scrollYProgress, [0, 1], [0, -50]) }}
-        />
-        <motion.div 
-          className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-gradient-gold opacity-5 rounded-full blur-3xl"
-          animate={{ 
-            scale: [1.2, 1, 1.2],
-            opacity: [0.1, 0.05, 0.1],
-            x: [0, -15, 0],
-            y: [0, 15, 0]
-          }}
-          transition={{ duration: 10, repeat: Infinity, delay: 2 }}
-          style={{ y: useTransform(scrollYProgress, [0, 1], [0, 30]) }}
-        />
-        
-        {/* Additional floating elements for more dynamic background */}
-        <motion.div 
-          className="absolute top-1/2 right-1/6 w-64 h-64 bg-gradient-primary opacity-3 rounded-full blur-2xl"
-          animate={{ 
-            scale: [1, 1.3, 1],
-            opacity: [0.03, 0.08, 0.03],
-            rotate: [0, 180, 360]
-          }}
-          transition={{ duration: 12, repeat: Infinity, delay: 1 }}
-          style={{ 
-            y: useTransform(scrollYProgress, [0, 1], [0, -40]),
-            x: useTransform(scrollYProgress, [0, 1], [0, 20])
-          }}
-        />
-        
-        <motion.div 
-          className="absolute bottom-1/2 right-1/3 w-72 h-72 bg-gradient-secondary opacity-4 rounded-full blur-3xl"
-          animate={{ 
-            scale: [1.1, 0.9, 1.1],
-            opacity: [0.04, 0.07, 0.04],
-            rotate: [360, 180, 0]
-          }}
-          transition={{ duration: 15, repeat: Infinity, delay: 3 }}
-          style={{ 
-            y: useTransform(scrollYProgress, [0, 1], [0, 25]),
-            x: useTransform(scrollYProgress, [0, 1], [0, -15])
-          }}
-        />
+        <div className="absolute top-1/3 right-1/4 w-80 h-80 bg-gradient-accent opacity-5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-gradient-gold opacity-5 rounded-full blur-3xl" />
       </div>
       
       <div className="max-w-7xl mx-auto relative z-10">
@@ -130,9 +72,9 @@ const Projects = () => {
               }}
               viewport={{ once: true }}
               whileHover={{ 
-                scale: 1.02,
-                y: -6,
-                transition: { duration: 0.3, ease: "easeOut" }
+                scale: 1.01,
+                y: -4,
+                transition: { duration: 0.2, ease: "easeOut" }
               }}
               className="group relative"
             >
@@ -269,8 +211,9 @@ const Projects = () => {
                           <motion.button
                             onClick={() => handleOpenLink(project.githubUrl!)}
                             className="p-3 rounded-xl bg-accent/10 hover:bg-accent/20 text-accent border border-accent/20 hover:border-accent/40 transition-all duration-300"
-                            whileHover={{ scale: 1.1, rotate: 5 }}
+                            whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
+                            transition={{ duration: 0.2 }}
                           >
                             <Github className="w-5 h-5" />
                           </motion.button>
@@ -279,8 +222,9 @@ const Projects = () => {
                           <motion.button
                             onClick={() => handleOpenLink(project.liveUrl!)}
                             className="p-3 rounded-xl bg-accent/10 hover:bg-accent/20 text-accent border border-accent/20 hover:border-accent/40 transition-all duration-300"
-                            whileHover={{ scale: 1.1, rotate: -5 }}
+                            whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
+                            transition={{ duration: 0.2 }}
                           >
                             <ExternalLink className="w-5 h-5" />
                           </motion.button>
@@ -308,7 +252,8 @@ const Projects = () => {
                           transition={{ duration: 0.4, delay: techIndex * 0.1 }}
                           viewport={{ once: true }}
                           className="px-3 py-1.5 bg-accent/15 text-accent text-xs rounded-full border border-accent/30 font-medium hover:bg-accent/25 hover:border-accent/50 transition-all duration-300 cursor-pointer"
-                          whileHover={{ scale: 1.05 }}
+                          whileHover={{ scale: 1.02 }}
+                          transition={{ duration: 0.2 }}
                       >
                         {tech}
                         </motion.span>

@@ -1,5 +1,5 @@
-import React, { useState, useRef } from "react";
-import { motion, useScroll, useTransform, useInView } from "framer-motion";
+import React, { useState, useRef, useCallback } from "react";
+import { motion, useInView, useScroll } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { experiences } from "@/data/portfolio";
@@ -8,17 +8,18 @@ import { ExternalLink, ChevronDown } from "lucide-react";
 const Experience = () => {
   const [expandedCard, setExpandedCard] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const timelineRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+
+  // Scroll-linked animation: vertical line grows from top to bottom as you scroll through the section
   const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start center", "end center"]
+    target: sectionRef,
+    offset: ["start end", "end start"],
   });
 
-  // Transform scroll progress for the timeline line
-  const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
-  const lineOpacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
-
-  const toggleExpand = (index: number) => {
-    setExpandedCard(expandedCard === index ? null : index);
+  const toggleExpand = useCallback((index: number) => {
+    setExpandedCard(prev => prev === index ? null : index);
     
     // Smooth scroll to the expanded card
     setTimeout(() => {
@@ -31,46 +32,17 @@ const Experience = () => {
         });
       }
     }, 150);
-  };
+  }, []);
 
   return (
-    <section id="experience" className="py-20 px-4 md:px-6 lg:px-8 relative overflow-hidden continuous-bg section-transition scroll-smooth">
-      {/* Enhanced Background Effects with Scroll Continuity */}
-      <motion.div 
-        className="absolute inset-0 bokeh-bg"
-        style={{ 
-          opacity: useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.1, 0.3, 0.2, 0.1]),
-          y: useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
-        }}
-      />
+    <section ref={sectionRef} id="experience" className="py-20 px-4 md:px-6 lg:px-8 relative overflow-hidden continuous-bg section-transition scroll-smooth">
+      {/* Static Background - No scroll animations */}
+      <div className="absolute inset-0 bokeh-bg opacity-20" />
 
-      {/* Reduced Background Elements - No Overlapping */}
+      {/* Static Background Elements - No animations */}
       <div className="absolute inset-0 overflow-hidden z-0">
-        <motion.div 
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-accent opacity-5 rounded-full blur-3xl"
-          animate={{ 
-            scale: [1, 1.2, 1],
-            opacity: [0.05, 0.1, 0.05],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-        <motion.div 
-          className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-500/10 to-teal-400/10 rounded-full blur-3xl"
-          animate={{ 
-            scale: [0.9, 1.1, 0.9],
-            opacity: [0.08, 0.12, 0.08],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 5
-          }}
-        />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-accent opacity-5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-500/10 to-teal-400/10 rounded-full blur-3xl" />
       </div>
       
       <div className="max-w-6xl mx-auto relative z-10" ref={containerRef}>
@@ -117,21 +89,18 @@ const Experience = () => {
         </motion.div>
         
         {/* Timeline Container */}
-        <div className="relative max-w-4xl mx-auto">
-          {/* Vertical Progress Line */}
-          <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-muted-foreground/20 to-muted-foreground/20">
-            <motion.div
-              className="absolute top-0 left-0 w-full bg-gradient-to-b from-teal-400 via-purple-500 to-teal-400 rounded-full"
-              style={{
-                height: lineHeight,
-                opacity: lineOpacity,
-                boxShadow: "0 0 20px rgba(20, 184, 166, 0.5), 0 0 40px rgba(168, 85, 247, 0.3)"
-              }}
-            />
-          </div>
+        <div ref={timelineRef} className="relative max-w-4xl mx-auto">
+          {/* Vertical Progress Line - animates with scroll (scaleY 0→1 as section is scrolled) */}
+          <motion.div
+            className="absolute left-8 top-0 bottom-0 w-0.5 origin-top bg-gradient-to-b from-muted-foreground/20 via-accent/40 to-muted-foreground/20"
+            style={{
+              scaleY: scrollYProgress,
+              transformOrigin: "top",
+            }}
+          />
 
           {/* Experience Cards */}
-          <div className="space-y-12">
+          <div className="space-y-6">
             {experiences.map((exp, index) => {
               const isEven = index % 2 === 0;
               const cardRef = useRef<HTMLDivElement>(null);
@@ -193,14 +162,13 @@ const Experience = () => {
                     id={`experience-card-${index}`}
                     className={`w-full max-w-2xl ${isEven ? 'ml-16' : 'mr-16'} group`}
                     whileHover={{ 
-                      y: -12,
-                      scale: 1.03,
-                      rotateY: 2,
-                      transition: { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }
+                      y: -2,
+                      scale: 1.005,
+                      transition: { duration: 0.2, ease: [0.25, 0.46, 0.45, 0.94] }
                     }}
                   >
                     <motion.div 
-                      className="relative p-6 rounded-3xl bg-gradient-to-r from-card/30 via-card/20 to-card/10 backdrop-blur-xl border border-accent/20 shadow-2xl hover:shadow-accent/25 transition-all duration-500 overflow-hidden"
+                      className="relative p-4 rounded-2xl bg-gradient-to-r from-card/30 via-card/20 to-card/10 backdrop-blur-xl border border-accent/20 shadow-2xl hover:shadow-accent/25 transition-all duration-500 overflow-hidden"
                       animate={{
                         boxShadow: expandedCard === index 
                           ? "0 25px 50px -12px rgba(20, 184, 166, 0.25), 0 0 0 1px rgba(20, 184, 166, 0.4)"
@@ -209,46 +177,44 @@ const Experience = () => {
                       transition={{ duration: 0.3 }}
                     >
                       {/* Dynamic Neon Glow Overlay */}
-                      <div className={`absolute inset-0 rounded-3xl bg-gradient-to-r from-accent/5 via-transparent to-accent/5 transition-opacity duration-500 ${expandedCard === index ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}></div>
-                      <div className={`absolute inset-0 rounded-3xl bg-gradient-to-br from-transparent via-accent/8 to-transparent transition-opacity duration-500 ${expandedCard === index ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}></div>
+                      <div className={`absolute inset-0 rounded-2xl bg-gradient-to-r from-accent/5 via-transparent to-accent/5 transition-opacity duration-500 ${expandedCard === index ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}></div>
+                      <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br from-transparent via-accent/8 to-transparent transition-opacity duration-500 ${expandedCard === index ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'}`}></div>
 
-                      <div className="relative z-10 p-6">
+                      <div className="relative z-10 p-4">
                         {/* Header */}
-                        <div className="flex items-center justify-between mb-4">
-                          <div className="flex items-center gap-4">
-                            {exp.company === "KJSCE CodeCell" ? (
+                        <div className="flex items-center justify-between gap-3 mb-3">
+                          <div className="flex items-center gap-3 min-w-0">
+                            {exp.logo.startsWith("/") || exp.logo.startsWith("http") ? (
                               <motion.img
-                                src="/codecell.png"
-                                alt="KJSCE CodeCell Logo"
-                                className="w-12 h-12 object-contain"
-                                whileHover={{ rotate: 360 }}
-                                transition={{ duration: 0.6, ease: "easeInOut" }}
+                                src={exp.logo}
+                                alt={`${exp.company} Logo`}
+                                className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover flex-shrink-0 ring-2 ring-accent/20"
+                                whileHover={{ scale: 1.05 }}
+                                transition={{ duration: 0.2, ease: "easeInOut" }}
                               />
                             ) : (
                               <motion.span 
-                                className="text-2xl"
+                                className="text-3xl sm:text-4xl w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center flex-shrink-0 bg-muted/50 ring-2 ring-accent/20"
                                 whileHover={{ rotate: 360 }}
                                 transition={{ duration: 0.6, ease: "easeInOut" }}
                               >
                                 {exp.logo}
                               </motion.span>
                             )}
-                            <div>
-                              <h3 className="text-xl font-bold text-foreground">{exp.title}</h3>
-                              <p className="text-accent font-medium">{exp.company}</p>
-                              <p className="text-muted-foreground text-sm">{exp.location}</p>
+                            <div className="min-w-0">
+                              <h3 className="text-lg font-bold text-foreground truncate">{exp.title}</h3>
+                              <p className="text-accent font-medium text-sm truncate">{exp.company}</p>
+                              <p className="text-muted-foreground text-xs">{exp.location}</p>
                             </div>
                           </div>
-                          <div className="flex flex-col items-end gap-2">
-                            <Badge variant="secondary" className="text-xs">
-                              {exp.period}
-                            </Badge>
-                          </div>
-                  </div>
+                          <Badge variant="secondary" className="text-xs flex-shrink-0">
+                            {exp.period}
+                          </Badge>
+                        </div>
                   
                         {/* Description */}
                         {exp.description && (
-                          <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
+                          <p className="text-muted-foreground text-sm mb-3 leading-relaxed line-clamp-2 sm:line-clamp-3">
                             {exp.description}
                           </p>
                         )}
@@ -256,7 +222,7 @@ const Experience = () => {
                         {/* Visit Website Button */}
                         {exp.website && (
                           <motion.div
-                            className="mb-4"
+                            className="mb-3"
                             initial={{ opacity: 0, y: 10 }}
                             animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
                             transition={{ delay: 0.3 }}
@@ -299,7 +265,7 @@ const Experience = () => {
 
                         {/* Tech Tags */}
                         {exp.tech && (
-                          <div className="flex flex-wrap gap-2 mb-4">
+                          <div className="flex flex-wrap gap-1.5 mb-3">
                             {exp.tech.map((tech, i) => (
                               <motion.div
                                 key={i}
@@ -336,28 +302,26 @@ const Experience = () => {
                           </div>
                         )}
 
-                        {/* Key Contributions - Expandable with Button */}
-                        <div className="border-t border-accent/10 pt-4">
-                          <div className="flex items-center justify-between mb-2">
-                            <div className="text-sm font-medium text-muted-foreground">
-                              Key Contributions
-                            </div>
+                        {/* Key Contributions - Rectangular expand button in center */}
+                        <div className="border-t border-accent/10 pt-3">
+                          <div className="flex justify-center w-full">
                             <motion.button
                               onClick={() => toggleExpand(index)}
-                              className="p-2 rounded-lg bg-accent/10 hover:bg-accent/20 text-accent border border-accent/20 hover:border-accent/40 transition-all duration-300"
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
+                              className="w-full max-w-xs flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-accent/10 hover:bg-accent/20 text-accent border border-accent/20 hover:border-accent/40 transition-all duration-300 font-medium text-sm"
+                              whileHover={{ scale: 1.02 }}
+                              whileTap={{ scale: 0.98 }}
                               aria-label={expandedCard === index ? "Collapse" : "Expand"}
                             >
-                              <motion.div
+                              <motion.span
                                 animate={{ rotate: expandedCard === index ? 180 : 0 }}
                                 transition={{ duration: 0.3, ease: "easeInOut" }}
                               >
-                                <ChevronDown className="w-5 h-5" />
-                              </motion.div>
+                                <ChevronDown className="w-4 h-4" />
+                              </motion.span>
+                              <span>{expandedCard === index ? "Collapse" : "Key contributions"}</span>
                             </motion.button>
                           </div>
-                          
+
                           <motion.div
                             initial={false}
                             animate={{
@@ -371,7 +335,7 @@ const Experience = () => {
                             }}
                             className="overflow-hidden"
                           >
-                            <ul className="space-y-2">
+                            <ul className="space-y-1.5">
                               {exp.achievements.map((achievement, i) => (
                                 <motion.li
                                   key={i}
@@ -384,7 +348,7 @@ const Experience = () => {
                                   }}
                                   className="text-muted-foreground text-sm flex items-start"
                                 >
-                                  <span className="text-accent mr-2 mt-1">•</span>
+                                  <span className="text-accent mr-2 mt-0.5 shrink-0">•</span>
                                   <span>{achievement}</span>
                                 </motion.li>
                               ))}

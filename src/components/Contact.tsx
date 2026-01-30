@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { motion, useInView } from 'framer-motion';
 import LampContainer from '@/components/ui/lamp';
 import { CardSpotlight } from '@/components/ui/card-spotlight';
 import { Mail, Phone, Github, Linkedin } from 'lucide-react';
@@ -8,109 +8,67 @@ import { contactInfo } from '@/data/portfolio';
 const Contact: React.FC = () => {
   const [typedText, setTypedText] = useState('');
   const [showEasterEgg, setShowEasterEgg] = useState(false);
-  
-  const [audio, setAudio] = useState<HTMLAudioElement | null>(null);
-  
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
   useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      setTypedText(prev => {
-        const newText = prev + e.key.toLowerCase();
-        if (newText.includes('pushpak')) {
-          setShowEasterEgg(true);
-          if (audio) {
-            audio.currentTime = 0;
-            audio.play().catch(console.error);
-          }
-          return '';
-        }
-        
-        return newText.slice(-10); // Keep only last 10 characters
-      });
-    };
-
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [audio]);
-
-  useEffect(() => {
-    const audioElement = new Audio('/pushpa.m4a');
-    audioElement.preload = 'auto';
-    setAudio(audioElement);
+    // Lazy load audio only when needed
+    if (!audioRef.current) {
+      audioRef.current = new Audio('/pushpa.m4a');
+      audioRef.current.preload = 'none'; // Don't preload
+    }
+    
     return () => {
-      if (audioElement) {
-        audioElement.pause();
-        audioElement.currentTime = 0;
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
       }
     };
   }, []);
 
+  const handleKeyPress = useCallback((e: KeyboardEvent) => {
+    setTypedText(prev => {
+      const newText = prev + e.key.toLowerCase();
+      if (newText.includes('pushpak')) {
+        setShowEasterEgg(true);
+        if (audioRef.current) {
+          audioRef.current.currentTime = 0;
+          audioRef.current.play().catch(() => {});
+        }
+        return '';
+      }
+      return newText.slice(-10);
+    });
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [handleKeyPress]);
+
   
 
   return (
-    <section id="contact" className="py-20 px-4 relative overflow-hidden continuous-bg section-transition scroll-smooth">
-      {/* Enhanced Glassmorphism Background */}
-      <motion.div className="absolute inset-0 bokeh-bg z-0" style={{ opacity: 0.2 }} />
+    <section ref={sectionRef} id="contact" className="py-20 px-4 relative overflow-hidden continuous-bg section-transition scroll-smooth">
+      {/* Static Background */}
+      <div className="absolute inset-0 bokeh-bg z-0 opacity-20" />
       
-      {/* Glassmorphism Overlay */}
-      <motion.div 
-        className="absolute inset-0 glass-enhanced z-0"
-        style={{ 
-          opacity: 0.15
-        }}
-      />
+      {/* Static Glassmorphism Overlay */}
+      <div className="absolute inset-0 glass-enhanced z-0 opacity-15" />
 
-      {/* Reduced Floating Particles for better performance */}
+      {/* Static Floating Particles - CSS only */}
       <div className="floating-particles z-1">
-        {[...Array(4)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="particle"
-            style={{
-              left: `${15 + i * 25}%`,
-              top: `${20 + (i % 2) * 50}%`,
-            }}
-            animate={{
-              y: [0, -20, 0],
-              opacity: [0.1, 0.3, 0.1],
-            }}
-            transition={{
-              duration: 8 + i * 0.5,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: i * 0.5
-            }}
-          />
-        ))}
+        <div className="particle"></div>
+        <div className="particle"></div>
+        <div className="particle"></div>
+        <div className="particle"></div>
       </div>
       
-      {/* Reduced Glassmorphism Orbs to prevent overlapping */}
+      {/* Static Background Orbs */}
       <div className="absolute inset-0 overflow-hidden z-0">
-        <motion.div 
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-accent opacity-8 rounded-full blur-3xl"
-          animate={{ 
-            scale: [1, 1.2, 1],
-            opacity: [0.08, 0.12, 0.08],
-          }}
-          transition={{
-            duration: 20,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-        <motion.div 
-          className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-500/10 to-teal-400/10 rounded-full blur-3xl"
-          animate={{ 
-            scale: [0.9, 1.1, 0.9],
-            opacity: [0.1, 0.13, 0.1],
-          }}
-          transition={{
-            duration: 25,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 5
-          }}
-        />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-accent opacity-8 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/3 right-1/4 w-80 h-80 bg-gradient-to-r from-purple-500/10 to-teal-400/10 rounded-full blur-3xl" />
       </div>
 
       <div className="max-w-7xl mx-auto relative z-20">

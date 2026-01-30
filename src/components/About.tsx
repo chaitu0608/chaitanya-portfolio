@@ -1,56 +1,40 @@
-import React from 'react';
-import { motion, useScroll, useTransform } from "framer-motion";
+import React, { useCallback } from 'react';
+import { motion, useInView } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Download, Github, Linkedin, MapPin } from "lucide-react";
 import GlassCard from "@/components/ui/glass-card";
 import { personalInfo, contactInfo } from "@/data/portfolio";
+import { useRef } from "react";
 
 interface AboutProps {
   onAvatarClick: () => void;
 }
 
 const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
-  const { scrollYProgress } = useScroll();
-  
-  // Transform scroll progress into various animation values
-  const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
-  const backgroundOpacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.4, 0.6, 0.3]);
-  const imageScale = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1.05, 1.1]);
-  const imageRotate = useTransform(scrollYProgress, [0, 1], [0, 5]);
+  const sectionRef = useRef(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
-  // Simple PDF export function
-  const exportToPDF = async () => {
-    // Open the CV PDF from public folder
+  // Memoized callbacks
+  const exportToPDF = useCallback(() => {
     const resumeUrl = "/ChaitanyaDhamdhere_CV.pdf";
     window.open(resumeUrl, '_blank');
-  };
+  }, []);
 
-  const handleOpenLink = (url: string) => {
+  const handleOpenLink = useCallback((url: string) => {
     window.open(url, '_blank');
-  };
+  }, []);
 
 
 
   return (
-    <section id="about" className="min-h-screen flex items-center px-4 md:px-6 lg:px-8 pt-32 pb-24 relative overflow-hidden continuous-bg section-transition scroll-smooth">
-      {/* Enhanced Bokeh Background with Scroll Animation */}
-      <motion.div 
-        className="absolute inset-0 bokeh-bg"
-        style={{ 
-          opacity: backgroundOpacity,
-          y: backgroundY 
-        }}
-      />
+    <section ref={sectionRef} id="about" className="min-h-screen flex items-center px-4 md:px-6 lg:px-8 pt-32 pb-24 relative overflow-hidden continuous-bg section-transition scroll-smooth">
+      {/* Static Background - No scroll animations */}
+      <div className="absolute inset-0 bokeh-bg opacity-40" />
       
-      {/* Glassmorphism Overlay */}
-      <motion.div 
-        className="absolute inset-0 glass-enhanced opacity-20"
-        style={{ 
-          opacity: useTransform(scrollYProgress, [0, 0.5, 1], [0.1, 0.15, 0.1])
-        }}
-      />
+      {/* Static Glassmorphism Overlay */}
+      <div className="absolute inset-0 glass-enhanced opacity-15" />
 
-      {/* Reduced Floating Particles for better performance */}
+      {/* Reduced Floating Particles - Static CSS only */}
       <div className="floating-particles z-1">
         <div className="particle"></div>
         <div className="particle"></div>
@@ -58,36 +42,19 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
         <div className="particle"></div>
       </div>
       
-      {/* Optimized Background Elements - Reduced overlapping */}
+      {/* Static Background Elements - No animations */}
       <div className="absolute inset-0 overflow-hidden z-0">
-        <motion.div 
-          className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-accent opacity-5 rounded-full blur-3xl"
-          animate={{ 
-            scale: [1, 1.15, 1],
-            opacity: [0.05, 0.08, 0.05],
-          }}
-          transition={{ duration: 10, repeat: Infinity }}
-          style={{ y: useTransform(scrollYProgress, [0, 1], [0, -30]) }}
-        />
-        <motion.div 
-          className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-gold opacity-5 rounded-full blur-3xl"
-          animate={{ 
-            scale: [1, 1.1, 1],
-            opacity: [0.05, 0.08, 0.05],
-          }}
-          transition={{ duration: 12, repeat: Infinity, delay: 3 }}
-          style={{ y: useTransform(scrollYProgress, [0, 1], [0, 20]) }}
-        />
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-accent opacity-5 rounded-full blur-3xl" />
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-gold opacity-5 rounded-full blur-3xl" />
       </div>
 
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-14 items-center relative z-20">
         {/* Left Content */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
+          animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
           transition={{ 
-            duration: 0.8, 
-            delay: 0.2,
+            duration: 0.6, 
             ease: [0.25, 0.46, 0.45, 0.94]
           }}
           className="space-y-9 md:space-y-10"
@@ -103,66 +70,21 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
             }}
             className="space-y-4"
           >
-            <motion.p 
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ 
-                duration: 0.6, 
-                delay: 0.6,
-                ease: [0.25, 0.46, 0.45, 0.94]
-              }}
-              className="text-accent font-mono text-sm tracking-wider smooth-text"
-            >
+            <p className="text-accent font-mono text-sm tracking-wider smooth-text">
               Hello, I'm
-            </motion.p>
-            <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ 
-                duration: 0.8, 
-                delay: 0.8,
-                ease: [0.25, 0.46, 0.45, 0.94]
-              }}
-              className="text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-tight"
-            >
-              <motion.span 
-                className="text-gradient smooth-text"
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ 
-                  duration: 0.8, 
-                  delay: 1.0,
-                  ease: [0.25, 0.46, 0.45, 0.94]
-                }}
-              >
+            </p>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-tight">
+              <span className="text-gradient smooth-text">
                 Chaitanya Dhamdhere
-              </motion.span>
-            </motion.h1>
-            <motion.h2 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ 
-                duration: 0.6, 
-                delay: 1.2,
-                ease: [0.25, 0.46, 0.45, 0.94]
-              }}
-              className="text-xl md:text-xl lg:text-2xl text-muted-foreground font-light leading-relaxed max-w-xl smooth-text"
-            >
+              </span>
+            </h1>
+            <h2 className="text-xl md:text-xl lg:text-2xl text-muted-foreground font-light leading-relaxed max-w-xl smooth-text">
               Software Engineering student passionate about turning ideas into impactful solutions through code.
-            </motion.h2>
+            </h2>
         </motion.div>
         
           {/* Description */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ 
-              duration: 0.6, 
-              delay: 1.4,
-              ease: [0.25, 0.46, 0.45, 0.94]
-            }}
-            className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl space-y-4"
-          >
+          <div className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl space-y-4">
             <p>
               Currently pursuing a B.Tech in Computer Engineering at KJ Somaiya College of Engineering, I'm passionate about building things and solving challenging problems.
             </p>
@@ -172,105 +94,51 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
             <p className="text-accent/90 font-medium text-center italic">
               Just a guy trying to make sense of tech and life - learning, building, and exploring along the way.
             </p>
-          </motion.div>
+          </div>
 
                 {/* Status Badge */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 0.8 }}
-                  className="inline-flex items-center gap-3 px-4 py-2 rounded-full glass-panel border border-accent/20"
-                >
+                <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full glass-panel border border-accent/20">
                   <div className="w-2 h-2 bg-accent rounded-full animate-pulse"></div>
                   <span className="text-accent font-mono text-sm">Available for new projects</span>
-                </motion.div>
+                </div>
 
                 {/* Location Info */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: 1.0 }}
-                  className="flex items-center gap-2 text-base"
-                >
+                <div className="flex items-center gap-2 text-base">
                   <MapPin className="w-5 h-5 text-accent" />
                   <span className="text-muted-foreground font-medium">Mumbai, India</span>
-                </motion.div>
+                </div>
 
           {/* Action Buttons */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ 
-              duration: 0.6, 
-              delay: 1.6,
-              ease: [0.25, 0.46, 0.45, 0.94]
-            }}
-            className="flex flex-wrap gap-3"
-          >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ 
-                duration: 0.5, 
-                delay: 1.8,
-                ease: [0.25, 0.46, 0.45, 0.94]
-              }}
+          <div className="flex flex-wrap gap-3">
+            <Button 
+              size="lg" 
+              className="btn-primary smooth-button"
+              onClick={exportToPDF}
             >
-              <Button 
-                size="lg" 
-                className="btn-primary smooth-button"
-                onClick={exportToPDF}
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Download className="w-5 h-5 mr-2 smooth-icon" />
-                <span className="smooth-text">Resume</span>
-              </Button>
-            </motion.div>
+              <Download className="w-5 h-5 mr-2 smooth-icon" />
+              <span className="smooth-text">Resume</span>
+            </Button>
             
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ 
-                duration: 0.5, 
-                delay: 2.0,
-                ease: [0.25, 0.46, 0.45, 0.94]
-              }}
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="btn-secondary smooth-button"
+              onClick={() => handleOpenLink(contactInfo.githubUrl)}
             >
-              <Button 
-                variant="outline" 
-                size="lg" 
-                className="btn-secondary smooth-button"
-                onClick={() => handleOpenLink(contactInfo.githubUrl)}
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Github className="w-5 h-5 mr-2 smooth-icon" />
-                <span className="smooth-text">GitHub</span>
-              </Button>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ 
-                duration: 0.5, 
-                delay: 2.2,
-                ease: [0.25, 0.46, 0.45, 0.94]
-              }}
+              <Github className="w-5 h-5 mr-2 smooth-icon" />
+              <span className="smooth-text">GitHub</span>
+            </Button>
+            
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="btn-secondary smooth-button"
+              onClick={() => handleOpenLink(contactInfo.linkedinUrl)}
             >
-              <Button 
-                variant="outline" 
-                size="lg" 
-                className="btn-secondary smooth-button"
-                onClick={() => handleOpenLink(contactInfo.linkedinUrl)}
-                whileHover={{ scale: 1.05, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Linkedin className="w-5 h-5 mr-2 smooth-icon" />
-                <span className="smooth-text">LinkedIn</span>
-              </Button>
-            </motion.div>
-          </motion.div>
+              <Linkedin className="w-5 h-5 mr-2 smooth-icon" />
+              <span className="smooth-text">LinkedIn</span>
+            </Button>
+          </div>
 
 
         </motion.div>
@@ -278,33 +146,26 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
         {/* Right Content - Professional Image Section */}
         <motion.div
           initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
+          animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
           transition={{ 
-            duration: 0.8, 
-            delay: 0.4,
+            duration: 0.6,
             ease: [0.25, 0.46, 0.45, 0.94]
           }}
           className="flex justify-center lg:justify-end"
         >
           <div className="relative">
-
-            {/* Main Image Container with Scroll Animation */}
+            {/* Main Image Container - Simplified hover */}
             <motion.div
               whileHover={{ 
-                scale: 1.05, 
-                rotateY: 5,
+                scale: 1.03,
                 y: -5
               }}
               transition={{ 
-                duration: 0.4,
+                duration: 0.3,
                 ease: [0.25, 0.46, 0.45, 0.94]
               }}
               className="relative group cursor-pointer smooth-card"
               onClick={onAvatarClick}
-              style={{
-                scale: imageScale,
-                rotateY: imageRotate
-              }}
             >
               {/* Outer Glow Ring */}
               <div className="absolute -inset-4 bg-gradient-to-r from-accent/20 via-accent/10 to-accent/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500"></div>
@@ -357,63 +218,34 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
                   </div>
                   
                   
-                  <motion.div
-                    className="absolute bottom-6 left-6 w-10 h-10 bg-accent/20 rounded-lg flex items-center justify-center border border-accent/30 backdrop-blur-sm"
-                    animate={{ rotate: [360, 0] }}
-                    transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                  >
+                  <div className="absolute bottom-6 left-6 w-10 h-10 bg-accent/20 rounded-lg flex items-center justify-center border border-accent/30 backdrop-blur-sm">
                     <span className="text-xl">🚀</span>
-                  </motion.div>
+                  </div>
 
-                  <motion.div
-                    className="absolute top-1/2 left-4 w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center border border-accent/30 backdrop-blur-sm"
-                    animate={{ y: [0, -10, 0] }}
-                    transition={{ duration: 3, repeat: Infinity }}
-                  >
+                  <div className="absolute top-1/2 left-4 w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center border border-accent/30 backdrop-blur-sm">
                     <span className="text-lg">💻</span>
-                  </motion.div>
+                  </div>
 
-                      <motion.div
-                    className="absolute top-1/2 right-4 w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center border border-accent/30 backdrop-blur-sm"
-                    animate={{ y: [0, 10, 0] }}
-                    transition={{ duration: 3, repeat: Infinity, delay: 1.5 }}
-                  >
+                  <div className="absolute top-1/2 right-4 w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center border border-accent/30 backdrop-blur-sm">
                     <span className="text-lg">⚡</span>
-                      </motion.div>
+                  </div>
 
-                  <motion.div
-                    className="absolute top-6 left-6 w-10 h-10 bg-accent/20 rounded-lg flex items-center justify-center border border-accent/30 backdrop-blur-sm"
-                    animate={{ rotate: [0, -360] }}
-                    transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                  >
+                  <div className="absolute top-6 left-6 w-10 h-10 bg-accent/20 rounded-lg flex items-center justify-center border border-accent/30 backdrop-blur-sm">
                     <span className="text-xl">⚛️</span>
-          </motion.div>
+          </div>
 
-                  {/* Minimal Tech Emojis - Key Ones Only */}
-          <motion.div
-                    className="absolute top-4 left-1/2 w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center border border-accent/30 backdrop-blur-sm"
-                    animate={{ scale: [1, 1.2, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  >
+                  {/* Minimal Tech Emojis - Static only */}
+          <div className="absolute top-4 left-1/2 w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center border border-accent/30 backdrop-blur-sm">
                     <span className="text-lg">📊</span>
-                  </motion.div>
+                  </div>
 
-                    <motion.div
-                    className="absolute bottom-8 right-8 w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center border border-accent/30 backdrop-blur-sm"
-                    animate={{ y: [0, -8, 0] }}
-                    transition={{ duration: 2.5, repeat: Infinity, delay: 0.5 }}
-                  >
+                    <div className="absolute bottom-8 right-8 w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center border border-accent/30 backdrop-blur-sm">
                     <span className="text-lg">📱</span>
-                    </motion.div>
+                    </div>
 
-
-                  <motion.div
-                    className="absolute top-1/2 left-1/4 w-6 h-6 bg-accent/20 rounded-full flex items-center justify-center border border-accent/30 backdrop-blur-sm"
-                    animate={{ rotate: [0, 360] }}
-                    transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                  >
+                  <div className="absolute top-1/2 left-1/4 w-6 h-6 bg-accent/20 rounded-full flex items-center justify-center border border-accent/30 backdrop-blur-sm">
                     <span className="text-xs">💡</span>
-                  </motion.div>
+                  </div>
                 </div>
                 
                 {/* Hover Overlay */}
@@ -428,23 +260,9 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
                 </div>
               </GlassCard>
 
-              {/* Decorative Elements */}
-              <motion.div
-                className="absolute -top-2 -left-2 w-4 h-4 bg-gradient-accent rounded-full"
-                animate={{
-                  scale: [1, 1.2, 1],
-                  opacity: [0.5, 1, 0.5]
-                }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
-              <motion.div
-                className="absolute -bottom-2 -right-2 w-3 h-3 bg-gradient-gold rounded-full"
-                animate={{
-                  scale: [1, 1.3, 1],
-                  opacity: [0.5, 1, 0.5]
-                }}
-                transition={{ duration: 2.5, repeat: Infinity, delay: 0.5 }}
-              />
+              {/* Decorative Elements - Static */}
+              <div className="absolute -top-2 -left-2 w-4 h-4 bg-gradient-accent rounded-full opacity-60" />
+              <div className="absolute -bottom-2 -right-2 w-3 h-3 bg-gradient-gold rounded-full opacity-60" />
             </motion.div>
 
               </div>

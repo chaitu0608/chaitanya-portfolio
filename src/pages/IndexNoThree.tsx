@@ -1,5 +1,5 @@
-import React, { useState, useEffect, lazy, Suspense } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, lazy, Suspense, useCallback, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import Navigation from "@/components/Navigation";
 import CustomCursor from "@/components/CustomCursor";
 import FloatingDock from "@/components/ui/floating-dock";
@@ -26,27 +26,41 @@ const SectionLoader = () => (
 const ENABLE_CUSTOM_CURSOR = false;
 
 const IndexNoThree = () => {
-  console.log('IndexNoThree component is rendering...');
-  
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isPhotoAlbumOpen, setIsPhotoAlbumOpen] = useState(false);
   const [isDeveloperModeOpen, setIsDeveloperModeOpen] = useState(false);
   const [konamiCode, setKonamiCode] = useState<string[]>([]);
 
-  // Handle avatar clicks for photo album
-  const handleAvatarClick = () => {
+  // Memoized callbacks to prevent re-renders
+  const handleAvatarClick = useCallback(() => {
     setIsPhotoAlbumOpen(true);
-  };
+  }, []);
 
-  // Konami code easter egg
+  const handleContactClick = useCallback(() => {
+    setIsContactModalOpen(true);
+  }, []);
+
+  const handleContactModalClose = useCallback(() => {
+    setIsContactModalOpen(false);
+  }, []);
+
+  const handlePhotoAlbumClose = useCallback(() => {
+    setIsPhotoAlbumOpen(false);
+  }, []);
+
+  const handleDeveloperModeClose = useCallback(() => {
+    setIsDeveloperModeOpen(false);
+  }, []);
+
+  // Konami code easter egg - optimized
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const konamiSequence = [
-        'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
-        'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
-        'KeyB', 'KeyA'
-      ];
+    const konamiSequence = [
+      'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
+      'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
+      'KeyB', 'KeyA'
+    ];
 
+    const handleKeyDown = (e: KeyboardEvent) => {
       setKonamiCode(prev => {
         const newCode = [...prev, e.code];
         if (newCode.length > konamiSequence.length) {
@@ -72,72 +86,68 @@ const IndexNoThree = () => {
       {/* Custom Cursor - Disabled for now, set ENABLE_CUSTOM_CURSOR to true to enable */}
       {ENABLE_CUSTOM_CURSOR && <CustomCursor />}
       
-      {/* Simple background without Three.js */}
+      {/* Optimized background - Reduced animations */}
       <div className="fixed inset-0 -z-10">
         <div className="absolute inset-0 bokeh-bg opacity-40" />
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-accent opacity-5 rounded-full blur-3xl animate-pulse" />
-          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-gold opacity-5 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }} />
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-accent opacity-5 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-gold opacity-5 rounded-full blur-3xl" />
         </div>
       </div>
 
-      {/* Main Content */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key="main-content"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] }}
-        >
-          <Navigation onContactClick={() => setIsContactModalOpen(true)} />
+      {/* Main Content - Simplified animation */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+      >
+        <Navigation onContactClick={handleContactClick} />
 
-          <main className="scroll-smooth">
-            <Suspense fallback={<SectionLoader />}>
-              <About onAvatarClick={handleAvatarClick} />
-            </Suspense>
-
-            <Suspense fallback={<SectionLoader />}>
-              <Projects />
-            </Suspense>
-
-            <Suspense fallback={<SectionLoader />}>
-              <Experience />
-            </Suspense>
-
-            <Suspense fallback={<SectionLoader />}>
-              <Skills />
-            </Suspense>
-
-            <Suspense fallback={<SectionLoader />}>
-              <Contact />
-            </Suspense>
-          </main>
-
-          <Suspense fallback={null}>
-            <Footer onContactClick={() => setIsContactModalOpen(true)} />
+        <main className="scroll-smooth">
+          <Suspense fallback={<SectionLoader />}>
+            <About onAvatarClick={handleAvatarClick} />
           </Suspense>
 
-          {/* Floating Dock */}
-          <FloatingDock onContactClick={() => setIsContactModalOpen(true)} />
-        </motion.div>
-      </AnimatePresence>
+          <Suspense fallback={<SectionLoader />}>
+            <Projects />
+          </Suspense>
+
+          <Suspense fallback={<SectionLoader />}>
+            <Experience />
+          </Suspense>
+
+          <Suspense fallback={<SectionLoader />}>
+            <Skills />
+          </Suspense>
+
+          <Suspense fallback={<SectionLoader />}>
+            <Contact />
+          </Suspense>
+        </main>
+
+        <Suspense fallback={null}>
+          <Footer onContactClick={handleContactClick} />
+        </Suspense>
+
+        {/* Floating Dock */}
+        <FloatingDock onContactClick={handleContactClick} />
+      </motion.div>
 
       {/* Modals */}
       <Suspense fallback={null}>
         <ContactModal
           isOpen={isContactModalOpen}
-          onClose={() => setIsContactModalOpen(false)}
+          onClose={handleContactModalClose}
         />
 
         <PhotoAlbum
           isOpen={isPhotoAlbumOpen}
-          onClose={() => setIsPhotoAlbumOpen(false)}
+          onClose={handlePhotoAlbumClose}
         />
 
         <DeveloperModeModal
           isOpen={isDeveloperModeOpen}
-          onClose={() => setIsDeveloperModeOpen(false)}
+          onClose={handleDeveloperModeClose}
         />
       </Suspense>
     </div>

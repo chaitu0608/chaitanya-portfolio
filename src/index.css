@@ -424,17 +424,18 @@
   }
 }
 
-/* Smooth Scroll - Enhanced Global */
+/* Smoothest possible scroll - lazy, slow-feel, very smooth */
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 100px;
   -webkit-overflow-scrolling: touch;
-  contain: layout;
+  scrollbar-gutter: stable;
 }
 
 body {
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
+  overflow-x: hidden;
 }
 
 /* Smooth scrolling for all scrollable containers */
@@ -480,14 +481,13 @@ motion.span {
   will-change: transform, opacity;
 }
 
-/* Smooth Scroll Snap */
+/* Smooth scroll - no snap for fluid, lazy feel */
 main {
-  scroll-snap-type: y proximity;
   scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
 }
 
 section {
-  scroll-snap-align: start;
   scroll-margin-top: 100px;
 }
 
@@ -616,8 +616,8 @@ a:hover, button:hover, [role="button"]:hover, .cursor-pointer:hover {
     opacity: 0.2;
   }
   50% {
-    transform: translateY(-15px);
-    opacity: 0.4;
+    transform: translateY(-10px);
+    opacity: 0.3;
   }
 }
 
@@ -641,7 +641,7 @@ a:hover, button:hover, [role="button"]:hover, .cursor-pointer:hover {
   }
 }
 
-/* Continuous Background Effects */
+/* Continuous Background Effects - Static for performance */
 .continuous-bg {
   position: relative;
   overflow: hidden;
@@ -662,8 +662,6 @@ a:hover, button:hover, [role="button"]:hover, .cursor-pointer:hover {
     rgba(32, 227, 178, 0.02) 75%,
     rgba(79, 209, 199, 0.02) 100%
   );
-  background-size: 400% 400%;
-  animation: gradient-wave 20s ease infinite;
   pointer-events: none;
   z-index: 0;
 }
@@ -690,7 +688,6 @@ a:hover, button:hover, [role="button"]:hover, .cursor-pointer:hover {
     rgba(56, 178, 172, 0.02) 0%,
     transparent 50%
   );
-  animation: orb-pulse 15s ease-in-out infinite;
   pointer-events: none;
   z-index: 0;
 }
@@ -712,8 +709,8 @@ a:hover, button:hover, [role="button"]:hover, .cursor-pointer:hover {
   height: 3px;
   background: rgba(32, 227, 178, 0.3);
   border-radius: 50%;
-  will-change: transform, opacity;
-  animation: particle-float 15s linear infinite;
+  animation: particle-float 20s linear infinite;
+  animation-play-state: running;
 }
 
 .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
@@ -727,7 +724,6 @@ a:hover, button:hover, [role="button"]:hover, .cursor-pointer:hover {
   position: relative;
   z-index: 10;
   scroll-margin-top: 100px;
-  scroll-snap-align: start;
 }
 
 .section-transition::before {

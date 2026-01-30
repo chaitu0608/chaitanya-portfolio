@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Home, User, Briefcase, Code, Star, Mail } from "lucide-react";
 import { navItems, personalInfo } from "@/data/portfolio";
 import { scrollToSection } from "@/utils/animations";
 import { motion, AnimatePresence } from "framer-motion";
+import { useThrottle } from "@/hooks/useThrottle";
 
 interface NavigationProps {
   onContactClick?: () => void;
@@ -14,40 +15,42 @@ const Navigation: React.FC<NavigationProps> = ({ onContactClick }) => {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("about");
 
-  const navIcons = {
+  const navIcons = useMemo(() => ({
     about: User,
     projects: Code,
     experience: Briefcase,
     skills: Star,
     contact: Mail
-  };
+  }), []);
+
+  const sections = useMemo(() => navItems.map(item => item.href.substring(1)), []);
+
+  // Throttled scroll handler for better performance
+  const handleScroll = useThrottle(() => {
+    const isScrolled = window.scrollY > 50;
+    setScrolled(isScrolled);
+    
+    // Update active section based on scroll position
+    const currentSection = sections.find(section => {
+      const element = document.getElementById(section);
+      if (element) {
+        const rect = element.getBoundingClientRect();
+        return rect.top <= 100 && rect.bottom >= 100;
+      }
+      return false;
+    });
+    
+    if (currentSection) {
+      setActiveSection(currentSection);
+    }
+  }, 100); // Throttle to 100ms
 
   useEffect(() => {
-    const handleScroll = () => {
-      const isScrolled = window.scrollY > 50;
-      setScrolled(isScrolled);
-      
-      // Update active section based on scroll position
-      const sections = navItems.map(item => item.href.substring(1));
-      const currentSection = sections.find(section => {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          return rect.top <= 100 && rect.bottom >= 100;
-        }
-        return false;
-      });
-      
-      if (currentSection) {
-        setActiveSection(currentSection);
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [handleScroll]);
 
-  const handleScrollToSection = (href: string) => {
+  const handleScrollToSection = useCallback((href: string) => {
     if (href === '#contact' && onContactClick) {
       onContactClick();
     } else {
@@ -55,7 +58,11 @@ const Navigation: React.FC<NavigationProps> = ({ onContactClick }) => {
     }
     setIsOpen(false);
     setActiveSection(href.substring(1));
-  };
+  }, [onContactClick]);
+
+  const handleToggleMenu = useCallback(() => {
+    setIsOpen(prev => !prev);
+  }, []);
 
   return (
     <motion.nav
@@ -97,20 +104,17 @@ const Navigation: React.FC<NavigationProps> = ({ onContactClick }) => {
                       y: -2
                     }}
                     whileTap={{ scale: 0.95 }}
+                    transition={{ duration: 0.2 }}
                     className={`relative flex items-center gap-2 px-4 py-2 rounded-full text-sm smooth-button group overflow-hidden ${
                       isActive
                         ? "bg-accent/20 text-accent smooth-glow border border-accent/30"
                         : "text-muted-foreground hover:bg-accent/10 hover:text-accent"
                     }`}
                   >
-                    <motion.div
-                      className="flex items-center gap-2"
-                      whileHover={{ x: 2 }}
-                      transition={{ duration: 0.2 }}
-                    >
+                    <div className="flex items-center gap-2">
                       {Icon && <Icon className="w-4 h-4 smooth-icon" />}
                       <span className="smooth-text">{item.label}</span>
-                    </motion.div>
+                    </div>
                     {isActive && (
                       <motion.div
                         className="absolute inset-0 rounded-full bg-gradient-to-r from-accent/20 to-accent/10"
@@ -142,9 +146,7 @@ const Navigation: React.FC<NavigationProps> = ({ onContactClick }) => {
               variant="ghost"
               size="sm"
               className="md:hidden border border-accent/30 text-accent hover:bg-accent/10 smooth-button"
-              onClick={() => setIsOpen(!isOpen)}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              onClick={handleToggleMenu}
             >
               <motion.div
                 animate={{ rotate: isOpen ? 180 : 0 }}
@@ -192,20 +194,17 @@ const Navigation: React.FC<NavigationProps> = ({ onContactClick }) => {
                           x: 4
                         }}
                         whileTap={{ scale: 0.98 }}
+                        transition={{ duration: 0.2 }}
                         className={`relative flex items-center gap-3 w-full text-left text-sm py-3 px-4 rounded-lg smooth-button group overflow-hidden ${
                           isActive
                             ? "bg-accent/20 text-accent border border-accent/30 smooth-glow"
                             : "text-muted-foreground hover:bg-accent/10"
                         }`}
                       >
-                        <motion.div
-                          className="flex items-center gap-3"
-                          whileHover={{ x: 2 }}
-                          transition={{ duration: 0.2 }}
-                        >
+                        <div className="flex items-center gap-3">
                           {Icon && <Icon className="w-4 h-4 smooth-icon" />}
                           <span className="smooth-text">{item.label}</span>
-                        </motion.div>
+                        </div>
                         {isActive && (
                           <motion.div
                             className="absolute inset-0 rounded-lg bg-gradient-to-r from-accent/20 to-accent/10"

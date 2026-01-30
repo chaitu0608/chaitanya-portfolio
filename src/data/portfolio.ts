@@ -38,11 +38,26 @@ export const navItems: NavItem[] = [
 // Experience Data
 export const experiences: Experience[] = [
   {
+    title: "Software Development Intern",
+    company: "Jio Platforms Limited",
+    location: "Mumbai, India",
+    period: "2024",
+    logo: "/jio.png",
+    description:
+      "My role with the Jio-Events team involved studying their webinar platform to understand enterprise UI architecture, data flow, and development lifecycles. I also contributed to frontend and interaction design for AI-driven learning games under Spectrum Jio. The internship concluded with KanbanFlow, a full-stack capstone project showcasing end-to-end application development and system design.",
+    achievements: [
+      "Studied Jio-Events webinar platform to understand enterprise UI architecture, data flow, and development lifecycles.",
+      "Contributed to frontend and interaction design for AI-driven learning games under Spectrum Jio.",
+      "Built KanbanFlow as a full-stack capstone project, showcasing end-to-end application development and system design.",
+    ],
+    tech: ["React", "TypeScript", "Node.js", "UI/UX", "Full-stack"],
+  },
+  {
     title: "Core Team Member",
     company: "KJSCE CodeCell",
     location: "Mumbai, India",
     period: "July 2024 - Present",
-    logo: "🏢",
+    logo: "/codecell.png",
     website: "https://kjssecodecell.com/",
     description: "Technical community at K. J. Somaiya College of Engineering focused on fostering coding culture through workshops, hackathons, and competitive programming.",
     achievements: [
@@ -107,7 +122,6 @@ export const projects: Project[] = [
     tech: ["React", "Solidity", "Web3.js", "Ethereum", "IPFS", "MetaMask"],
     type: "Web3 Application",
     thumbnail: "/StarQuest.jpeg",
-    githubUrl: "https://github.com/chaitu0608/starquest",
   },
   {
     title: "Tutelage",

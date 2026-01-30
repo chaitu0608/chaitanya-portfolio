@@ -1,15 +1,28 @@
-// Ultra-Smooth scroll utility
+// Easing: ease-out cubic for very smooth, slow deceleration at the end
+const easeOutCubic = (t: number): number => 1 - Math.pow(1 - t, 3);
+
+// Ultra-smooth, slow programmatic scroll (duration ~1.4s, eased)
 export const scrollToSection = (href: string) => {
-  const element = document.querySelector(href);
-  if (element) {
-    const elementPosition = element.getBoundingClientRect().top + window.pageYOffset;
-    const offsetPosition = elementPosition - 100; // Account for fixed header
-    
-    window.scrollTo({
-      top: offsetPosition,
-      behavior: "smooth"
-    });
-  }
+  const element = document.querySelector(href) as HTMLElement | null;
+  if (!element) return;
+
+  const offset = 100; // account for fixed header
+  const targetY =
+    element.getBoundingClientRect().top + window.scrollY - offset;
+  const startY = window.scrollY;
+  const distance = targetY - startY;
+  const durationMs = 1600; // slow, smooth scroll
+  const startTime = performance.now();
+
+  const tick = (now: number) => {
+    const elapsed = now - startTime;
+    const t = Math.min(elapsed / durationMs, 1);
+    const eased = easeOutCubic(t);
+    window.scrollTo(0, startY + distance * eased);
+    if (t < 1) requestAnimationFrame(tick);
+  };
+
+  requestAnimationFrame(tick);
 };
 
 // Intersection Observer for animations
