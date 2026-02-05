@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense, useCallback, useMemo } from 'react';
+import React, { useState, useRef, useEffect, lazy, Suspense, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import Navigation from "@/components/Navigation";
 import CustomCursor from "@/components/CustomCursor";
@@ -12,8 +12,11 @@ const Skills = lazy(() => import("@/components/Skills"));
 const Footer = lazy(() => import("@/components/Footer"));
 const Contact = lazy(() => import("@/components/Contact"));
 const ContactModal = lazy(() => import("@/components/ContactModal"));
-const PhotoAlbum = lazy(() => import("@/components/PhotoAlbum"));
-const DeveloperModeModal = lazy(() => import("@/components/DeveloperModeModal"));
+const BhaisEasterEgg = lazy(() => import("@/components/BhaisEasterEgg"));
+
+const BHAIS_TRIGGER = "bhais";
+const SHER_TRIGGER = "sher";
+const SHER_AUDIO = "/amandeep.m4a";
 
 // Loading fallback component
 const SectionLoader = () => (
@@ -27,13 +30,22 @@ const ENABLE_CUSTOM_CURSOR = false;
 
 const IndexNoThree = () => {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-  const [isPhotoAlbumOpen, setIsPhotoAlbumOpen] = useState(false);
-  const [isDeveloperModeOpen, setIsDeveloperModeOpen] = useState(false);
-  const [konamiCode, setKonamiCode] = useState<string[]>([]);
+  const [showBhaisEgg, setShowBhaisEgg] = useState(false);
+  const bhaisBufferRef = useRef("");
 
-  // Memoized callbacks to prevent re-renders
-  const handleAvatarClick = useCallback(() => {
-    setIsPhotoAlbumOpen(true);
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key.length !== 1) return;
+      const buf = (bhaisBufferRef.current + e.key.toLowerCase()).slice(-BHAIS_TRIGGER.length);
+      bhaisBufferRef.current = buf;
+      if (buf === BHAIS_TRIGGER) setShowBhaisEgg(true);
+      if (buf.slice(-SHER_TRIGGER.length) === SHER_TRIGGER) {
+        const audio = new Audio(SHER_AUDIO);
+        audio.play().catch(() => {});
+      }
+    };
+    window.addEventListener("keydown", onKey, { passive: true });
+    return () => window.removeEventListener("keydown", onKey);
   }, []);
 
   const handleContactClick = useCallback(() => {
@@ -42,43 +54,6 @@ const IndexNoThree = () => {
 
   const handleContactModalClose = useCallback(() => {
     setIsContactModalOpen(false);
-  }, []);
-
-  const handlePhotoAlbumClose = useCallback(() => {
-    setIsPhotoAlbumOpen(false);
-  }, []);
-
-  const handleDeveloperModeClose = useCallback(() => {
-    setIsDeveloperModeOpen(false);
-  }, []);
-
-  // Konami code easter egg - optimized
-  useEffect(() => {
-    const konamiSequence = [
-      'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
-      'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
-      'KeyB', 'KeyA'
-    ];
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      setKonamiCode(prev => {
-        const newCode = [...prev, e.code];
-        if (newCode.length > konamiSequence.length) {
-          newCode.shift();
-        }
-        
-        if (newCode.length === konamiSequence.length && 
-            newCode.every((code, index) => code === konamiSequence[index])) {
-          setIsDeveloperModeOpen(true);
-          return [];
-        }
-        
-        return newCode;
-      });
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   return (
@@ -105,7 +80,7 @@ const IndexNoThree = () => {
 
         <main className="scroll-smooth">
           <Suspense fallback={<SectionLoader />}>
-            <About onAvatarClick={handleAvatarClick} />
+            <About />
           </Suspense>
 
           <Suspense fallback={<SectionLoader />}>
@@ -140,15 +115,9 @@ const IndexNoThree = () => {
           onClose={handleContactModalClose}
         />
 
-        <PhotoAlbum
-          isOpen={isPhotoAlbumOpen}
-          onClose={handlePhotoAlbumClose}
-        />
-
-        <DeveloperModeModal
-          isOpen={isDeveloperModeOpen}
-          onClose={handleDeveloperModeClose}
-        />
+        {showBhaisEgg && (
+          <BhaisEasterEgg onClose={() => setShowBhaisEgg(false)} />
+        )}
       </Suspense>
     </div>
   );

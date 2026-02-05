@@ -6,11 +6,7 @@ import GlassCard from "@/components/ui/glass-card";
 import { personalInfo, contactInfo } from "@/data/portfolio";
 import { useRef } from "react";
 
-interface AboutProps {
-  onAvatarClick: () => void;
-}
-
-const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
+const About = () => {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
@@ -164,8 +160,7 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
                 duration: 0.3,
                 ease: [0.25, 0.46, 0.45, 0.94]
               }}
-              className="relative group cursor-pointer smooth-card"
-              onClick={onAvatarClick}
+              className="relative group smooth-card"
             >
               {/* Outer Glow Ring */}
               <div className="absolute -inset-4 bg-gradient-to-r from-accent/20 via-accent/10 to-accent/20 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500"></div>
@@ -173,7 +168,7 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
               {/* Main Image Card */}
               <GlassCard className="p-4 premium-glow relative overflow-hidden">
                 {/* Bigger Image Container */}
-                <div className="w-96 h-96 md:w-[28rem] md:h-[28rem] lg:w-[30rem] lg:h-[30rem] relative">
+                <div className="w-[28rem] h-[28rem] md:w-[32rem] md:h-[32rem] lg:w-[36rem] lg:h-[36rem] relative">
                   {/* Background Pattern */}
                   <div className="absolute inset-0 bg-gradient-to-br from-accent/10 via-background to-accent/5 rounded-2xl"></div>
                   
@@ -248,16 +243,6 @@ const About: React.FC<AboutProps> = ({ onAvatarClick }) => {
                   </div>
                 </div>
                 
-                {/* Hover Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-accent/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl flex items-end justify-center pb-6">
-                  <motion.div
-                    initial={{ y: 20, opacity: 0 }}
-                    whileHover={{ y: 0, opacity: 1 }}
-                    className="text-center"
-                  >
-                    <div className="text-sm text-accent font-mono">Click for Photo Album!</div>
-                  </motion.div>
-                </div>
               </GlassCard>
 
               {/* Decorative Elements - Static */}
