@@ -1,6 +1,6 @@
 // Site configuration constants
 export const SITE_CONFIG = {
-  title: "Chaitanya Dhamdhere - Full Stack Developer Portfolio",
+  title: "Chaitanya Dhamdhere",
   description: "Computer Engineering student and Full Stack Developer passionate about building innovative web applications. Skilled in React, Next.js, TypeScript, and more.",
   url: "https://chaitanya-portfolio.com",
   ogImage: "https://lovable.dev/opengraph-image-p98pqg.png",
