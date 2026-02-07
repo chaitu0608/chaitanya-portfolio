@@ -23,7 +23,7 @@ export const contactInfo: ContactInfo = {
   location: "Mumbai, India",
   githubUrl: "https://github.com/chaitu0608",
   linkedinUrl: "https://www.linkedin.com/in/chaitanya-dhamdhere/",
-  resumeUrl: "/ChaitanyaDhamdhere_CV.pdf",
+  resumeUrl: "/CD_Resume.pdf",
 };
 
 // Navigation Items

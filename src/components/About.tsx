@@ -12,7 +12,7 @@ const About = () => {
 
   // Memoized callbacks
   const exportToPDF = useCallback(() => {
-    const resumeUrl = "/ChaitanyaDhamdhere_CV.pdf";
+    const resumeUrl = "/CD_Resume.pdf";
     window.open(resumeUrl, '_blank');
   }, []);
 
