@@ -13,6 +13,7 @@ const Footer = lazy(() => import("@/components/Footer"));
 const Contact = lazy(() => import("@/components/Contact"));
 const ContactModal = lazy(() => import("@/components/ContactModal"));
 const BhaisEasterEgg = lazy(() => import("@/components/BhaisEasterEgg"));
+const PhotoAlbum = lazy(() => import("@/components/PhotoAlbum"));
 
 const BHAIS_TRIGGER = "bhais";
 const SHER_TRIGGER = "sher";
@@ -30,6 +31,7 @@ const ENABLE_CUSTOM_CURSOR = false;
 
 const IndexNoThree = () => {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const [isPhotoAlbumOpen, setIsPhotoAlbumOpen] = useState(false);
   const [showBhaisEgg, setShowBhaisEgg] = useState(false);
   const bhaisBufferRef = useRef("");
 
@@ -56,6 +58,14 @@ const IndexNoThree = () => {
     setIsContactModalOpen(false);
   }, []);
 
+  const handleOpenPhotoAlbum = useCallback(() => {
+    setIsPhotoAlbumOpen(true);
+  }, []);
+
+  const handleClosePhotoAlbum = useCallback(() => {
+    setIsPhotoAlbumOpen(false);
+  }, []);
+
   return (
     <div className="min-h-screen gradient-primary scroll-smooth">
       {/* Custom Cursor - Disabled for now, set ENABLE_CUSTOM_CURSOR to true to enable */}
@@ -80,7 +90,7 @@ const IndexNoThree = () => {
 
         <main className="scroll-smooth">
           <Suspense fallback={<SectionLoader />}>
-            <About />
+            <About onOpenPhotoAlbum={handleOpenPhotoAlbum} />
           </Suspense>
 
           <Suspense fallback={<SectionLoader />}>
@@ -118,6 +128,11 @@ const IndexNoThree = () => {
         {showBhaisEgg && (
           <BhaisEasterEgg onClose={() => setShowBhaisEgg(false)} />
         )}
+
+        <PhotoAlbum
+          isOpen={isPhotoAlbumOpen}
+          onClose={handleClosePhotoAlbum}
+        />
       </Suspense>
     </div>
   );

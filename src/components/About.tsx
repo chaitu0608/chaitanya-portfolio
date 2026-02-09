@@ -6,15 +6,29 @@ import GlassCard from "@/components/ui/glass-card";
 import { personalInfo, contactInfo } from "@/data/portfolio";
 import { useRef } from "react";
 
-const About = () => {
+// Preview images for the photos badge (same sources as PhotoAlbum; add more in public/ as needed)
+const PHOTO_ALBUM_PREVIEW_IMAGES = [
+  "/profile-photo.png",
+  "/codecell25.jpeg",
+  "/profile2.jpeg",
+  "/profile3.jpg",
+];
+
+interface AboutProps {
+  onOpenPhotoAlbum?: () => void;
+}
+
+const About = ({ onOpenPhotoAlbum }: AboutProps) => {
   const sectionRef = useRef(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
 
-  // Memoized callbacks
-  const exportToPDF = useCallback(() => {
-    const resumeUrl = "/CD_Resume.pdf";
-    window.open(resumeUrl, '_blank');
-  }, []);
+  // Absolute URL so resume opens in a new tab correctly (e.g. on localhost)
+  const resumeHref =
+    typeof window !== "undefined" && contactInfo.resumeUrl
+      ? contactInfo.resumeUrl.startsWith("http")
+        ? contactInfo.resumeUrl
+        : `${window.location.origin}${contactInfo.resumeUrl}`
+      : contactInfo.resumeUrl ?? "/ChaitanyaResume.pdf";
 
   const handleOpenLink = useCallback((url: string) => {
     window.open(url, '_blank');
@@ -105,16 +119,17 @@ const About = () => {
                 </div>
 
           {/* Action Buttons */}
-          <div className="flex flex-wrap gap-3">
-            <Button 
-              size="lg" 
-              className="btn-primary smooth-button"
-              onClick={exportToPDF}
+          <div className="flex flex-wrap gap-3 items-center">
+            <a
+              href={resumeHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-11 items-center justify-center rounded-lg px-6 text-sm font-medium bg-accent text-accent-foreground hover:bg-accent/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 btn-primary smooth-button"
             >
               <Download className="w-5 h-5 mr-2 smooth-icon" />
               <span className="smooth-text">Resume</span>
-            </Button>
-            
+            </a>
+
             <Button 
               variant="outline" 
               size="lg" 
@@ -213,9 +228,39 @@ const About = () => {
                   </div>
                   
                   
-                  <div className="absolute bottom-6 left-6 w-10 h-10 bg-accent/20 rounded-lg flex items-center justify-center border border-accent/30 backdrop-blur-sm">
-                    <span className="text-xl">🚀</span>
-                  </div>
+                  {/* Three small photos preview - click to open album */}
+                  {onOpenPhotoAlbum && (
+                    <button
+                      type="button"
+                      onClick={onOpenPhotoAlbum}
+                      className="absolute bottom-6 left-6 flex items-center justify-center rounded-full ring-2 ring-white/20 ring-offset-2 ring-offset-background/80 bg-black/40 backdrop-blur-sm p-1.5 hover:ring-accent/50 hover:bg-black/50 transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                      aria-label="View more photos"
+                    >
+                      <div className="relative flex h-9 w-[52px] items-center justify-center">
+                        {PHOTO_ALBUM_PREVIEW_IMAGES.slice(0, 3).map((src, i) => (
+                          <div
+                            key={`${src}-${i}`}
+                            className="absolute rounded-full overflow-hidden border-2 border-background/90 bg-muted shadow-md"
+                            style={{
+                              width: 28,
+                              height: 28,
+                              left: i * 14,
+                              top: 6 - i * 1,
+                              zIndex: 3 - i,
+                            }}
+                          >
+                            <img
+                              src={src}
+                              alt=""
+                              className="h-full w-full object-cover"
+                              loading="lazy"
+                              onError={(e) => { e.currentTarget.style.display = "none"; }}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </button>
+                  )}
 
                   <div className="absolute top-1/2 left-4 w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center border border-accent/30 backdrop-blur-sm">
                     <span className="text-lg">💻</span>
@@ -250,8 +295,8 @@ const About = () => {
               <div className="absolute -bottom-2 -right-2 w-3 h-3 bg-gradient-gold rounded-full opacity-60" />
             </motion.div>
 
-              </div>
-          </motion.div>
+          </div>
+        </motion.div>
         </div>
     </section>
   );

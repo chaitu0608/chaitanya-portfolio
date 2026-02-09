@@ -12,11 +12,11 @@ interface PhotoAlbumProps {
 const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ isOpen, onClose }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Photo album data
+  // Photo album data (images from public folder; add more as needed)
   const photos = [
     {
       id: 1,
-      src: '/profilephoto.webp',
+      src: '/profile-photo.png',
       title: 'Professional Headshot',
       description: 'Chaitanya at ETHGlobal New Delhi'
     },

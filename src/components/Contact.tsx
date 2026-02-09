@@ -12,6 +12,14 @@ const Contact: React.FC = () => {
   const leftInView = useInView(leftRef, { once: true, margin: "-40px" });
   const rightInView = useInView(rightRef, { once: true, margin: "-40px" });
 
+  // Absolute URL so resume opens in a new tab correctly (e.g. on localhost)
+  const resumeHref =
+    typeof window !== "undefined" && contactInfo.resumeUrl
+      ? contactInfo.resumeUrl.startsWith("http")
+        ? contactInfo.resumeUrl
+        : `${window.location.origin}${contactInfo.resumeUrl}`
+      : contactInfo.resumeUrl ?? "/ChaitanyaResume.pdf";
+
   return (
     <section
       ref={sectionRef}
@@ -144,9 +152,9 @@ const Contact: React.FC = () => {
                 <span className="text-xs text-muted-foreground">Connect</span>
               </a>
               <a
-                href={contactInfo.resumeUrl}
+                href={resumeHref}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="col-span-2 rounded-2xl glass-enhanced border border-accent/20 shadow-2xl hover:shadow-accent/25 p-4 flex items-center justify-center gap-3 group transition-all duration-300"
               >
                 <FileText className="h-5 w-5 text-accent" />

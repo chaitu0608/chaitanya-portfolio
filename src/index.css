@@ -610,6 +610,19 @@ a:hover, button:hover, [role="button"]:hover, .cursor-pointer:hover {
   }
 }
 
+@keyframes noise-gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.noise-border-wrapper {
+  animation: noise-gradient-shift 4s ease infinite;
+}
+
 @keyframes particle-float {
   0%, 100% {
     transform: translateY(0px);
