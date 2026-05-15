@@ -2,9 +2,9 @@
 export const SITE_CONFIG = {
   title: "Chaitanya Dhamdhere",
   description: "Computer Engineering student and Full Stack Developer passionate about building innovative web applications. Skilled in React, Next.js, TypeScript, and more.",
-  url: "https://chaitanya-portfolio.com",
-  ogImage: "https://lovable.dev/opengraph-image-p98pqg.png",
-  twitterHandle: "@lovable_dev"
+  url: "https://www.cdhamdhere.xyz",
+  ogImage: "https://www.cdhamdhere.xyz/profile3.jpg",
+  twitterHandle: "@chaitu0608"
 } as const;
 
 // Animation configuration

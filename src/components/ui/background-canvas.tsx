@@ -6,7 +6,7 @@ import * as THREE from 'three';
 // Animated gradient sphere component
 const AnimatedSphere: React.FC = () => {
   const meshRef = useRef<THREE.Mesh>(null);
-  const materialRef = useRef<any>(null);
+  const materialRef = useRef<{ time: number } | null>(null);
 
   useFrame((state) => {
     if (meshRef.current) {
