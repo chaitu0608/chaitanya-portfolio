@@ -16,10 +16,14 @@ export const useScrollSpy = (sectionIds: string[], offset: number = 100) => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Call once to set initial state
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('lenis-scroll', handleScroll, { passive: true });
+    handleScroll();
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('lenis-scroll', handleScroll);
+    };
   }, [sectionIds, offset]);
 
   return activeSection;

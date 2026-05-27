@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import Navigation from "@/components/Navigation";
 import CustomCursor from "@/components/CustomCursor";
 import FloatingDock from "@/components/ui/floating-dock";
+import { ScrollProvider } from "@/context/ScrollProvider";
 
 // Lazy load components for better performance
 const About = lazy(() => import("@/components/About"));
@@ -67,6 +68,7 @@ const IndexNoThree = () => {
   }, []);
 
   return (
+    <ScrollProvider>
     <div className="min-h-screen gradient-primary scroll-smooth">
       {/* Custom Cursor - Disabled for now, set ENABLE_CUSTOM_CURSOR to true to enable */}
       {ENABLE_CUSTOM_CURSOR && <CustomCursor />}
@@ -88,7 +90,7 @@ const IndexNoThree = () => {
       >
         <Navigation onContactClick={handleContactClick} />
 
-        <main className="scroll-smooth">
+        <main className="scroll-smooth pb-28">
           <Suspense fallback={<SectionLoader />}>
             <About onOpenPhotoAlbum={handleOpenPhotoAlbum} />
           </Suspense>
@@ -106,12 +108,12 @@ const IndexNoThree = () => {
           </Suspense>
 
           <Suspense fallback={<SectionLoader />}>
-            <Contact />
+            <Contact onContactClick={handleContactClick} />
           </Suspense>
         </main>
 
         <Suspense fallback={null}>
-          <Footer onContactClick={handleContactClick} />
+          <Footer />
         </Suspense>
 
         {/* Floating Dock */}
@@ -135,6 +137,7 @@ const IndexNoThree = () => {
         />
       </Suspense>
     </div>
+    </ScrollProvider>
   );
 };
 

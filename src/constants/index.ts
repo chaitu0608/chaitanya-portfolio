@@ -3,7 +3,7 @@ export const SITE_CONFIG = {
   title: "Chaitanya Dhamdhere",
   description: "Computer Engineering student and Full Stack Developer passionate about building innovative web applications. Skilled in React, Next.js, TypeScript, and more.",
   url: "https://www.cdhamdhere.xyz",
-  ogImage: "https://www.cdhamdhere.xyz/profile3.jpg",
+  ogImage: "https://www.cdhamdhere.xyz/og.png",
   twitterHandle: "@chaitu0608"
 } as const;
 

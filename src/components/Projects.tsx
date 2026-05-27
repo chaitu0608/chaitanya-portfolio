@@ -1,289 +1,371 @@
-import React, { useCallback, useRef } from 'react';
-import { motion, useInView } from 'framer-motion';
-import { Button } from "@/components/ui/button";
+import React, { useCallback, useRef, useState } from "react";
+import {
+  motion,
+  useInView,
+  useScroll,
+  useTransform,
+  AnimatePresence,
+} from "framer-motion";
 import { ExternalLink, Github } from "lucide-react";
-import GlassCard from "@/components/ui/glass-card";
 import { projects } from "@/data/portfolio";
+import type { Project, ProjectSize } from "@/types";
+import { cn } from "@/lib/utils";
+
+const MARQUEE_TEXT = "PROJECTS · BUILD · SHIP · ";
+const GITHUB_PROFILE = "https://github.com/chaitu0608";
+
+const TECH_CAPTIONS: Record<string, string> = {
+  "Full-Stack": "End-to-end architecture and deployment",
+  "Real-time": "Live detection and streaming updates",
+  Security: "Threat classification and attack surface analysis",
+  "AI/ML": "Model-assisted detection pipelines",
+  Visualization: "Interactive attack dashboards",
+  "Next.js": "App Router, server components, Vercel deploy",
+  TypeScript: "Strict typing across the stack",
+  "Tailwind CSS": "Utility-first responsive UI",
+  Vercel: "Edge deployment and preview URLs",
+  "Product Analytics": "Conversion and audit funnel tracking",
+  "Vercel OG": "Dynamic Open Graph image generation",
+  "React Native": "Cross-platform mobile app",
+  Expo: "OTA updates and native modules",
+  "Node.js": "REST APIs and background jobs",
+  Express: "Middleware, routing, and auth layers",
+  MongoDB: "Document models and aggregations",
+  "AWS S3": "Media storage and signed URLs",
+  React: "Component architecture and state",
+  Solidity: "Smart contracts on Ethereum",
+  "Web3.js": "On-chain reads and writes",
+  Ethereum: "Mainnet integration",
+  IPFS: "Decentralized asset storage",
+  MetaMask: "Wallet connect flows",
+  "C++": "Low-level secure wipe engine",
+  Python: "Automation and tooling scripts",
+  Electron: "Cross-platform desktop shell",
+  PostgreSQL: "Relational data and migrations",
+  Firebase: "Auth and realtime sync",
+  OpenSSL: "Cryptographic erase paths",
+  AJAX: "Async UI without full page reloads",
+  PHP: "Server-side LMS logic",
+  MySQL: "Course and attendance schema",
+  JavaScript: "DOM and API integration",
+  "HTML/CSS": "Semantic markup and layout",
+  "D3.js": "Algorithm step visualization",
+  JavaFX: "Desktop UI framework",
+  Java: "OOP diary application core",
+  SQLite: "Local encrypted storage",
+  "API Integration": "Third-party weather APIs",
+  "Chart.js": "Forecast visualizations",
+  Authentication: "Session and OAuth flows",
+  Prisma: "Type-safe database ORM",
+  "NextAuth.js": "Provider-based auth",
+};
+
+const SIZE_CLASS: Record<ProjectSize, string> = {
+  hero: "bento-tile-hero",
+  tall: "bento-tile-tall",
+  wide: "bento-tile-wide",
+  half: "bento-tile-half",
+  third: "bento-tile-third",
+};
+
+const TITLE_SIZE: Record<ProjectSize, string> = {
+  hero: "text-3xl md:text-4xl",
+  tall: "text-2xl md:text-3xl",
+  wide: "text-2xl md:text-3xl",
+  half: "text-xl md:text-2xl",
+  third: "text-lg md:text-xl",
+};
+
+function formatIndex(n: number): string {
+  return String(n).padStart(2, "0");
+}
+
+const MarqueeHeader = () => (
+  <div className="relative mb-8 overflow-hidden border-y border-accent/10 py-4">
+    <div className="bento-marquee-track">
+      {Array.from({ length: 12 }).map((_, i) => (
+        <span
+          key={i}
+          className="font-display text-2xl md:text-3xl font-bold text-gradient whitespace-nowrap px-8"
+        >
+          {MARQUEE_TEXT}
+        </span>
+      ))}
+    </div>
+  </div>
+);
+
+interface TechChipProps {
+  tech: string;
+}
+
+const TechChip: React.FC<TechChipProps> = ({ tech }) => {
+  const [hovered, setHovered] = useState(false);
+  const caption = TECH_CAPTIONS[tech] ?? `${tech} — used in this build`;
+
+  return (
+    <span
+      className="relative inline-block"
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+    >
+      <span className="px-2 py-0.5 text-[10px] md:text-xs rounded-full bg-accent/10 text-accent border border-accent/25 cursor-default">
+        {tech}
+      </span>
+      <AnimatePresence>
+        {hovered && (
+          <motion.span
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 4 }}
+            transition={{ duration: 0.15 }}
+            className="absolute left-0 top-full z-30 mt-1 w-max max-w-[200px] px-2 py-1 text-[10px] rounded-md bg-background/95 border border-accent/30 text-muted-foreground shadow-lg pointer-events-none"
+          >
+            {caption}
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </span>
+  );
+};
+
+interface BentoTileProps {
+  project: Project;
+  index: number;
+  onOpenLink: (url: string) => void;
+}
+
+const BentoTile: React.FC<BentoTileProps> = ({ project, index, onOpenLink }) => {
+  const size = project.size ?? "third";
+  const visibleTech = project.tech.slice(0, 4);
+  const extraCount = project.tech.length - visibleTech.length;
+  const thumb = project.thumbnail ?? project.imageUrl;
+
+  return (
+    <motion.article
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.5, delay: index * 0.05 }}
+      whileHover={{ y: -4 }}
+      data-bento-index={index}
+      className={cn(
+        "bento-tile group glass-panel rounded-2xl border border-glass-border",
+        "hover:border-accent/40 hover:shadow-[0_0_32px_rgba(32,227,178,0.12)]",
+        "transition-colors duration-300",
+        SIZE_CLASS[size]
+      )}
+    >
+      {thumb && (
+        <div className="absolute inset-0 z-0">
+          <img
+            src={thumb}
+            alt=""
+            className="w-full h-full object-cover opacity-25 group-hover:opacity-35 group-hover:scale-[1.03] transition-all duration-500"
+            loading="lazy"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/85 to-background/40" />
+        </div>
+      )}
+
+      <div className="relative z-10 flex flex-col h-full p-5 md:p-6">
+        <span className="font-mono text-xs text-accent/70 mb-2">
+          {formatIndex(index + 1)}
+        </span>
+
+        <div className="flex-1 min-h-0">
+          <p className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
+            {project.type}
+          </p>
+          <h3
+            className={cn(
+              "font-display font-bold text-foreground leading-tight mb-1",
+              TITLE_SIZE[size]
+            )}
+          >
+            {project.title}
+          </h3>
+          <p className="text-sm text-accent/90 font-medium mb-2">{project.subtitle}</p>
+          {(size === "hero" || size === "tall" || size === "wide") && (
+            <p className="text-xs md:text-sm text-muted-foreground line-clamp-3 md:line-clamp-4">
+              {project.description}
+            </p>
+          )}
+        </div>
+
+        <div className="flex flex-wrap gap-1.5 mt-3 mb-3">
+          {visibleTech.map((t) => (
+            <TechChip key={t} tech={t} />
+          ))}
+          {extraCount > 0 && (
+            <span className="px-2 py-0.5 text-[10px] rounded-full bg-muted/30 text-muted-foreground">
+              +{extraCount}
+            </span>
+          )}
+        </div>
+
+        <div className="flex items-center gap-2 mt-auto">
+          {project.githubUrl && (
+            <button
+              type="button"
+              onClick={() => onOpenLink(project.githubUrl!)}
+              className="p-2 rounded-lg bg-background/60 border border-glass-border hover:border-accent/50 hover:text-accent transition-colors"
+              aria-label={`${project.title} on GitHub`}
+            >
+              <Github className="w-4 h-4" />
+            </button>
+          )}
+          {project.liveUrl && (
+            <button
+              type="button"
+              onClick={() => onOpenLink(project.liveUrl!)}
+              className="p-2 rounded-lg bg-background/60 border border-glass-border hover:border-accent/50 hover:text-accent transition-colors"
+              aria-label={`${project.title} live demo`}
+            >
+              <ExternalLink className="w-4 h-4" />
+            </button>
+          )}
+        </div>
+      </div>
+    </motion.article>
+  );
+};
 
 const Projects = () => {
-  const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+  const sectionRef = useRef<HTMLElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(sectionRef, { once: true, margin: "-80px" });
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  const progressHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
 
   const handleOpenLink = useCallback((url: string) => {
-    window.open(url, '_blank');
+    window.open(url, "_blank", "noopener,noreferrer");
+  }, []);
+
+  React.useEffect(() => {
+    const section = sectionRef.current;
+    const grid = gridRef.current;
+    if (!section || !grid) return;
+
+    const tiles = grid.querySelectorAll<HTMLElement>("[data-bento-index]");
+    if (!tiles.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const idx = Number(entry.target.getAttribute("data-bento-index"));
+            if (!Number.isNaN(idx)) setActiveIndex(idx);
+          }
+        });
+      },
+      { root: null, rootMargin: "-40% 0px -40% 0px", threshold: 0 }
+    );
+
+    tiles.forEach((tile) => observer.observe(tile));
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <section ref={sectionRef} id="projects" className="py-20 px-4 relative overflow-hidden continuous-bg section-transition scroll-smooth">
-      {/* Static Background - No scroll animations */}
-      <div className="absolute inset-0 bokeh-bg opacity-30" />
-
-      {/* Optimized Floating Particles - Static CSS only */}
-      <div className="floating-particles">
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-      </div>
-      
-      {/* Static Background Elements - No animations */}
-      <div className="absolute inset-0 overflow-hidden">
+    <section
+      ref={sectionRef}
+      id="projects"
+      className="py-20 px-4 md:pl-8 relative overflow-hidden continuous-bg section-transition scroll-smooth"
+    >
+      <div className="absolute inset-0 bokeh-bg opacity-30 pointer-events-none" />
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/3 right-1/4 w-80 h-80 bg-gradient-accent opacity-5 rounded-full blur-3xl" />
         <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-gradient-gold opacity-5 rounded-full blur-3xl" />
       </div>
-      
+
+      {/* Sticky progress rail */}
+      <div className="hidden md:block absolute left-2 top-24 bottom-24 z-20 w-8">
+        <div className="bento-progress-rail h-full">
+          <motion.div className="bento-progress-fill" style={{ height: progressHeight }} />
+        </div>
+        <p className="absolute -left-1 top-0 font-mono text-[10px] text-muted-foreground -rotate-90 origin-left translate-y-8 whitespace-nowrap">
+          {formatIndex(activeIndex + 1)} / {formatIndex(projects.length)}
+        </p>
+      </div>
+
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          transition={{ duration: 0.5 }}
+          className="text-center mb-6"
         >
-          <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
+          <h2 className="text-4xl md:text-5xl font-display font-bold mb-3">
             The things I have <span className="text-gradient">built</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            I love turning ideas into interactive experiences — here are some of the projects I've brought to life.
+            Selected work — tap a tile for code or live demos.
           </p>
         </motion.div>
 
-        {/* Projects Grid - Custom Landscape Layout */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+        <MarqueeHeader />
+
+        <motion.p
+          initial={{ opacity: 0, x: -40 }}
+          whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          className="space-y-8 max-w-6xl mx-auto"
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+          className="font-display text-4xl sm:text-5xl md:text-7xl font-bold text-foreground/90 mb-10 md:mb-12 tracking-tight"
         >
+          BUILT TO <span className="text-gradient">SHIP.</span>
+        </motion.p>
+
+        <div ref={gridRef} className="bento-grid">
           {projects.map((project, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50, scale: 0.95 }}
-              whileInView={{ opacity: 1, x: 0, scale: 1 }}
-              transition={{ 
-                duration: 0.7, 
-                delay: index * 0.15,
-                type: "spring",
-                stiffness: 100,
-                damping: 15
-              }}
-              viewport={{ once: true }}
-              whileHover={{ 
-                scale: 1.01,
-                y: -4,
-                transition: { duration: 0.2, ease: "easeOut" }
-              }}
-              className="group relative"
-            >
-              {/* Landscape Glassmorphism Card */}
-              <div className="relative p-6 rounded-3xl glass-enhanced border border-accent/20 shadow-2xl hover:shadow-accent/25 smooth-transition-slow overflow-hidden">
-                {/* Dynamic Neon Glow Effect */}
-                <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-accent/5 via-transparent to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-transparent via-accent/8 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                
-                {/* Content - Landscape Layout */}
-                <div className="relative z-10 flex flex-col lg:flex-row gap-6 items-start">
-                  {/* Project Visual - Portrait Card for StarQuest & Tutelage */}
-                  {(project.title === 'StarQuest' || project.title === 'Tutelage') ? (
-                    <div className="w-full lg:w-64 flex-shrink-0 flex justify-center">
-                      <div className="w-full max-w-[240px] bg-gradient-to-br from-accent/20 via-accent/10 to-accent/5 rounded-2xl border border-accent/20 flex items-center justify-center relative overflow-hidden glass shadow-lg">
-                        {/* Portrait Card Frame */}
-                        <div className="w-full aspect-[3/4] bg-gradient-to-br from-background/95 to-background/85 rounded-xl border border-accent/10 flex items-center justify-center overflow-hidden p-2">
-                          {project.thumbnail ? (
-                            <img
-                              src={project.thumbnail}
-                              alt={project.title}
-                              className="w-full h-full object-contain rounded-lg"
-                              loading="lazy"
-                              decoding="async"
-                              onError={(e) => {
-                                e.currentTarget.style.display = 'none';
-                                const fallback = e.currentTarget.nextElementSibling as HTMLElement;
-                                if (fallback) fallback.style.display = 'flex';
-                              }}
-                            />
-                          ) : null}
-                          <div 
-                            className="w-full h-full bg-gradient-to-br from-accent/10 to-accent/5 flex items-center justify-center text-4xl rounded-lg"
-                            style={{ display: project.thumbnail ? 'none' : 'flex' }}
-                          >
-                            {project.type === 'Desktop Application' ? '💻' : 
-                             project.type === 'Web3 Application' ? '⛓️' : 
-                             project.type === 'Web Application' ? '🌐' : '📱'}
-                          </div>
-                        </div>
-                        
-                        {/* Animated Gradient Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-accent/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"></div>
-                        
-                        {/* Floating Particles Effect */}
-                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                          <div className="absolute top-4 left-4 w-2 h-2 bg-accent/60 rounded-full animate-pulse"></div>
-                          <div className="absolute top-8 right-6 w-1.5 h-1.5 bg-accent/40 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
-                          <div className="absolute bottom-6 left-8 w-1 h-1 bg-accent/50 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    /* Standard Landscape Layout for other projects */
-                    <div className="w-full lg:w-80 flex-shrink-0">
-                      <div className="w-full h-48 bg-gradient-to-br from-accent/20 via-accent/10 to-accent/5 rounded-2xl border border-accent/20 flex items-center justify-center relative overflow-hidden glass">
-                        {/* Device Frame Effect */}
-                        <div className="absolute inset-3 bg-gradient-to-br from-background/95 to-background/85 rounded-xl border border-accent/10 flex items-center justify-center overflow-hidden">
-                          {project.title === 'Padhle' ? (
-                            <img 
-                              src="/padhle.png" 
-                              alt="Padhle Learning Management System"
-                              className="w-full h-full object-cover rounded-lg"
-                              onError={(e) => {
-                                e.currentTarget.style.display = 'none';
-                                const fallback = e.currentTarget.nextElementSibling as HTMLElement;
-                                if (fallback) fallback.style.display = 'flex';
-                              }}
-                            />
-                          ) : project.title === 'TrustWipe' ? (
-                            <img 
-                              src="/trustwipe.jpg" 
-                              alt="TrustWipe Secure Data Wiping System"
-                              className="w-full h-full object-cover rounded-lg"
-                              loading="lazy"
-                              decoding="async"
-                              onError={(e) => {
-                                e.currentTarget.style.display = 'none';
-                                const fallback = e.currentTarget.nextElementSibling as HTMLElement;
-                                if (fallback) fallback.style.display = 'flex';
-                              }}
-                            />
-                          ) : project.thumbnail ? (
-                            <img
-                              src={project.thumbnail}
-                              alt={project.title}
-                              className="w-full h-full object-cover rounded-lg"
-                              loading="lazy"
-                              decoding="async"
-                              onError={(e) => {
-                                e.currentTarget.style.display = 'none';
-                                const fallback = e.currentTarget.nextElementSibling as HTMLElement;
-                                if (fallback) fallback.style.display = 'flex';
-                              }}
-                            />
-                          ) : null}
-                          <div 
-                            className="text-4xl opacity-60 group-hover:opacity-80 transition-opacity duration-300"
-                            style={{ display: project.thumbnail ? 'none' : 'flex' }}
-                          >
-                            {project.type === 'Desktop Application' ? '💻' : 
-                             project.type === 'Web3 Application' ? '⛓️' : 
-                             project.type === 'Web Application' ? '🌐' : '📱'}
-                          </div>
-                        </div>
-                        
-                        {/* Animated Gradient Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-accent/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                        
-                        {/* Floating Particles Effect */}
-                        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                          <div className="absolute top-4 left-4 w-2 h-2 bg-accent/60 rounded-full animate-pulse"></div>
-                          <div className="absolute top-8 right-6 w-1.5 h-1.5 bg-accent/40 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
-                          <div className="absolute bottom-6 left-8 w-1 h-1 bg-accent/50 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {/* Project Information - Landscape */}
-                  <div className="flex-1 space-y-4">
-                    {/* Title and Links */}
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <h3 className="text-2xl font-bold text-foreground group-hover:text-accent transition-colors duration-300 mb-2">
-                          {project.title}
-                        </h3>
-                        <p className="text-accent/80 font-medium text-sm mb-3">{project.subtitle}</p>
-                      </div>
-                      
-                      {/* Action Buttons */}
-                      <div className="flex gap-2 ml-4">
-                        {project.githubUrl ? (
-                          <motion.button
-                            onClick={() => handleOpenLink(project.githubUrl!)}
-                            className="p-3 rounded-xl bg-accent/10 hover:bg-accent/20 text-accent border border-accent/20 hover:border-accent/40 transition-all duration-300"
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            transition={{ duration: 0.2 }}
-                          >
-                            <Github className="w-5 h-5" />
-                          </motion.button>
-                        ) : null}
-                        {project.liveUrl ? (
-                          <motion.button
-                            onClick={() => handleOpenLink(project.liveUrl!)}
-                            className="p-3 rounded-xl bg-accent/10 hover:bg-accent/20 text-accent border border-accent/20 hover:border-accent/40 transition-all duration-300"
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            transition={{ duration: 0.2 }}
-                          >
-                            <ExternalLink className="w-5 h-5" />
-                          </motion.button>
-                        ) : null}
-                        {!project.githubUrl && !project.liveUrl && (
-                          <span className="px-3 py-1.5 text-xs text-muted-foreground border border-border/50 rounded-xl bg-muted/30 font-medium">
-                            Access Restricted
-                          </span>
-                        )}
-                      </div>
-                </div>
-                
-                    {/* Description */}
-                    <p className="text-muted-foreground leading-relaxed text-sm">
-                  {project.description}
-                </p>
-                
-                    {/* Technology Tags */}
-                  <div className="flex flex-wrap gap-2">
-                      {project.tech.slice(0, 4).map((tech, techIndex) => (
-                        <motion.span
-                          key={techIndex}
-                          initial={{ opacity: 0, scale: 0.8, y: 10 }}
-                          whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                          transition={{ duration: 0.4, delay: techIndex * 0.1 }}
-                          viewport={{ once: true }}
-                          className="px-3 py-1.5 bg-accent/15 text-accent text-xs rounded-full border border-accent/30 font-medium hover:bg-accent/25 hover:border-accent/50 transition-all duration-300 cursor-pointer"
-                          whileHover={{ scale: 1.02 }}
-                          transition={{ duration: 0.2 }}
-                      >
-                        {tech}
-                        </motion.span>
-                      ))}
-                      {project.tech.length > 4 && (
-                        <motion.span
-                          initial={{ opacity: 0, scale: 0.8, y: 10 }}
-                          whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                          transition={{ duration: 0.4, delay: 0.4 }}
-                          viewport={{ once: true }}
-                          className="px-3 py-1.5 bg-muted/50 text-muted-foreground text-xs rounded-full border border-muted/50 font-medium"
-                        >
-                          +{project.tech.length - 4}
-                        </motion.span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Enhanced Border Glow */}
-                <div className="absolute inset-0 rounded-3xl border border-accent/10 group-hover:border-accent/40 transition-colors duration-500"></div>
-                
-                {/* Corner Accents */}
-                <div className="absolute top-4 right-4 w-2 h-2 bg-accent/30 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="absolute bottom-4 left-4 w-1.5 h-1.5 bg-accent/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ transitionDelay: '0.1s' }}></div>
-              </div>
-            </motion.div>
+            <BentoTile
+              key={project.title}
+              project={project}
+              index={index}
+              onOpenLink={handleOpenLink}
+            />
           ))}
-        </motion.div>
+
+          <motion.a
+            href={GITHUB_PROFILE}
+            target="_blank"
+            rel="noopener noreferrer"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            whileHover={{ y: -4 }}
+            className={cn(
+              "bento-tile bento-tile-archive group glass-panel rounded-2xl",
+              "border border-dashed border-accent/30 flex flex-col items-center justify-center",
+              "hover:border-accent/60 hover:bg-accent/5 transition-all p-6 text-center"
+            )}
+          >
+            <span className="font-mono text-xs text-accent/70 mb-2">
+              {formatIndex(projects.length + 1)}
+            </span>
+            <Github className="w-10 h-10 text-accent mb-3 group-hover:scale-110 transition-transform" />
+            <p className="font-display text-xl font-bold">More on GitHub</p>
+            <p className="text-sm text-muted-foreground mt-1">@chaitu0608</p>
+          </motion.a>
         </div>
+
+        {isInView && (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8 }}
+            className="text-center text-sm text-muted-foreground mt-10"
+          >
+            Hover tech chips for context · {projects.length} featured projects
+          </motion.p>
+        )}
+      </div>
     </section>
   );
 };

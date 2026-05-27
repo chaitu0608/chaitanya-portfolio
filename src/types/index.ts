@@ -21,12 +21,15 @@ export interface Education {
   icon: string;
 }
 
+export type ProjectSize = "hero" | "tall" | "wide" | "half" | "third";
+
 export interface Project {
   title: string;
   subtitle: string;
   description: string;
   tech: string[];
   type: string;
+  size?: ProjectSize;
   githubUrl?: string;
   liveUrl?: string;
   imageUrl?: string;

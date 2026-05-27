@@ -12,6 +12,8 @@ import {
   Twitter,
   ChevronUp
 } from 'lucide-react';
+import { scrollToSection } from '@/utils/animations';
+import { scrollToTarget } from '@/lib/scroll/lenis';
 
 interface DockItem {
   icon: React.ComponentType<{ className?: string }>;
@@ -26,10 +28,7 @@ interface FloatingDockProps {
   onContactClick?: () => void;
 }
 
-const FloatingDock: React.FC<FloatingDockProps> = ({ 
-  className,
-  onContactClick 
-}) => {
+const FloatingDock: React.FC<FloatingDockProps> = ({ className }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -57,7 +56,7 @@ const FloatingDock: React.FC<FloatingDockProps> = ({
     {
       icon: Mail,
       label: 'Contact',
-      onClick: onContactClick,
+      href: '#contact',
     },
   ];
 
@@ -104,7 +103,11 @@ const FloatingDock: React.FC<FloatingDockProps> = ({
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('lenis-scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('lenis-scroll', handleScroll);
+    };
   }, [lastScrollY]);
 
   const handleItemClick = (item: DockItem) => {
@@ -113,17 +116,14 @@ const FloatingDock: React.FC<FloatingDockProps> = ({
     } else if (item.href) {
       if (item.external) {
         window.open(item.href, '_blank');
-      } else {
-        const element = document.querySelector(item.href);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
+      } else if (item.href) {
+        scrollToSection(item.href);
       }
     }
   };
 
   const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    scrollToTarget(0, { offset: 0, duration: 1 });
   };
 
   return (

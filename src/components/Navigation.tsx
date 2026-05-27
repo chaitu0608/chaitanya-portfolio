@@ -10,7 +10,7 @@ interface NavigationProps {
   onContactClick?: () => void;
 }
 
-const Navigation: React.FC<NavigationProps> = ({ onContactClick }) => {
+const Navigation: React.FC<NavigationProps> = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("about");
@@ -47,18 +47,18 @@ const Navigation: React.FC<NavigationProps> = ({ onContactClick }) => {
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("lenis-scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("lenis-scroll", handleScroll);
+    };
   }, [handleScroll]);
 
   const handleScrollToSection = useCallback((href: string) => {
-    if (href === '#contact' && onContactClick) {
-      onContactClick();
-    } else {
-      scrollToSection(href);
-    }
+    scrollToSection(href);
     setIsOpen(false);
     setActiveSection(href.substring(1));
-  }, [onContactClick]);
+  }, []);
 
   const handleToggleMenu = useCallback(() => {
     setIsOpen(prev => !prev);

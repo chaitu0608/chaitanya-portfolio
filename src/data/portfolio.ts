@@ -91,10 +91,11 @@ export const education: Education[] = [
   },
 ];
 
-// Projects Data
+// Projects Data (order + size drives bento layout in Projects.tsx)
 export const projects: Project[] = [
   {
     title: "ShieldEye",
+    size: "hero",
     subtitle: "Advanced Threat Detection System",
     description:
       "Production-ready, full-stack cyberattack detection and visualization platform that identifies, analyzes, and classifies 12+ URL-based attacks in real time. Built for SIH 2025 | Team ShieldEye. Detects SQL Injection (error/union/time/blind), XSS (reflected/stored/DOM), SSRF, Directory Traversal, Command Injection, LFI/RFI, XXE, Web Shell Upload, Credential Stuffing, Brute Force, HTTP Parameter Pollution, and Typosquatting.",
@@ -104,7 +105,19 @@ export const projects: Project[] = [
     liveUrl: "https://shieldeye.vercel.app",
   },
   {
+    title: "SpendSense",
+    size: "tall",
+    subtitle: "Free AI Spend Audit Tool",
+    description:
+      "Free AI tool spend audit — list your tools, plans, seats and monthly spend, get an instant shareable report with downgrades, seat fixes and savings math. Benchmarks 8 vendors (Cursor, Copilot, Claude, ChatGPT, Anthropic API, OpenAI API, Gemini, Windsurf) against public list pricing. Rule-based math, no login, under 3 minutes.",
+    tech: ["Next.js", "TypeScript", "Tailwind CSS", "Vercel", "Product Analytics", "Vercel OG"],
+    type: "Web Application",
+    thumbnail: "https://credex-intern.vercel.app/opengraph-image?619e52654fdd82d8",
+    liveUrl: "https://credex-intern.vercel.app/",
+  },
+  {
     title: "TrustWipe",
+    size: "wide",
     subtitle: "Secure Data Wiping System",
     description:
       "Designed a secure wiping engine implementing NIST SP 800-88 standards with overwrite, secure-erase, and crypto-erase methods. Developed a user-friendly React frontend for easy interaction and status monitoring. Built a robust Node.js backend to manage wipe requests, schedule tasks, and log activities.",
@@ -115,16 +128,8 @@ export const projects: Project[] = [
     liveUrl: "https://trustwipe.vercel.app/",
   },
   {
-    title: "StarQuest",
-    subtitle: "ETHGlobal Project",
-    description:
-      "A decentralized application built for ETHGlobal hackathon focusing on blockchain integration and smart contract development. Features include user authentication, transaction management, and real-time updates.",
-    tech: ["React", "Solidity", "Web3.js", "Ethereum", "IPFS", "MetaMask"],
-    type: "Web3 Application",
-    thumbnail: "/StarQuest.jpeg",
-  },
-  {
     title: "Tutelage",
+    size: "half",
     subtitle: "Educational Social Platform",
     description:
       "Full-featured educational social platform for Indian professional certification students (CA, CS, CMA). Allows users to share study materials, organize content by books and topics, build personalized learning feeds, connect with mentors, and interact via likes, comments, and bookmarks. Mobile app built with React Native + Expo, backend with Node.js/Express and MongoDB, OTP-based auth, AWS S3 storage and extensive post/topic models.",
@@ -133,7 +138,18 @@ export const projects: Project[] = [
     thumbnail: "/tutelage.png",
   },
   {
+    title: "StarQuest",
+    size: "half",
+    subtitle: "ETHGlobal Project",
+    description:
+      "A decentralized application built for ETHGlobal hackathon focusing on blockchain integration and smart contract development. Features include user authentication, transaction management, and real-time updates.",
+    tech: ["React", "Solidity", "Web3.js", "Ethereum", "IPFS", "MetaMask"],
+    type: "Web3 Application",
+    thumbnail: "/StarQuest.jpeg",
+  },
+  {
     title: "Padhle",
+    size: "third",
     subtitle: "Learning Management System",
     description:
       "Role-based system with attendance tracking and course management. AJAX-powered interface with real-time updates. Secure session management and SQL injection prevention.",
@@ -145,6 +161,7 @@ export const projects: Project[] = [
   },
   {
     title: "Vertex Cover Simulator",
+    size: "third",
     subtitle: "Algorithm Visualization",
     description:
       "Interactive visualization tool for understanding vertex cover algorithms. Features step-by-step execution, performance metrics, and educational content for computer science students.",
@@ -155,7 +172,19 @@ export const projects: Project[] = [
     liveUrl: "https://bhoumishgrover.github.io/Vertex-Cover-Simulator/",
   },
   {
+    title: "Next-Ama App",
+    size: "third",
+    subtitle: "Full Stack Authentication",
+    description:
+      "Built a robust full-stack authentication system using Next.js (App Router), TypeScript, and MongoDB, following best practices from the 'Chai aur Code' Next.js Auth playlist.",
+    tech: ["Next.js", "TypeScript", "MongoDB", "Authentication", "Tailwind CSS", "Prisma", "NextAuth.js"],
+    type: "Full Stack Application",
+    githubUrl: "https://github.com/chaitu0608/next-ama-app",
+    liveUrl: "https://next-ama-demo.com",
+  },
+  {
     title: "JournalMate",
+    size: "third",
     subtitle: "JavaFX Desktop App",
     description:
       "Built a secure and user-friendly digital diary application with a dynamic JavaFX interface, focusing on smooth navigation and interactivity. Implemented robust features like password-protected access and rich-text content editing.",
@@ -165,6 +194,7 @@ export const projects: Project[] = [
   },
   {
     title: "Weather App",
+    size: "third",
     subtitle: "React Weather Dashboard",
     description:
       "A responsive weather application built with React featuring real-time weather data, location-based forecasts, and interactive charts. Includes dark/light mode and offline capabilities.",
@@ -172,16 +202,6 @@ export const projects: Project[] = [
     type: "Web Application",
     githubUrl: "https://github.com/chaitu0608/weather-app",
     liveUrl: "https://weather-app-demo.com",
-  },
-  {
-    title: "Next-Ama App",
-    subtitle: "Full Stack Authentication",
-    description:
-      "Built a robust full-stack authentication system using Next.js (App Router), TypeScript, and MongoDB, following best practices from the 'Chai aur Code' Next.js Auth playlist.",
-    tech: ["Next.js", "TypeScript", "MongoDB", "Authentication", "Tailwind CSS", "Prisma", "NextAuth.js"],
-    type: "Full Stack Application",
-    githubUrl: "https://github.com/chaitu0608/next-ama-app",
-    liveUrl: "https://next-ama-demo.com",
   },
 ];
 

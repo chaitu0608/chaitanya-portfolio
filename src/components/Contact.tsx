@@ -1,24 +1,79 @@
-import React, { useRef } from "react";
-import { motion, useInView } from "framer-motion";
-import { Mail, Phone, MapPin, Github, Linkedin, FileText, Music } from "lucide-react";
+import React, { useRef, useState, useCallback, useEffect } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Github,
+  Linkedin,
+  FileText,
+  Music,
+  Send,
+  Copy,
+  Check,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { contactInfo } from "@/data/portfolio";
+import { getResumeHref } from "@/lib/resume";
+import SectionMarquee from "@/components/scroll/SectionMarquee";
+import BigTypeReveal from "@/components/scroll/BigTypeReveal";
+
+const APPLE_MUSIC_EMBED =
+  "https://embed.music.apple.com/in/playlist/chaitu101/pl.u-AkAm81pUx87R2zE?theme=dark";
 
 const EASE = [0.25, 0.46, 0.45, 0.94] as const;
 
-const Contact: React.FC = () => {
-  const sectionRef = useRef<HTMLElement>(null);
-  const leftRef = useRef<HTMLDivElement>(null);
-  const rightRef = useRef<HTMLDivElement>(null);
-  const leftInView = useInView(leftRef, { once: true, margin: "-40px" });
-  const rightInView = useInView(rightRef, { once: true, margin: "-40px" });
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.08, delayChildren: 0.1 },
+  },
+};
 
-  // Absolute URL so resume opens in a new tab correctly (e.g. on localhost)
-  const resumeHref =
-    typeof window !== "undefined" && contactInfo.resumeUrl
-      ? contactInfo.resumeUrl.startsWith("http")
-        ? contactInfo.resumeUrl
-        : `${window.location.origin}${contactInfo.resumeUrl}`
-      : contactInfo.resumeUrl ?? "/ChaitanyaResume.pdf";
+const tileVariants = {
+  hidden: { opacity: 0, y: 24 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: EASE },
+  },
+};
+
+interface ContactProps {
+  onContactClick?: () => void;
+}
+
+const Contact: React.FC<ContactProps> = ({ onContactClick }) => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const [copied, setCopied] = useState(false);
+  const resumeHref = getResumeHref();
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"],
+  });
+
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "12%"]);
+  const [reducedMotion, setReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReducedMotion(mq.matches);
+    const handler = () => setReducedMotion(mq.matches);
+    mq.addEventListener("change", handler);
+    return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  const handleCopyEmail = useCallback(async () => {
+    try {
+      await navigator.clipboard.writeText(contactInfo.email);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      window.location.href = `mailto:${contactInfo.email}`;
+    }
+  }, []);
 
   return (
     <section
@@ -26,28 +81,22 @@ const Contact: React.FC = () => {
       id="contact"
       className="py-20 px-4 relative overflow-hidden continuous-bg section-transition scroll-smooth"
     >
-      {/* Same background as "The things I have built" */}
-      <div className="absolute inset-0 bokeh-bg opacity-30" />
-      <div className="floating-particles">
-        <div className="particle" />
-        <div className="particle" />
-        <div className="particle" />
-        <div className="particle" />
-        <div className="particle" />
-      </div>
-      <div className="absolute inset-0 overflow-hidden">
+      <motion.div
+        className="absolute inset-0 bokeh-bg opacity-30 pointer-events-none"
+        style={reducedMotion ? undefined : { y: bgY }}
+      />
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-1/3 right-1/4 w-80 h-80 bg-gradient-accent opacity-5 rounded-full blur-3xl" />
         <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-gradient-gold opacity-5 rounded-full blur-3xl" />
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* Header – same design as Projects */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-center mb-16"
+          className="text-center mb-8"
         >
           <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
             Let&apos;s <span className="text-gradient">connect</span>
@@ -57,137 +106,172 @@ const Contact: React.FC = () => {
           </p>
         </motion.div>
 
-        {/* Bento layout – left: contact list card, right: social + music */}
+        <SectionMarquee text="CONNECT · REACH OUT · BUILD TOGETHER · " className="mb-8" />
+
+        <BigTypeReveal className="mb-10 md:mb-12">
+          READY WHEN <span className="text-gradient">YOU ARE.</span>
+        </BigTypeReveal>
+
         <motion.div
-          className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 max-w-6xl mx-auto"
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          viewport={{ once: true }}
+          className="contact-bento-grid max-w-6xl mx-auto"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-80px" }}
         >
-          {/* Left: one card with email, phone, location */}
+          {/* Contact channels */}
           <motion.div
-            ref={leftRef}
-            className="lg:col-span-5 space-y-4"
-            initial={{ opacity: 0, x: -24 }}
-            animate={leftInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, ease: EASE, delay: 0.1 }}
+            variants={tileVariants}
+            className="contact-tile contact-tile-channels rounded-2xl glass-enhanced border border-accent/20 shadow-2xl p-6 md:p-7"
           >
-            <div className="rounded-2xl glass-enhanced border border-accent/20 shadow-2xl hover:shadow-accent/25 transition-all duration-300 p-6">
-              <div className="space-y-5">
-                <a
-                  href={`mailto:${contactInfo.email}`}
-                  className="flex items-center gap-4 group"
-                >
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent/10 text-accent group-hover:bg-accent/20 transition-colors">
-                    <Mail className="h-5 w-5" />
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide">Email</p>
-                    <p className="font-medium text-foreground truncate group-hover:text-accent transition-colors">
-                      {contactInfo.email}
-                    </p>
-                  </div>
-                </a>
-                <div className="h-px bg-border/60" />
-                <a
-                  href={`tel:${contactInfo.phone.replace(/\s/g, "")}`}
-                  className="flex items-center gap-4 group"
-                >
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500/20 transition-colors">
-                    <Phone className="h-5 w-5" />
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide">Phone</p>
-                    <p className="font-medium text-foreground group-hover:text-emerald-400 transition-colors">
-                      {contactInfo.phone}
-                    </p>
-                  </div>
-                </a>
-                <div className="h-px bg-border/60" />
-                <div className="flex items-center gap-4">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-500/10 text-amber-400">
-                    <MapPin className="h-5 w-5" />
-                  </span>
-                  <div className="min-w-0">
-                    <p className="text-xs text-muted-foreground uppercase tracking-wide">Location</p>
-                    <p className="font-medium text-foreground">{contactInfo.location}</p>
-                  </div>
+            <p className="font-mono text-xs text-accent/70 mb-4">01 — Direct</p>
+            <div className="space-y-5">
+              <a
+                href={`mailto:${contactInfo.email}`}
+                className="flex items-center gap-4 group"
+              >
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent/10 text-accent group-hover:bg-accent/20 transition-colors shrink-0">
+                  <Mail className="h-5 w-5" />
+                </span>
+                <div className="min-w-0">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Email</p>
+                  <p className="font-medium text-foreground truncate group-hover:text-accent transition-colors">
+                    {contactInfo.email}
+                  </p>
+                </div>
+              </a>
+              <div className="h-px bg-border/60" />
+              <a
+                href={`tel:${contactInfo.phone.replace(/\s/g, "")}`}
+                className="flex items-center gap-4 group"
+              >
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500/20 transition-colors shrink-0">
+                  <Phone className="h-5 w-5" />
+                </span>
+                <div className="min-w-0">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Phone</p>
+                  <p className="font-medium text-foreground group-hover:text-emerald-400 transition-colors">
+                    {contactInfo.phone}
+                  </p>
+                </div>
+              </a>
+              <div className="h-px bg-border/60" />
+              <div className="flex items-center gap-4">
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-500/10 text-amber-400 shrink-0">
+                  <MapPin className="h-5 w-5" />
+                </span>
+                <div className="min-w-0">
+                  <p className="text-xs text-muted-foreground uppercase tracking-wide">Location</p>
+                  <p className="font-medium text-foreground">{contactInfo.location}</p>
                 </div>
               </div>
             </div>
           </motion.div>
 
-          {/* Right: social cards + music */}
+          {/* Apple Music */}
           <motion.div
-            ref={rightRef}
-            className="lg:col-span-7 space-y-6"
-            initial={{ opacity: 0, x: 24 }}
-            animate={rightInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, ease: EASE, delay: 0.2 }}
+            variants={tileVariants}
+            className="contact-tile contact-tile-music rounded-2xl glass-enhanced border border-accent/20 shadow-2xl overflow-hidden flex flex-col min-h-[320px] lg:min-h-[380px]"
           >
-            <div className="grid grid-cols-2 gap-4">
-              <a
-                href={contactInfo.githubUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="rounded-2xl glass-enhanced border border-accent/20 shadow-2xl hover:shadow-accent/25 p-5 flex flex-col items-center gap-3 text-center group transition-all duration-300"
-              >
-                <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted text-muted-foreground group-hover:bg-accent/10 group-hover:text-accent transition-colors">
-                  <Github className="h-6 w-6" />
-                </span>
-                <span className="font-semibold text-foreground">GitHub</span>
-                <span className="text-xs text-muted-foreground">Projects & code</span>
-              </a>
-              <a
-                href={contactInfo.linkedinUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="rounded-2xl glass-enhanced border border-accent/20 shadow-2xl hover:shadow-accent/25 p-5 flex flex-col items-center gap-3 text-center group transition-all duration-300"
-              >
-                <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-500/10 text-blue-400 group-hover:bg-blue-500/20 transition-colors">
-                  <Linkedin className="h-6 w-6" />
-                </span>
-                <span className="font-semibold text-foreground">LinkedIn</span>
-                <span className="text-xs text-muted-foreground">Connect</span>
-              </a>
-              <a
-                href={resumeHref}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="col-span-2 rounded-2xl glass-enhanced border border-accent/20 shadow-2xl hover:shadow-accent/25 p-4 flex items-center justify-center gap-3 group transition-all duration-300"
-              >
-                <FileText className="h-5 w-5 text-accent" />
-                <span className="font-semibold text-foreground">Resume / CV</span>
-              </a>
-            </div>
-          </motion.div>
-        </motion.div>
-
-        {/* My vibe – centered, full-width row, no space below left */}
-        <motion.div
-          className="flex justify-center w-full mt-6"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.25 }}
-          viewport={{ once: true }}
-        >
-          <div className="w-full max-w-xl rounded-2xl glass-enhanced border border-accent/20 shadow-2xl hover:shadow-accent/25 overflow-hidden transition-all duration-300">
-            <div className="p-3 border-b border-accent/10 flex items-center justify-center gap-2">
+            <div className="p-3 border-b border-accent/10 flex items-center gap-2 shrink-0">
               <Music className="h-5 w-5 text-accent shrink-0" />
               <p className="font-semibold text-foreground text-sm">My vibe</p>
-              <p className="text-xs text-muted-foreground hidden sm:inline">— What I&apos;m listening to</p>
+              <p className="text-xs text-muted-foreground hidden sm:inline">
+                — What I&apos;m listening to
+              </p>
+              <span className="ml-auto font-mono text-[10px] text-accent/60">02</span>
             </div>
-            <div className="w-full aspect-[4/3] max-h-[380px] bg-muted/20 overflow-hidden">
+            <div className="flex-1 min-h-[280px] bg-muted/20">
               <iframe
                 title="Apple Music Playlist"
                 allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
                 sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation-by-user-activation allow-pointer-lock"
                 className="w-full h-full min-h-[280px] border-0"
-                src="https://embed.music.apple.com/in/playlist/chaitu101/pl.u-AkAm81pUx87R2zE?theme=dark"
+                src={APPLE_MUSIC_EMBED}
               />
             </div>
-          </div>
+          </motion.div>
+
+          {/* Social strip */}
+          <motion.div
+            variants={tileVariants}
+            className="contact-tile contact-tile-social grid grid-cols-1 sm:grid-cols-3 gap-4"
+          >
+            <a
+              href={contactInfo.githubUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-2xl glass-enhanced border border-accent/20 p-5 flex flex-col items-center gap-2 text-center group hover:border-accent/40 transition-all"
+            >
+              <Github className="h-7 w-7 text-muted-foreground group-hover:text-accent transition-colors" />
+              <span className="font-semibold text-foreground">GitHub</span>
+              <span className="text-xs text-muted-foreground">Projects & code</span>
+            </a>
+            <a
+              href={contactInfo.linkedinUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="rounded-2xl glass-enhanced border border-accent/20 p-5 flex flex-col items-center gap-2 text-center group hover:border-accent/40 transition-all"
+            >
+              <Linkedin className="h-7 w-7 text-blue-400 group-hover:text-blue-300 transition-colors" />
+              <span className="font-semibold text-foreground">LinkedIn</span>
+              <span className="text-xs text-muted-foreground">Connect</span>
+            </a>
+            <a
+              href={resumeHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="rounded-2xl glass-enhanced border border-accent/20 p-5 flex flex-col items-center gap-2 text-center group hover:border-accent/40 transition-all"
+            >
+              <FileText className="h-7 w-7 text-accent" />
+              <span className="font-semibold text-foreground">Resume</span>
+              <span className="text-xs text-muted-foreground">PDF download</span>
+            </a>
+          </motion.div>
+
+          {/* CTA row */}
+          <motion.div
+            variants={tileVariants}
+            className="contact-tile contact-tile-cta flex flex-col sm:flex-row items-stretch sm:items-center gap-4 p-6 rounded-2xl glass-enhanced border border-accent/20"
+          >
+            <Button
+              size="lg"
+              className="flex-1 gap-2 bg-accent text-accent-foreground hover:bg-accent/90 font-semibold"
+              onClick={onContactClick}
+            >
+              <Send className="h-4 w-4" />
+              Send a message
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="flex-1 gap-2 border-accent/30 hover:bg-accent/10"
+              asChild
+            >
+              <a href={`mailto:${contactInfo.email}`}>
+                <Mail className="h-4 w-4" />
+                Email me
+              </a>
+            </Button>
+            <Button
+              size="lg"
+              variant="ghost"
+              className="gap-2 shrink-0"
+              onClick={handleCopyEmail}
+            >
+              {copied ? (
+                <>
+                  <Check className="h-4 w-4 text-accent" />
+                  Copied
+                </>
+              ) : (
+                <>
+                  <Copy className="h-4 w-4" />
+                  Copy email
+                </>
+              )}
+            </Button>
+          </motion.div>
         </motion.div>
       </div>
     </section>

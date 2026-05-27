@@ -1235,3 +1235,152 @@ img {
   background: rgba(32, 227, 178, 0.2);
   color: hsl(var(--foreground));
 }
+
+/* Projects bento grid */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.25rem;
+  grid-auto-rows: 14rem;
+}
+
+.bento-tile {
+  position: relative;
+  overflow: hidden;
+  min-height: 14rem;
+}
+
+.bento-tile-hero {
+  grid-column: span 8;
+  grid-row: span 2;
+  min-height: 28rem;
+}
+
+.bento-tile-tall {
+  grid-column: span 4;
+  grid-row: span 2;
+  min-height: 28rem;
+}
+
+.bento-tile-wide {
+  grid-column: span 12;
+  grid-row: span 1;
+}
+
+.bento-tile-half {
+  grid-column: span 6;
+  grid-row: span 1;
+}
+
+.bento-tile-third {
+  grid-column: span 4;
+  grid-row: span 1;
+}
+
+.bento-tile-archive {
+  grid-column: span 4;
+  grid-row: span 1;
+}
+
+@media (max-width: 768px) {
+  .bento-grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+    gap: 1rem;
+  }
+
+  .bento-tile-hero,
+  .bento-tile-tall,
+  .bento-tile-wide,
+  .bento-tile-half,
+  .bento-tile-third,
+  .bento-tile-archive {
+    grid-column: span 1;
+    grid-row: span 1;
+    min-height: 18rem;
+  }
+}
+
+/* Section / projects marquee */
+.section-marquee-track,
+.bento-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: bento-marquee 28s linear infinite;
+}
+
+.bento-marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes bento-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.bento-progress-rail {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: hsl(var(--border) / 0.4);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.bento-progress-fill {
+  width: 100%;
+  background: hsl(var(--accent));
+  transform-origin: top;
+  border-radius: 1px;
+}
+
+/* Contact bento grid */
+.contact-bento-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.25rem;
+}
+
+.contact-tile {
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-tile-channels {
+  grid-column: span 12;
+}
+
+.contact-tile-music {
+  grid-column: span 12;
+}
+
+.contact-tile-social {
+  grid-column: span 12;
+}
+
+.contact-tile-cta {
+  grid-column: span 12;
+}
+
+@media (min-width: 1024px) {
+  .contact-tile-channels {
+    grid-column: span 5;
+  }
+
+  .contact-tile-music {
+    grid-column: span 7;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section-marquee-track,
+  .bento-marquee-track {
+    animation: none;
+  }
+}
