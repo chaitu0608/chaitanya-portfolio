@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import GlassCard from '@/components/ui/glass-card';
+import { ImageWithFallback } from '@/components/ui/image-with-fallback';
 
 interface PhotoAlbumProps {
   isOpen: boolean;
@@ -85,22 +86,15 @@ const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ isOpen, onClose }) => {
             {/* Photo Display */}
             <div className="relative mb-6">
               <div className="aspect-video bg-muted/20 rounded-lg overflow-hidden relative">
-                <img
+                <ImageWithFallback
                   src={photos[currentIndex].src}
                   alt={photos[currentIndex].title}
-                  className="w-full h-full object-cover"
+                  fallbackLabel={photos[currentIndex].title}
+                  fallbackVariant="initials"
                   loading="lazy"
                   decoding="async"
-                  onError={(e) => {
-                    const target = e.currentTarget as HTMLImageElement;
-                    target.style.display = 'none';
-                    const fallback = target.nextElementSibling as HTMLElement;
-                    if (fallback) fallback.style.display = 'flex';
-                  }}
+                  containerClassName="h-full w-full [&_span]:text-4xl"
                 />
-                <div className="w-full h-full bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center text-6xl" style={{display: 'none'}}>
-                  📸
-                </div>
               </div>
 
               {/* Navigation Arrows */}
@@ -149,22 +143,15 @@ const PhotoAlbum: React.FC<PhotoAlbumProps> = ({ isOpen, onClose }) => {
                       : 'border-transparent hover:border-accent/50'
                   }`}
                 >
-                  <img
+                  <ImageWithFallback
                     src={photo.src}
                     alt={photo.title}
-                    className="w-full h-full object-cover"
+                    fallbackLabel={photo.title}
+                    fallbackVariant="initials"
                     loading="lazy"
                     decoding="async"
-                    onError={(e) => {
-                      const target = e.currentTarget as HTMLImageElement;
-                      target.style.display = 'none';
-                      const fallback = target.nextElementSibling as HTMLElement;
-                      if (fallback) fallback.style.display = 'flex';
-                    }}
+                    containerClassName="h-full w-full [&_span]:text-xs"
                   />
-                  <div className="w-full h-full bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center text-lg" style={{display: 'none'}}>
-                    📸
-                  </div>
                 </button>
               ))}
             </div>

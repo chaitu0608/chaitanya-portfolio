@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { 
@@ -10,10 +10,12 @@ import {
   Github,
   Linkedin,
   Twitter,
-  ChevronUp
+  ChevronUp,
+  MessageCircle
 } from 'lucide-react';
 import { scrollToSection } from '@/utils/animations';
 import { scrollToTarget } from '@/lib/scroll/lenis';
+import { contactInfo } from '@/data/portfolio';
 
 interface DockItem {
   icon: React.ComponentType<{ className?: string }>;
@@ -28,58 +30,38 @@ interface FloatingDockProps {
   onContactClick?: () => void;
 }
 
-const FloatingDock: React.FC<FloatingDockProps> = ({ className }) => {
+const FloatingDock: React.FC<FloatingDockProps> = ({ className, onContactClick }) => {
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
-  const dockItems: DockItem[] = [
+  const dockItems: DockItem[] = useMemo(() => [
+    { icon: User, label: 'About', href: '#about' },
+    { icon: Code, label: 'Projects', href: '#projects' },
+    { icon: Briefcase, label: 'Experience', href: '#experience' },
+    { icon: Star, label: 'Skills', href: '#skills' },
     {
-      icon: User,
-      label: 'About',
-      href: '#about',
+      icon: onContactClick ? MessageCircle : Mail,
+      label: onContactClick ? 'Message' : 'Contact',
+      href: onContactClick ? undefined : '#contact',
+      onClick: onContactClick,
     },
-    {
-      icon: Code,
-      label: 'Projects',
-      href: '#projects',
-    },
-    {
-      icon: Briefcase,
-      label: 'Experience',
-      href: '#experience',
-    },
-    {
-      icon: Star,
-      label: 'Skills',
-      href: '#skills',
-    },
-    {
-      icon: Mail,
-      label: 'Contact',
-      href: '#contact',
-    },
-  ];
+  ], [onContactClick]);
 
-  const socialItems: DockItem[] = [
-    {
-      icon: Github,
-      label: 'GitHub',
-      href: 'https://github.com/chaitu0608',
-      external: true,
-    },
-    {
-      icon: Linkedin,
-      label: 'LinkedIn',
-      href: 'https://www.linkedin.com/in/chaitanya-dhamdhere/',
-      external: true,
-    },
-    {
-      icon: Twitter,
-      label: 'Twitter',
-      href: 'https://twitter.com/chaitu0608',
-      external: true,
-    },
-  ];
+  const socialItems: DockItem[] = useMemo(() => {
+    const items: DockItem[] = [
+      { icon: Github, label: 'GitHub', href: contactInfo.githubUrl, external: true },
+      { icon: Linkedin, label: 'LinkedIn', href: contactInfo.linkedinUrl, external: true },
+    ];
+    if (contactInfo.twitterUrl) {
+      items.push({
+        icon: Twitter,
+        label: 'Twitter',
+        href: contactInfo.twitterUrl,
+        external: true,
+      });
+    }
+    return items;
+  }, []);
 
   useEffect(() => {
     let ticking = false;
@@ -115,8 +97,8 @@ const FloatingDock: React.FC<FloatingDockProps> = ({ className }) => {
       item.onClick();
     } else if (item.href) {
       if (item.external) {
-        window.open(item.href, '_blank');
-      } else if (item.href) {
+        window.open(item.href, '_blank', 'noopener,noreferrer');
+      } else {
         scrollToSection(item.href);
       }
     }
@@ -140,11 +122,9 @@ const FloatingDock: React.FC<FloatingDockProps> = ({ className }) => {
           )}
         >
           <div className="max-w-7xl mx-auto px-6 flex justify-center">
-          {/* Main Dock */}
           <div className="glass-panel px-4 py-3 rounded-full shadow-card">
             <div className="flex items-center gap-2">
-              {/* Navigation Items */}
-              {dockItems.map((item, index) => (
+              {dockItems.map((item) => (
                 <motion.button
                   key={item.label}
                   onClick={() => handleItemClick(item)}
@@ -152,21 +132,18 @@ const FloatingDock: React.FC<FloatingDockProps> = ({ className }) => {
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
                   transition={{ duration: 0.2 }}
+                  aria-label={item.label}
                 >
                   <item.icon className="w-5 h-5 text-muted-foreground group-hover:text-accent smooth-transition" />
-                  
-                  {/* Tooltip */}
                   <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-card text-xs text-card-foreground rounded-md opacity-0 group-hover:opacity-100 smooth-transition pointer-events-none whitespace-nowrap">
                     {item.label}
                   </div>
                 </motion.button>
               ))}
               
-              {/* Separator */}
               <div className="w-px h-6 bg-border mx-2" />
               
-              {/* Social Items */}
-              {socialItems.map((item, index) => (
+              {socialItems.map((item) => (
                 <motion.button
                   key={item.label}
                   onClick={() => handleItemClick(item)}
@@ -174,10 +151,9 @@ const FloatingDock: React.FC<FloatingDockProps> = ({ className }) => {
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
                   transition={{ duration: 0.2 }}
+                  aria-label={item.label}
                 >
                   <item.icon className="w-5 h-5 text-muted-foreground group-hover:text-accent smooth-transition" />
-                  
-                  {/* Tooltip */}
                   <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-card text-xs text-card-foreground rounded-md opacity-0 group-hover:opacity-100 smooth-transition pointer-events-none whitespace-nowrap">
                     {item.label}
                   </div>
@@ -186,13 +162,13 @@ const FloatingDock: React.FC<FloatingDockProps> = ({ className }) => {
             </div>
           </div>
           
-          {/* Scroll to Top Button */}
           <motion.button
             onClick={scrollToTop}
             className="absolute -top-16 left-1/2 transform -translate-x-1/2 p-2 glass-panel rounded-full shadow-card hover:shadow-card-hover smooth-transition"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             transition={{ duration: 0.2 }}
+            aria-label="Scroll to top"
           >
             <ChevronUp className="w-4 h-4 text-muted-foreground hover:text-accent smooth-transition" />
           </motion.button>

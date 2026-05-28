@@ -56,6 +56,8 @@ const Contact: React.FC<ContactProps> = ({ onContactClick }) => {
 
   const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "12%"]);
   const [reducedMotion, setReducedMotion] = useState(false);
+  const musicSectionRef = useRef<HTMLDivElement>(null);
+  const [musicInView, setMusicInView] = useState(false);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -63,6 +65,22 @@ const Contact: React.FC<ContactProps> = ({ onContactClick }) => {
     const handler = () => setReducedMotion(mq.matches);
     mq.addEventListener("change", handler);
     return () => mq.removeEventListener("change", handler);
+  }, []);
+
+  useEffect(() => {
+    const el = musicSectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setMusicInView(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
   const handleCopyEmail = useCallback(async () => {
@@ -79,7 +97,7 @@ const Contact: React.FC<ContactProps> = ({ onContactClick }) => {
     <section
       ref={sectionRef}
       id="contact"
-      className="py-20 px-4 relative overflow-hidden continuous-bg section-transition scroll-smooth"
+      className="py-20 px-4 relative overflow-hidden continuous-bg section-transition"
     >
       <motion.div
         className="absolute inset-0 bokeh-bg opacity-30 pointer-events-none"
@@ -170,6 +188,7 @@ const Contact: React.FC<ContactProps> = ({ onContactClick }) => {
 
           {/* Apple Music */}
           <motion.div
+            ref={musicSectionRef}
             variants={tileVariants}
             className="contact-tile contact-tile-music rounded-2xl glass-enhanced border border-accent/20 shadow-2xl overflow-hidden flex flex-col min-h-[320px] lg:min-h-[380px]"
           >
@@ -182,13 +201,20 @@ const Contact: React.FC<ContactProps> = ({ onContactClick }) => {
               <span className="ml-auto font-mono text-[10px] text-accent/60">02</span>
             </div>
             <div className="flex-1 min-h-[280px] bg-muted/20">
-              <iframe
-                title="Apple Music Playlist"
-                allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
-                sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation-by-user-activation allow-pointer-lock"
-                className="w-full h-full min-h-[280px] border-0"
-                src={APPLE_MUSIC_EMBED}
-              />
+              {musicInView ? (
+                <iframe
+                  title="Apple Music Playlist"
+                  allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
+                  sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation-by-user-activation allow-pointer-lock"
+                  className="w-full h-full min-h-[280px] border-0"
+                  src={APPLE_MUSIC_EMBED}
+                  loading="lazy"
+                />
+              ) : (
+                <div className="flex h-full min-h-[280px] items-center justify-center text-sm text-muted-foreground">
+                  Scroll to load playlist…
+                </div>
+              )}
             </div>
           </motion.div>
 

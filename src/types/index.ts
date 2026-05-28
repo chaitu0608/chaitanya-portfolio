@@ -48,6 +48,7 @@ export interface ContactInfo {
   location: string;
   githubUrl: string;
   linkedinUrl: string;
+  twitterUrl?: string;
   resumeUrl?: string;
 }
 

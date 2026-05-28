@@ -8,6 +8,7 @@ import SectionMarquee from "@/components/scroll/SectionMarquee";
 import BigTypeReveal from "@/components/scroll/BigTypeReveal";
 import type { Experience as ExperienceItem } from "@/types";
 import { cn } from "@/lib/utils";
+import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 
 const EASE = [0.25, 0.46, 0.45, 0.94] as const;
 
@@ -56,10 +57,13 @@ const RolePanel: React.FC<RolePanelProps> = ({
         <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
           <div className="flex items-center gap-3 min-w-0">
             {exp.logo.startsWith("/") || exp.logo.startsWith("http") ? (
-              <img
+              <ImageWithFallback
                 src={exp.logo}
-                alt=""
-                className="w-12 h-12 md:w-14 md:h-14 rounded-full object-cover ring-2 ring-accent/20 shrink-0"
+                alt={`${exp.company} logo`}
+                fallbackLabel={exp.company}
+                fallbackVariant="company"
+                companyLogo={exp.logo}
+                containerClassName="w-12 h-12 md:w-14 md:h-14 shrink-0 rounded-full ring-2 ring-accent/20"
               />
             ) : (
               <span className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-muted/50 ring-2 ring-accent/20 flex items-center justify-center text-2xl shrink-0">

@@ -5,11 +5,13 @@ import {
   useScroll,
   useTransform,
   AnimatePresence,
+  useReducedMotion,
 } from "framer-motion";
 import { ExternalLink, Github } from "lucide-react";
 import { projects } from "@/data/portfolio";
 import type { Project, ProjectSize } from "@/types";
 import { cn } from "@/lib/utils";
+import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 
 const MARQUEE_TEXT = "PROJECTS · BUILD · SHIP · ";
 const GITHUB_PROFILE = "https://github.com/chaitu0608";
@@ -136,6 +138,7 @@ interface BentoTileProps {
 }
 
 const BentoTile: React.FC<BentoTileProps> = ({ project, index, onOpenLink }) => {
+  const prefersReducedMotion = useReducedMotion();
   const size = project.size ?? "third";
   const visibleTech = project.tech.slice(0, 4);
   const extraCount = project.tech.length - visibleTech.length;
@@ -147,7 +150,7 @@ const BentoTile: React.FC<BentoTileProps> = ({ project, index, onOpenLink }) => 
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.5, delay: index * 0.05 }}
-      whileHover={{ y: -4 }}
+      whileHover={prefersReducedMotion ? undefined : { y: -4 }}
       data-bento-index={index}
       className={cn(
         "bento-tile group glass-panel rounded-2xl border border-glass-border",
@@ -158,11 +161,14 @@ const BentoTile: React.FC<BentoTileProps> = ({ project, index, onOpenLink }) => 
     >
       {thumb && (
         <div className="absolute inset-0 z-0">
-          <img
+          <ImageWithFallback
             src={thumb}
-            alt=""
-            className="w-full h-full object-cover opacity-25 group-hover:opacity-35 group-hover:scale-[1.03] transition-all duration-500"
+            alt={`${project.title} preview`}
+            fallbackLabel={project.title}
+            fallbackVariant="project"
             loading="lazy"
+            className="opacity-25 group-hover:opacity-35 group-hover:scale-[1.03] transition-all duration-500"
+            containerClassName="h-full w-full"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-background via-background/85 to-background/40" />
         </div>
@@ -276,7 +282,7 @@ const Projects = () => {
     <section
       ref={sectionRef}
       id="projects"
-      className="py-20 px-4 md:pl-8 relative overflow-hidden continuous-bg section-transition scroll-smooth"
+      className="py-20 px-4 md:pl-8 relative overflow-hidden continuous-bg section-transition"
     >
       <div className="absolute inset-0 bokeh-bg opacity-30 pointer-events-none" />
       <div className="absolute inset-0 overflow-hidden pointer-events-none">

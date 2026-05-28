@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import SectionMarquee from "@/components/scroll/SectionMarquee";
 
 const Footer: React.FC = () => {
+  const prefersReducedMotion = useReducedMotion();
   const [time, setTime] = useState<string>(() =>
     new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
   );
@@ -82,8 +83,12 @@ const Footer: React.FC = () => {
               <span className="text-muted-foreground text-sm md:text-base">Made with</span>
               <motion.span
                 className="inline-flex text-xl md:text-2xl leading-none"
-                animate={{ scale: [1, 1.12, 1] }}
-                transition={{ duration: 1.2, repeat: Infinity, repeatDelay: 2 }}
+                animate={prefersReducedMotion ? undefined : { scale: [1, 1.12, 1] }}
+                transition={
+                  prefersReducedMotion
+                    ? undefined
+                    : { duration: 1.2, repeat: Infinity, repeatDelay: 2 }
+                }
                 aria-hidden
               >
                 ❤️

@@ -1,10 +1,10 @@
-import React, { useCallback } from 'react';
-import { motion, useInView } from "framer-motion";
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Download, Github, Linkedin, MapPin } from "lucide-react";
 import GlassCard from "@/components/ui/glass-card";
+import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 import { personalInfo, contactInfo } from "@/data/portfolio";
-import { useRef } from "react";
 
 // Preview images for the photos badge (same sources as PhotoAlbum; add more in public/ as needed)
 const PHOTO_ALBUM_PREVIEW_IMAGES = [
@@ -20,7 +20,47 @@ interface AboutProps {
 
 const About = ({ onOpenPhotoAlbum }: AboutProps) => {
   const sectionRef = useRef(null);
+  const hasRevealedRef = useRef(false);
+  const [startPhotoReveal, setStartPhotoReveal] = useState(false);
+  const [showSoftOverlay, setShowSoftOverlay] = useState(true);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+  const prefersReducedMotion = useReducedMotion();
+
+  useEffect(() => {
+    let revealTimer: number | null = null;
+    let overlayTimer: number | null = null;
+
+    const runRevealOnce = () => {
+      if (hasRevealedRef.current) return;
+      hasRevealedRef.current = true;
+      const delay = prefersReducedMotion ? 0 : 800;
+      revealTimer = window.setTimeout(() => {
+        setStartPhotoReveal(true);
+        if (!prefersReducedMotion) {
+          overlayTimer = window.setTimeout(() => {
+            setShowSoftOverlay(false);
+          }, 1600);
+        } else {
+          setShowSoftOverlay(false);
+        }
+      }, delay);
+    };
+
+    if (document.readyState === "complete") {
+      runRevealOnce();
+      return () => {
+        if (revealTimer !== null) window.clearTimeout(revealTimer);
+        if (overlayTimer !== null) window.clearTimeout(overlayTimer);
+      };
+    }
+
+    window.addEventListener("load", runRevealOnce, { once: true });
+    return () => {
+      window.removeEventListener("load", runRevealOnce);
+      if (revealTimer !== null) window.clearTimeout(revealTimer);
+      if (overlayTimer !== null) window.clearTimeout(overlayTimer);
+    };
+  }, [prefersReducedMotion]);
 
   // Absolute URL so resume opens in a new tab correctly (e.g. on localhost)
   const resumeHref =
@@ -37,7 +77,7 @@ const About = ({ onOpenPhotoAlbum }: AboutProps) => {
 
 
   return (
-    <section ref={sectionRef} id="about" className="min-h-screen flex items-center px-4 md:px-6 lg:px-8 pt-32 pb-24 relative overflow-hidden continuous-bg section-transition scroll-smooth">
+    <section ref={sectionRef} id="about" className="min-h-screen flex items-center px-4 md:px-6 lg:px-8 pt-32 pb-24 relative overflow-hidden continuous-bg section-transition">
       {/* Static Background - No scroll animations */}
       <div className="absolute inset-0 bokeh-bg opacity-40" />
       
@@ -88,23 +128,15 @@ const About = ({ onOpenPhotoAlbum }: AboutProps) => {
                 Chaitanya Dhamdhere
               </span>
             </h1>
-            <h2 className="text-xl md:text-xl lg:text-2xl text-muted-foreground font-light leading-relaxed max-w-xl smooth-text">
-              Software Engineering student passionate about turning ideas into impactful solutions through code.
-            </h2>
+            <p className="text-xl md:text-2xl text-muted-foreground font-light leading-relaxed max-w-xl smooth-text">
+              Computer Engineering student · Full-stack developer
+            </p>
         </motion.div>
         
-          {/* Description */}
-          <div className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl space-y-4">
-            <p>
-              Currently pursuing a B.Tech in Computer Engineering at KJ Somaiya College of Engineering, I'm passionate about building things and solving challenging problems.
-            </p>
-            <p>
-              Somewhere between coding projects and crates of mangoes, I discovered how much I enjoy mixing innovation with real-world entrepreneurship.
-            </p>
-            <p className="text-accent/90 font-medium text-center italic">
-              Just a guy trying to make sense of tech and life - learning, building, and exploring along the way.
-            </p>
-          </div>
+          <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl">
+            B.Tech at KJ Somaiya College of Engineering, Mumbai. I build web apps,
+            ship products, and love turning hard problems into clean, working software.
+          </p>
 
                 {/* Status Badge */}
                 <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full glass-panel border border-accent/20">
@@ -167,10 +199,11 @@ const About = ({ onOpenPhotoAlbum }: AboutProps) => {
           <div className="relative">
             {/* Main Image Container - Simplified hover */}
             <motion.div
-              whileHover={{ 
-                scale: 1.03,
-                y: -5
-              }}
+              whileHover={
+                prefersReducedMotion
+                  ? undefined
+                  : { scale: 1.03, y: -5 }
+              }
               transition={{ 
                 duration: 0.3,
                 ease: [0.25, 0.46, 0.45, 0.94]
@@ -198,42 +231,56 @@ const About = ({ onOpenPhotoAlbum }: AboutProps) => {
                     }}></div>
                 </div>
                 
-                  {/* Full Profile Photo */}
+                  {/* Full Profile Photo (one-time blur -> sharp reveal) */}
                   <div className="absolute inset-2 bg-gradient-to-br from-accent/20 to-accent/5 rounded-xl overflow-hidden border border-accent/20">
-                    <img 
-                      src="/profile-photo.png?v=2" 
-                      alt="Chaitanya Dhamdhere" 
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                      decoding="async"
-                      onLoad={() => console.log('Image loaded successfully')}
-                      onError={(e) => {
-                        console.log('Image failed to load, showing fallback');
-                        e.currentTarget.style.display = 'none';
-                        const nextElement = e.currentTarget.nextElementSibling as HTMLElement;
-                        if (nextElement) {
-                          nextElement.style.display = 'flex';
-                        }
-                      }}
-                    />
-                    <div className="w-full h-full bg-gradient-to-br from-accent/30 to-accent/10 flex items-center justify-center text-6xl" style={{display: 'none'}}>
-                      👨‍💻
-                  </div>
+                    <motion.div
+                      className="absolute inset-0"
+                      initial={false}
+                      animate={
+                        prefersReducedMotion || startPhotoReveal
+                          ? { filter: "blur(0px)", scale: 1, opacity: 1 }
+                          : { filter: "blur(9px)", scale: 1.03, opacity: 0.88 }
+                      }
+                      transition={
+                        prefersReducedMotion
+                          ? { duration: 0 }
+                          : { duration: 1.45, ease: [0.22, 1, 0.36, 1] }
+                      }
+                    >
+                      <ImageWithFallback
+                        src="/profile-photo.png?v=2"
+                        alt={personalInfo.name}
+                        fallbackLabel={personalInfo.name}
+                        fallbackVariant="initials"
+                        loading="lazy"
+                        decoding="async"
+                        containerClassName="h-full w-full [&_span]:text-5xl md:[&_span]:text-6xl"
+                      />
+                    </motion.div>
+                    {!prefersReducedMotion && (
+                      <motion.div
+                        initial={false}
+                        animate={{ opacity: showSoftOverlay ? 1 : 0 }}
+                        transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+                        className="absolute inset-0 pointer-events-none"
+                        style={{
+                          background:
+                            "linear-gradient(140deg, rgba(36, 128, 156, 0.26), rgba(36, 128, 156, 0.08))",
+                        }}
+                      />
+                    )}
                   </div>
                   
-                  {/* Status Indicator - Floating on Photo */}
-                  <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex items-center gap-3 px-4 py-2 bg-accent/30 rounded-full border border-accent/50 backdrop-blur-sm shadow-lg">
-                    <div className="w-3 h-3 bg-accent rounded-full animate-pulse"></div>
-                    <span className="text-sm text-accent font-mono font-semibold">This is me</span>
+                  <div className="absolute top-4 right-4 flex items-center gap-2 px-3 py-1.5 bg-accent/30 rounded-full border border-accent/50 backdrop-blur-sm shadow-lg">
+                    <div className={`w-2 h-2 bg-accent rounded-full ${prefersReducedMotion ? "" : "animate-pulse"}`} />
+                    <span className="text-xs text-accent font-mono font-semibold">Open to work</span>
                   </div>
                   
-                  
-                  {/* Three small photos preview - click to open album */}
                   {onOpenPhotoAlbum && (
                     <button
                       type="button"
                       onClick={onOpenPhotoAlbum}
-                      className="absolute bottom-6 left-6 flex items-center justify-center rounded-full ring-2 ring-white/20 ring-offset-2 ring-offset-background/80 bg-black/40 backdrop-blur-sm p-1.5 hover:ring-accent/50 hover:bg-black/50 transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                      className="absolute bottom-4 left-4 flex items-center justify-center rounded-full ring-2 ring-white/20 ring-offset-2 ring-offset-background/80 bg-black/40 backdrop-blur-sm p-1.5 hover:ring-accent/50 hover:bg-black/50 transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-accent"
                       aria-label="View more photos"
                     >
                       <div className="relative flex h-9 w-[52px] items-center justify-center">
@@ -249,43 +296,19 @@ const About = ({ onOpenPhotoAlbum }: AboutProps) => {
                               zIndex: 3 - i,
                             }}
                           >
-                            <img
+                            <ImageWithFallback
                               src={src}
                               alt=""
-                              className="h-full w-full object-cover"
+                              fallbackLabel={personalInfo.name}
+                              fallbackVariant="initials"
                               loading="lazy"
-                              onError={(e) => { e.currentTarget.style.display = "none"; }}
+                              containerClassName="h-full w-full [&_span]:text-[10px]"
                             />
                           </div>
                         ))}
                       </div>
                     </button>
                   )}
-
-                  <div className="absolute top-1/2 left-4 w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center border border-accent/30 backdrop-blur-sm">
-                    <span className="text-lg">💻</span>
-                  </div>
-
-                  <div className="absolute top-1/2 right-4 w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center border border-accent/30 backdrop-blur-sm">
-                    <span className="text-lg">⚡</span>
-                  </div>
-
-                  <div className="absolute top-6 left-6 w-10 h-10 bg-accent/20 rounded-lg flex items-center justify-center border border-accent/30 backdrop-blur-sm">
-                    <span className="text-xl">⚛️</span>
-          </div>
-
-                  {/* Minimal Tech Emojis - Static only */}
-          <div className="absolute top-4 left-1/2 w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center border border-accent/30 backdrop-blur-sm">
-                    <span className="text-lg">📊</span>
-                  </div>
-
-                    <div className="absolute bottom-8 right-8 w-8 h-8 bg-accent/20 rounded-full flex items-center justify-center border border-accent/30 backdrop-blur-sm">
-                    <span className="text-lg">📱</span>
-                    </div>
-
-                  <div className="absolute top-1/2 left-1/4 w-6 h-6 bg-accent/20 rounded-full flex items-center justify-center border border-accent/30 backdrop-blur-sm">
-                    <span className="text-xs">💡</span>
-                  </div>
                 </div>
                 
               </GlassCard>
