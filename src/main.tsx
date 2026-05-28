@@ -1,10 +1,10 @@
-import { createRoot } from 'react-dom/client'
-import { inject } from '@vercel/analytics'
-import App from './App.tsx'
-import 'lenis/dist/lenis.css'
-import './index.css'
+import { createRoot } from "react-dom/client";
+import { inject } from "@vercel/analytics";
+import App from "./App.tsx";
+import "lenis/dist/lenis.css";
+import "./index.css";
 
-inject()
+inject();
 
 const rootElement = document.getElementById("root");
 

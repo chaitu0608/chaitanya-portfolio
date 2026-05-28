@@ -1,21 +1,16 @@
-import { personalInfo, projects } from "@/data/portfolio";
-
-const topProjects = projects
-  .slice(0, 3)
-  .map((p) => p.title)
-  .join(" · ");
-
 export const LOADER_COMMANDS = [
-  "whoami",
-  "npx chaitu-portfolio boot",
-  "export OPEN_TO_WORK=true",
+  "node --version",
+  "npm ci",
+  "npm run dev",
+  "open http://localhost:5173",
 ];
 
 export const LOADER_OUTPUTS: Record<number, string[]> = {
-  0: [`✓ ${personalInfo.name} — Full Stack Developer`],
-  1: [
-    "→ 200 OK · React · TypeScript · Node.js · Mumbai",
-    `→ ${topProjects} (+${Math.max(0, projects.length - 3)} more)`,
+  0: ["v20.11.1"],
+  1: ["✓ 312 packages installed in 1.4s"],
+  2: [
+    "VITE v5.4.10  ready in 412 ms",
+    "➜  Local: http://localhost:5173/",
   ],
-  2: ["→ Hiring? Contact below · ChaitanyaResume.pdf"],
+  3: ["✓ Chaitu's Portfolio is ready — launching…"],
 };
