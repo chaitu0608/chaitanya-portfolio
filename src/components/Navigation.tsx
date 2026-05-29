@@ -2,7 +2,6 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Menu,
-  X,
   User,
   Briefcase,
   Code,
@@ -10,9 +9,22 @@ import {
   Mail,
   MessageCircle,
 } from "lucide-react";
+import {
+  NavigationMenu,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+} from "@/components/ui/navigation-menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { navItems } from "@/data/portfolio";
 import { scrollToSection } from "@/utils/animations";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { useThrottle } from "@/hooks/useThrottle";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { cn } from "@/lib/utils";
@@ -89,7 +101,7 @@ const Navigation: React.FC<NavigationProps> = ({ onContactClick }) => {
       <div className="mx-auto max-w-7xl">
         <div
           className={cn(
-            "flex h-14 items-center gap-2 rounded-2xl border px-3 md:px-4 mac-dock-blur",
+            "mac-dock-blur flex h-14 items-center gap-2 rounded-2xl border px-3 md:px-4",
             scrolled
               ? "glass-enhanced border-border/60 shadow-card"
               : "border-border/40 bg-glass-bg-strong/80",
@@ -115,46 +127,55 @@ const Navigation: React.FC<NavigationProps> = ({ onContactClick }) => {
             </span>
           </button>
 
-          {/* Desktop nav */}
-          <div className="hidden flex-1 items-center justify-center gap-1 md:flex">
-            {navItems.map((item) => {
-              const Icon =
-                navIcons[item.href.substring(1) as keyof typeof navIcons];
-              const isActive = activeSection === item.href.substring(1);
+          {/* Desktop nav — shadcn NavigationMenu */}
+          <NavigationMenu className="mx-auto hidden max-w-none flex-1 justify-center md:flex">
+            <NavigationMenuList className="gap-1">
+              {navItems.map((item) => {
+                const sectionId = item.href.substring(1);
+                const Icon = navIcons[sectionId as keyof typeof navIcons];
+                const isActive = activeSection === sectionId;
 
-              return (
-                <motion.button
-                  key={item.label}
-                  type="button"
-                  onClick={() => handleScrollToSection(item.href)}
-                  whileHover={
-                    prefersReducedMotion ? undefined : { scale: 1.04, y: -1 }
-                  }
-                  whileTap={prefersReducedMotion ? undefined : { scale: 0.97 }}
-                  className={cn(
-                    "relative flex items-center gap-2 rounded-full px-3 py-2 text-sm transition-colors",
-                    isActive
-                      ? "border border-accent/30 bg-accent/15 text-accent"
-                      : "text-muted-foreground hover:bg-accent/10 hover:text-accent",
-                  )}
-                >
-                  {Icon && <Icon className="h-4 w-4" />}
-                  <span>{item.label}</span>
-                  {isActive && !prefersReducedMotion && (
-                    <motion.div
-                      className="absolute inset-0 rounded-full bg-accent/10"
-                      layoutId="activeTab"
-                      transition={{
-                        type: "spring",
-                        stiffness: 500,
-                        damping: 30,
+                return (
+                  <NavigationMenuItem key={item.label}>
+                    <NavigationMenuLink
+                      active={isActive}
+                      onSelect={(e) => {
+                        e.preventDefault();
+                        handleScrollToSection(item.href);
                       }}
-                    />
-                  )}
-                </motion.button>
-              );
-            })}
-          </div>
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleScrollToSection(item.href);
+                      }}
+                      href={item.href}
+                      className={cn(
+                        "relative flex cursor-pointer select-none items-center gap-2 rounded-full px-3 py-2 text-sm font-medium outline-none transition-colors",
+                        "focus-visible:ring-2 focus-visible:ring-accent/40",
+                        isActive
+                          ? "border border-accent/30 bg-accent/15 text-accent"
+                          : "text-muted-foreground hover:bg-accent/10 hover:text-accent",
+                      )}
+                    >
+                      {Icon && <Icon className="h-4 w-4" />}
+                      <span>{item.label}</span>
+                      {isActive && !prefersReducedMotion && (
+                        <motion.span
+                          aria-hidden
+                          layoutId="activeTab"
+                          className="absolute inset-0 rounded-full bg-accent/10"
+                          transition={{
+                            type: "spring",
+                            stiffness: 500,
+                            damping: 30,
+                          }}
+                        />
+                      )}
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                );
+              })}
+            </NavigationMenuList>
+          </NavigationMenu>
 
           {/* Actions */}
           <div className="ml-auto flex items-center gap-2">
@@ -169,70 +190,62 @@ const Navigation: React.FC<NavigationProps> = ({ onContactClick }) => {
               </Button>
             )}
             <ThemeToggle />
-            <Button
-              variant="ghost"
-              size="sm"
-              className="border border-border/60 md:hidden"
-              onClick={() => setIsOpen((o) => !o)}
-              aria-expanded={isOpen}
-              aria-label={isOpen ? "Close menu" : "Open menu"}
-            >
-              {isOpen ? (
-                <X className="h-5 w-5" />
-              ) : (
-                <Menu className="h-5 w-5" />
-              )}
-            </Button>
-          </div>
-        </div>
 
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={
-                prefersReducedMotion
-                  ? false
-                  : { opacity: 0, height: 0, y: -8 }
-              }
-              animate={
-                prefersReducedMotion
-                  ? undefined
-                  : { opacity: 1, height: "auto", y: 0 }
-              }
-              exit={
-                prefersReducedMotion
-                  ? undefined
-                  : { opacity: 0, height: 0, y: -8 }
-              }
-              transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="mt-2 overflow-hidden rounded-2xl border border-border/60 glass-panel md:hidden"
-            >
-              <div className="space-y-1 p-3">
-                {navItems.map((item) => {
-                  const Icon =
-                    navIcons[item.href.substring(1) as keyof typeof navIcons];
-                  const isActive = activeSection === item.href.substring(1);
+            {/* Mobile drawer — shadcn Sheet */}
+            <Sheet open={isOpen} onOpenChange={setIsOpen}>
+              <SheetTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="border border-border/60 md:hidden"
+                  aria-label="Open menu"
+                >
+                  <Menu className="h-5 w-5" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent
+                side="right"
+                className="w-[88vw] max-w-sm border-border/60 bg-background/95 backdrop-blur-xl"
+              >
+                <SheetHeader className="text-left">
+                  <SheetTitle className="flex items-center gap-2 font-mono text-sm">
+                    <span className="mac-traffic-lights" aria-hidden>
+                      <span className="close" />
+                      <span className="minimize" />
+                      <span className="maximize" />
+                    </span>
+                    Chaitu&apos;s Macbook
+                  </SheetTitle>
+                </SheetHeader>
 
-                  return (
-                    <button
-                      key={item.label}
-                      type="button"
-                      onClick={() => handleScrollToSection(item.href)}
-                      className={cn(
-                        "flex w-full items-center gap-3 rounded-lg px-4 py-3 text-sm transition-colors",
-                        isActive
-                          ? "border border-accent/30 bg-accent/15 text-accent"
-                          : "text-muted-foreground hover:bg-accent/10",
-                      )}
-                    >
-                      {Icon && <Icon className="h-4 w-4" />}
-                      {item.label}
-                    </button>
-                  );
-                })}
+                <nav className="mt-6 flex flex-col gap-1">
+                  {navItems.map((item) => {
+                    const sectionId = item.href.substring(1);
+                    const Icon = navIcons[sectionId as keyof typeof navIcons];
+                    const isActive = activeSection === sectionId;
+
+                    return (
+                      <button
+                        key={item.label}
+                        type="button"
+                        onClick={() => handleScrollToSection(item.href)}
+                        className={cn(
+                          "flex w-full items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium transition-colors",
+                          isActive
+                            ? "border border-accent/30 bg-accent/15 text-accent"
+                            : "text-muted-foreground hover:bg-accent/10 hover:text-accent",
+                        )}
+                      >
+                        {Icon && <Icon className="h-4 w-4" />}
+                        {item.label}
+                      </button>
+                    );
+                  })}
+                </nav>
+
                 {onContactClick && (
                   <Button
-                    className="mt-2 w-full bg-accent text-accent-foreground"
+                    className="mt-6 w-full bg-accent text-accent-foreground hover:bg-accent/90"
                     onClick={() => {
                       setIsOpen(false);
                       onContactClick();
@@ -242,10 +255,10 @@ const Navigation: React.FC<NavigationProps> = ({ onContactClick }) => {
                     Send a message
                   </Button>
                 )}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              </SheetContent>
+            </Sheet>
+          </div>
+        </div>
       </div>
     </motion.nav>
   );
