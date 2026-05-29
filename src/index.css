@@ -6,7 +6,72 @@
 
 @layer base {
   :root {
-    /* Premium Dark Theme Colors */
+    /* Light theme (default when .dark is absent) */
+    --background: 0 0% 98%;
+    --foreground: 220 20% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 10%;
+
+    --primary: 173 80% 36%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 220 14% 94%;
+    --secondary-foreground: 220 20% 10%;
+
+    --muted: 220 14% 94%;
+    --muted-foreground: 220 10% 42%;
+
+    --accent: 173 80% 36%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 220 13% 88%;
+    --input: 220 14% 92%;
+    --ring: 173 80% 36%;
+
+    --radius: 0.75rem;
+
+    --gradient-primary: linear-gradient(135deg, #f5f5f7 0%, #e8ecf1 45%, #dde4ec 100%);
+    --gradient-secondary: linear-gradient(135deg, #eef2f6 0%, #e2e8f0 50%, #f5f5f7 100%);
+    --gradient-accent: linear-gradient(135deg, #14b8a6 0%, #2dd4bf 50%, #0d9488 100%);
+    --gradient-gold: linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+    --text-gradient: linear-gradient(135deg, #0d9488 0%, #14b8a6 50%, #2dd4bf 100%);
+
+    --shadow-glow: 0 0 24px rgba(20, 184, 166, 0.12);
+    --shadow-glow-strong: 0 0 40px rgba(20, 184, 166, 0.2);
+    --shadow-gold: 0 0 20px rgba(245, 158, 11, 0.12);
+    --shadow-card: 0 8px 32px rgba(15, 23, 42, 0.08);
+    --shadow-card-hover: 0 16px 48px rgba(15, 23, 42, 0.12);
+    --glass-bg: rgba(255, 255, 255, 0.65);
+    --glass-border: rgba(15, 23, 42, 0.08);
+    --glass-bg-strong: rgba(255, 255, 255, 0.82);
+    --glass-border-strong: rgba(15, 23, 42, 0.1);
+
+    --neumorphism-light: 0 8px 32px rgba(255, 255, 255, 0.8);
+    --neumorphism-dark: inset 0 4px 16px rgba(15, 23, 42, 0.06);
+    --neumorphism-hover: 0 12px 40px rgba(15, 23, 42, 0.1);
+
+    --bokeh-bg: radial-gradient(ellipse at 20% 50%, rgba(20, 184, 166, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(45, 212, 191, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 40% 80%, rgba(13, 148, 136, 0.05) 0%, transparent 50%);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 220 20% 10%;
+    --sidebar-primary: 173 80% 36%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 14% 94%;
+    --sidebar-accent-foreground: 220 20% 10%;
+    --sidebar-border: 220 13% 88%;
+    --sidebar-ring: 173 80% 36%;
+  }
+
+  .dark {
     --background: 220 13% 9%;
     --foreground: 0 0% 98%;
 
@@ -28,23 +93,19 @@
     --accent: 173 80% 40%;
     --accent-foreground: 220 13% 9%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
 
     --border: 220 13% 18%;
     --input: 220 13% 15%;
     --ring: 173 80% 40%;
 
-    --radius: 0.75rem;
-    
-    /* Premium Gradients */
     --gradient-primary: linear-gradient(135deg, #0b0f12 0%, #1a1f2e 50%, #2d3748 100%);
     --gradient-secondary: linear-gradient(135deg, #1a1f2e 0%, #2d3748 50%, #0b0f12 100%);
     --gradient-accent: linear-gradient(135deg, #20E3B2 0%, #4FD1C7 50%, #38B2AC 100%);
     --gradient-gold: linear-gradient(135deg, #F6AD55 0%, #ED8936 50%, #DD6B20 100%);
     --text-gradient: linear-gradient(135deg, #20E3B2 0%, #4FD1C7 50%, #38B2AC 100%);
-    
-    /* Glassmorphism & Neumorphism Effects */
+
     --shadow-glow: 0 0 20px rgba(32, 227, 178, 0.15);
     --shadow-glow-strong: 0 0 40px rgba(32, 227, 178, 0.25);
     --shadow-gold: 0 0 20px rgba(246, 173, 85, 0.15);
@@ -54,13 +115,11 @@
     --glass-border: rgba(255, 255, 255, 0.05);
     --glass-bg-strong: rgba(255, 255, 255, 0.04);
     --glass-border-strong: rgba(255, 255, 255, 0.08);
-    
-    /* Neumorphism Effects */
+
     --neumorphism-light: 0 8px 32px rgba(255, 255, 255, 0.1);
     --neumorphism-dark: inset 0 8px 32px rgba(0, 0, 0, 0.3);
     --neumorphism-hover: 0 12px 48px rgba(255, 255, 255, 0.15);
-    
-    /* Background Effects */
+
     --bokeh-bg: radial-gradient(ellipse at 20% 50%, rgba(32, 227, 178, 0.05) 0%, transparent 50%),
                 radial-gradient(ellipse at 80% 20%, rgba(79, 209, 199, 0.05) 0%, transparent 50%),
                 radial-gradient(ellipse at 40% 80%, rgba(56, 178, 172, 0.05) 0%, transparent 50%);
@@ -72,44 +131,6 @@
     --sidebar-accent: 220 13% 15%;
     --sidebar-accent-foreground: 0 0% 98%;
     --sidebar-border: 220 13% 18%;
-    --sidebar-ring: 173 80% 40%;
-  }
-
-  .dark {
-    --background: 220 13% 7%;
-    --foreground: 0 0% 98%;
-
-    --card: 220 13% 9%;
-    --card-foreground: 0 0% 98%;
-
-    --popover: 220 13% 9%;
-    --popover-foreground: 0 0% 98%;
-
-    --primary: 173 80% 40%;
-    --primary-foreground: 220 13% 7%;
-
-    --secondary: 220 13% 13%;
-    --secondary-foreground: 0 0% 98%;
-
-    --muted: 220 13% 13%;
-    --muted-foreground: 0 0% 72%;
-
-    --accent: 173 80% 40%;
-    --accent-foreground: 220 13% 7%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 220 13% 16%;
-    --input: 220 13% 13%;
-    --ring: 173 80% 40%;
-    --sidebar-background: 220 13% 7%;
-    --sidebar-foreground: 0 0% 98%;
-    --sidebar-primary: 173 80% 40%;
-    --sidebar-primary-foreground: 220 13% 7%;
-    --sidebar-accent: 220 13% 13%;
-    --sidebar-accent-foreground: 0 0% 98%;
-    --sidebar-border: 220 13% 16%;
     --sidebar-ring: 173 80% 40%;
   }
 }
@@ -661,14 +682,23 @@ a:hover, button:hover, [role="button"]:hover, .cursor-pointer:hover {
   bottom: 0;
   background: linear-gradient(
     45deg,
+    hsl(var(--accent) / 0.04) 0%,
+    hsl(var(--accent) / 0.02) 50%,
+    hsl(var(--accent) / 0.04) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.dark .continuous-bg::before {
+  background: linear-gradient(
+    45deg,
     rgba(32, 227, 178, 0.02) 0%,
     rgba(79, 209, 199, 0.02) 25%,
     rgba(56, 178, 172, 0.02) 50%,
     rgba(32, 227, 178, 0.02) 75%,
     rgba(79, 209, 199, 0.02) 100%
   );
-  pointer-events: none;
-  z-index: 0;
 }
 
 .continuous-bg::after {
@@ -680,17 +710,17 @@ a:hover, button:hover, [role="button"]:hover, .cursor-pointer:hover {
   bottom: 0;
   background: radial-gradient(
     circle at 20% 80%,
-    rgba(32, 227, 178, 0.03) 0%,
+    hsl(var(--accent) / 0.06) 0%,
     transparent 50%
   ),
   radial-gradient(
     circle at 80% 20%,
-    rgba(79, 209, 199, 0.03) 0%,
+    hsl(var(--accent) / 0.04) 0%,
     transparent 50%
   ),
   radial-gradient(
     circle at 40% 40%,
-    rgba(56, 178, 172, 0.02) 0%,
+    hsl(var(--accent) / 0.03) 0%,
     transparent 50%
   );
   pointer-events: none;
@@ -749,26 +779,72 @@ a:hover, button:hover, [role="button"]:hover, .cursor-pointer:hover {
 
 /* Enhanced Glassmorphism with Ultra-Smooth Transitions */
 .glass-enhanced {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--glass-bg-strong);
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  will-change: transform, box-shadow, background;
+  border: 1px solid var(--glass-border-strong);
+  box-shadow: var(--shadow-card), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    border-color 0.3s ease;
   transform: translateZ(0);
   backface-visibility: hidden;
 }
 
 .glass-enhanced:hover {
-  background: rgba(255, 255, 255, 0.04);
-  border-color: rgba(32, 227, 178, 0.2);
-  box-shadow: 
-    0 12px 48px rgba(0, 0, 0, 0.4),
-    0 0 20px rgba(32, 227, 178, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.15);
-  transform: translateY(-3px) scale(1.01);
+  border-color: hsl(var(--accent) / 0.35);
+  box-shadow: var(--shadow-card-hover), var(--shadow-glow);
+  transform: translateY(-2px);
+}
+
+/* macOS-style window chrome (subtle — modals & cards) */
+.mac-window {
+  overflow: hidden;
+  border-radius: 0.75rem;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--card) / 0.95);
+  backdrop-filter: blur(24px);
+  box-shadow:
+    0 24px 80px rgba(0, 0, 0, 0.25),
+    0 0 0 1px hsl(var(--border) / 0.5);
+}
+
+.mac-window .mac-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid hsl(var(--border) / 0.6);
+  background: hsl(var(--muted) / 0.5);
+}
+
+.mac-traffic-lights {
+  display: flex;
+  gap: 0.375rem;
+}
+
+.mac-traffic-lights span {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 9999px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+
+.mac-traffic-lights .close,
+.mac-traffic-lights button.close {
+  background: #ff5f57;
+  border: none;
+  padding: 0;
+  width: 0.75rem;
+  height: 0.75rem;
+  cursor: pointer;
+}
+.mac-traffic-lights .minimize { background: #febc2e; }
+.mac-traffic-lights .maximize { background: #28c840; }
+
+.mac-dock-blur {
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border-strong);
 }
 
 /* Ultra-Smooth Card Animations */

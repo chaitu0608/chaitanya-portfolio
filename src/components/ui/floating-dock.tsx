@@ -32,7 +32,7 @@ interface FloatingDockProps {
 
 const FloatingDock: React.FC<FloatingDockProps> = ({ className, onContactClick }) => {
   const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
+  const lastScrollYRef = React.useRef(0);
 
   const dockItems: DockItem[] = useMemo(() => [
     { icon: User, label: 'About', href: '#about' },
@@ -65,32 +65,33 @@ const FloatingDock: React.FC<FloatingDockProps> = ({ className, onContactClick }
 
   useEffect(() => {
     let ticking = false;
-    
+
     const handleScroll = () => {
       if (!ticking) {
         requestAnimationFrame(() => {
           const currentScrollY = window.scrollY;
-          
-          if (currentScrollY > lastScrollY && currentScrollY > 100) {
+          const last = lastScrollYRef.current;
+
+          if (currentScrollY > last && currentScrollY > 100) {
             setIsVisible(false);
           } else {
             setIsVisible(true);
           }
-          
-          setLastScrollY(currentScrollY);
+
+          lastScrollYRef.current = currentScrollY;
           ticking = false;
         });
         ticking = true;
       }
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('lenis-scroll', handleScroll, { passive: true });
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("lenis-scroll", handleScroll, { passive: true });
     return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('lenis-scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("lenis-scroll", handleScroll);
     };
-  }, [lastScrollY]);
+  }, []);
 
   const handleItemClick = (item: DockItem) => {
     if (item.onClick) {
@@ -122,7 +123,7 @@ const FloatingDock: React.FC<FloatingDockProps> = ({ className, onContactClick }
           )}
         >
           <div className="max-w-7xl mx-auto px-6 flex justify-center">
-          <div className="glass-panel px-4 py-3 rounded-full shadow-card">
+          <div className="mac-dock-blur px-4 py-3 rounded-2xl shadow-card">
             <div className="flex items-center gap-2">
               {dockItems.map((item) => (
                 <motion.button
@@ -135,7 +136,7 @@ const FloatingDock: React.FC<FloatingDockProps> = ({ className, onContactClick }
                   aria-label={item.label}
                 >
                   <item.icon className="w-5 h-5 text-muted-foreground group-hover:text-accent smooth-transition" />
-                  <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-card text-xs text-card-foreground rounded-md opacity-0 group-hover:opacity-100 smooth-transition pointer-events-none whitespace-nowrap">
+                  <div className="pointer-events-none absolute -top-12 left-1/2 z-[60] -translate-x-1/2 whitespace-nowrap rounded-md bg-card px-2 py-1 text-xs text-card-foreground opacity-0 shadow-card transition-opacity group-hover:opacity-100">
                     {item.label}
                   </div>
                 </motion.button>
@@ -154,7 +155,7 @@ const FloatingDock: React.FC<FloatingDockProps> = ({ className, onContactClick }
                   aria-label={item.label}
                 >
                   <item.icon className="w-5 h-5 text-muted-foreground group-hover:text-accent smooth-transition" />
-                  <div className="absolute -top-12 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-card text-xs text-card-foreground rounded-md opacity-0 group-hover:opacity-100 smooth-transition pointer-events-none whitespace-nowrap">
+                  <div className="pointer-events-none absolute -top-12 left-1/2 z-[60] -translate-x-1/2 whitespace-nowrap rounded-md bg-card px-2 py-1 text-xs text-card-foreground opacity-0 shadow-card transition-opacity group-hover:opacity-100">
                     {item.label}
                   </div>
                 </motion.button>

@@ -1,8 +1,12 @@
 import React, { useState, lazy, Suspense, useCallback } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import Navigation from "@/components/Navigation";
 import FloatingDock from "@/components/ui/floating-dock";
+const PageAmbient = lazy(() =>
+  import("@/components/PageAmbient").then((m) => ({ default: m.PageAmbient })),
+);
 import { ScrollProvider } from "@/context/ScrollProvider";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const About = lazy(() => import("@/components/About"));
 const Projects = lazy(() => import("@/components/Projects"));
@@ -20,6 +24,10 @@ const SectionLoader = () => (
 );
 
 const Index = () => {
+  const isMobile = useIsMobile();
+  const prefersReducedMotion = useReducedMotion();
+  const smoothScroll = !isMobile && !prefersReducedMotion;
+
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [isPhotoAlbumOpen, setIsPhotoAlbumOpen] = useState(false);
 
@@ -40,15 +48,11 @@ const Index = () => {
   }, []);
 
   return (
-    <ScrollProvider>
-    <div className="min-h-screen gradient-primary">
-      <div className="fixed inset-0 -z-10">
-        <div className="absolute inset-0 bokeh-bg opacity-40" />
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-accent opacity-5 rounded-full blur-3xl" />
-          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-gold opacity-5 rounded-full blur-3xl" />
-        </div>
-      </div>
+    <ScrollProvider enabled={smoothScroll}>
+    <div className="min-h-screen gradient-primary transition-colors duration-500">
+      <Suspense fallback={null}>
+        <PageAmbient />
+      </Suspense>
 
       <motion.div
         initial={{ opacity: 0 }}
@@ -84,6 +88,15 @@ const Index = () => {
         </Suspense>
 
         <FloatingDock onContactClick={handleContactClick} />
+
+        {/* Crawlers: semantic content when sections are below fold */}
+        <div className="sr-only">
+          <h1>Chaitanya Dhamdhere — Full Stack Developer Portfolio</h1>
+          <p>
+            Projects, experience, skills, and contact for Chaitanya Dhamdhere,
+            computer engineering student in Mumbai.
+          </p>
+        </div>
       </motion.div>
 
       <Suspense fallback={null}>

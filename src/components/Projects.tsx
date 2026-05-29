@@ -154,7 +154,7 @@ const BentoTile: React.FC<BentoTileProps> = ({ project, index, onOpenLink }) => 
       data-bento-index={index}
       className={cn(
         "bento-tile group glass-panel rounded-2xl border border-glass-border",
-        "hover:border-accent/40 hover:shadow-[0_0_32px_rgba(32,227,178,0.12)]",
+        "hover:border-accent/40 hover:shadow-card-hover",
         "transition-colors duration-300",
         SIZE_CLASS[size]
       )}
@@ -282,16 +282,9 @@ const Projects = () => {
     <section
       ref={sectionRef}
       id="projects"
-      className="py-20 px-4 md:pl-8 relative overflow-hidden continuous-bg section-transition"
+      className="relative overflow-hidden px-4 py-20 section-transition md:pl-8"
     >
-      <div className="absolute inset-0 bokeh-bg opacity-30 pointer-events-none" />
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/3 right-1/4 w-80 h-80 bg-gradient-accent opacity-5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-gradient-gold opacity-5 rounded-full blur-3xl" />
-      </div>
-
-      {/* Sticky progress rail */}
-      <div className="hidden md:block absolute left-2 top-24 bottom-24 z-20 w-8">
+      <div className="pointer-events-none absolute bottom-24 left-2 top-24 z-20 hidden w-8 md:block">
         <div className="bento-progress-rail h-full">
           <motion.div className="bento-progress-fill" style={{ height: progressHeight }} />
         </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -83,15 +83,24 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-2xl mac-window traffic-light border-cyan-400/30">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-3 text-cyan-400 font-mono">
-            <Mail className="w-5 h-5" />
-            Send a message
-          </DialogTitle>
-        </DialogHeader>
+      <DialogContent hideClose className="max-w-2xl gap-0 overflow-hidden border-border p-0 mac-window">
+        <div className="mac-titlebar">
+          <span className="mac-traffic-lights" aria-hidden>
+            <DialogClose asChild>
+              <button type="button" className="close cursor-pointer" aria-label="Close" />
+            </DialogClose>
+            <span className="minimize" />
+            <span className="maximize" />
+          </span>
+          <DialogHeader className="min-w-0 flex-1 space-y-0 p-0">
+            <DialogTitle className="flex items-center gap-2 truncate text-sm font-medium text-foreground">
+              <Mail className="h-4 w-4 shrink-0 text-accent" />
+              Messages — New Message
+            </DialogTitle>
+          </DialogHeader>
+        </div>
 
-        <div className="space-y-6">
+        <div className="space-y-6 p-6">
           <AnimatePresence mode="wait">
             {!mailOpened ? (
               <motion.form
@@ -103,7 +112,7 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
                 className="space-y-6"
               >
                 <div className="space-y-2">
-                  <Label htmlFor="name" className="text-cyan-400 font-mono text-sm">
+                  <Label htmlFor="name" className="text-sm font-medium">
                     Your name
                   </Label>
                   <Input
@@ -112,14 +121,14 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
                     value={formData.name}
                     onChange={handleInputChange}
                     placeholder="Enter your name"
-                    className="terminal bg-black/50 border-cyan-400/30 text-foreground placeholder:text-muted-foreground"
+                    className="bg-secondary/50 border-border text-foreground placeholder:text-muted-foreground"
                     disabled={isOpeningMail}
                     autoComplete="name"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-cyan-400 font-mono text-sm">
+                  <Label htmlFor="email" className="text-sm font-medium">
                     Your email
                   </Label>
                   <Input
@@ -129,14 +138,14 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
                     value={formData.email}
                     onChange={handleInputChange}
                     placeholder="your.email@domain.com"
-                    className="terminal bg-black/50 border-cyan-400/30 text-foreground placeholder:text-muted-foreground"
+                    className="bg-secondary/50 border-border text-foreground placeholder:text-muted-foreground"
                     disabled={isOpeningMail}
                     autoComplete="email"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="message" className="text-cyan-400 font-mono text-sm">
+                  <Label htmlFor="message" className="text-sm font-medium">
                     Message
                   </Label>
                   <Textarea
@@ -146,7 +155,7 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
                     onChange={handleInputChange}
                     placeholder="What would you like to discuss?"
                     rows={6}
-                    className="terminal bg-black/50 border-cyan-400/30 text-foreground placeholder:text-muted-foreground resize-none"
+                    className="bg-secondary/50 border-border text-foreground placeholder:text-muted-foreground resize-none"
                     disabled={isOpeningMail}
                   />
                 </div>
@@ -168,7 +177,7 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
                     variant="outline"
                     onClick={handleClose}
                     disabled={isOpeningMail}
-                    className="flex-1 border-cyan-400/30 text-cyan-400 hover:bg-cyan-400/10"
+                    className="flex-1"
                   >
                     <X className="w-4 h-4 mr-2" />
                     Cancel
@@ -176,7 +185,7 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
                   <Button
                     type="submit"
                     disabled={isOpeningMail}
-                    className="flex-1 cosmic-cyber hover:scale-105 transition-all"
+                    className="flex-1 bg-accent text-accent-foreground hover:bg-accent/90"
                   >
                     <Send className="w-4 h-4 mr-2" />
                     {isOpeningMail ? 'Opening mail app…' : 'Open in email app'}

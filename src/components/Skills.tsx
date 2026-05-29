@@ -20,22 +20,9 @@ const Skills = () => {
     <section
       ref={sectionRef}
       id="skills"
-      className="py-20 px-4 relative overflow-hidden continuous-bg section-transition"
+      className="relative overflow-hidden px-4 py-20 section-transition"
     >
-      <div className="absolute inset-0 bokeh-bg opacity-30" />
-      <div className="floating-particles">
-        <div className="particle" />
-        <div className="particle" />
-        <div className="particle" />
-        <div className="particle" />
-        <div className="particle" />
-      </div>
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/3 right-1/4 w-80 h-80 bg-gradient-accent opacity-5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-gradient-gold opacity-5 rounded-full blur-3xl" />
-      </div>
-
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="relative z-10 mx-auto max-w-7xl">
         <motion.div
           initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
           whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
@@ -74,7 +61,7 @@ const Skills = () => {
               whileHover={
                 prefersReducedMotion ? undefined : { scale: 1.02, y: -4 }
               }
-              className={`rounded-2xl glass-enhanced border border-accent/20 shadow-2xl hover:shadow-accent/25 overflow-hidden border-l-4 transition-all duration-300 group ${CATEGORY_ACCENT[cat.category] ?? "border-l-accent bg-accent/5"}`}
+              className={`group overflow-hidden rounded-2xl border border-glass-border glass-panel shadow-card transition-all duration-300 hover:border-accent/30 hover:shadow-card-hover border-l-4 ${CATEGORY_ACCENT[cat.category] ?? "border-l-accent bg-accent/5"}`}
             >
               <div className="p-4 border-b border-border/40">
                 <h3 className="font-semibold text-foreground text-sm uppercase tracking-wide">

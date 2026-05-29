@@ -178,7 +178,7 @@ const RolePanel: React.FC<RolePanelProps> = ({
           initial={false}
           animate={{ height: isOpen ? "auto" : 0, opacity: isOpen ? 1 : 0 }}
           transition={{ duration: 0.3, ease: EASE }}
-          className="overflow-hidden border-t border-accent/10 bg-black/10"
+          className="overflow-hidden border-t border-border/60 bg-muted/40"
         >
           <div className="p-5 md:p-6">
             <div className="flex items-center gap-2 mb-3 text-accent">
@@ -255,15 +255,9 @@ const Experience: React.FC = () => {
     <section
       ref={sectionRef}
       id="experience"
-      className="py-20 px-4 md:pl-8 relative overflow-hidden continuous-bg section-transition"
+      className="relative overflow-hidden px-4 py-20 section-transition md:pl-8"
     >
-      <div className="absolute inset-0 bokeh-bg opacity-30 pointer-events-none" />
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/3 right-1/4 w-80 h-80 bg-gradient-accent opacity-5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-gradient-gold opacity-5 rounded-full blur-3xl" />
-      </div>
-
-      <div className="hidden md:block absolute left-2 top-24 bottom-24 z-20 w-8">
+      <div className="pointer-events-none absolute bottom-24 left-2 top-24 z-20 hidden w-8 md:block">
         <div className="bento-progress-rail h-full">
           <motion.div className="bento-progress-fill" style={{ height: progressHeight }} />
         </div>

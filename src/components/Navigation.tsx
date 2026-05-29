@@ -1,10 +1,21 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, User, Briefcase, Code, Star, Mail, MessageCircle } from "lucide-react";
+import {
+  Menu,
+  X,
+  User,
+  Briefcase,
+  Code,
+  Star,
+  Mail,
+  MessageCircle,
+} from "lucide-react";
 import { navItems } from "@/data/portfolio";
 import { scrollToSection } from "@/utils/animations";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useThrottle } from "@/hooks/useThrottle";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { cn } from "@/lib/utils";
 
 interface NavigationProps {
   onContactClick?: () => void;
@@ -16,21 +27,26 @@ const Navigation: React.FC<NavigationProps> = ({ onContactClick }) => {
   const [activeSection, setActiveSection] = useState("about");
   const prefersReducedMotion = useReducedMotion();
 
-  const navIcons = useMemo(() => ({
-    about: User,
-    projects: Code,
-    experience: Briefcase,
-    skills: Star,
-    contact: Mail
-  }), []);
+  const navIcons = useMemo(
+    () => ({
+      about: User,
+      projects: Code,
+      experience: Briefcase,
+      skills: Star,
+      contact: Mail,
+    }),
+    [],
+  );
 
-  const sections = useMemo(() => navItems.map(item => item.href.substring(1)), []);
+  const sections = useMemo(
+    () => navItems.map((item) => item.href.substring(1)),
+    [],
+  );
 
   const handleScroll = useThrottle(() => {
-    const isScrolled = window.scrollY > 50;
-    setScrolled(isScrolled);
-    
-    const currentSection = sections.find(section => {
+    setScrolled(window.scrollY > 50);
+
+    const currentSection = sections.find((section) => {
       const element = document.getElementById(section);
       if (element) {
         const rect = element.getBoundingClientRect();
@@ -38,7 +54,7 @@ const Navigation: React.FC<NavigationProps> = ({ onContactClick }) => {
       }
       return false;
     });
-    
+
     if (currentSection) {
       setActiveSection(currentSection);
     }
@@ -59,165 +75,170 @@ const Navigation: React.FC<NavigationProps> = ({ onContactClick }) => {
     setActiveSection(href.substring(1));
   }, []);
 
-  const handleToggleMenu = useCallback(() => {
-    setIsOpen(prev => !prev);
-  }, []);
-
   const navTransition = prefersReducedMotion
     ? { duration: 0 }
-    : { duration: 0.8, delay: 0.5, ease: [0.25, 0.46, 0.45, 0.94] as const };
+    : { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] as const };
 
   return (
     <motion.nav
-      initial={prefersReducedMotion ? false : { y: -100, opacity: 0 }}
+      initial={prefersReducedMotion ? false : { y: -24, opacity: 0 }}
       animate={prefersReducedMotion ? undefined : { y: 0, opacity: 1 }}
       transition={navTransition}
-      className={`fixed top-6 left-0 right-0 z-50 smooth-transition-ultra ${
-        scrolled ? "glass-enhanced border border-accent/20 shadow-2xl" : "bg-transparent"
-      }`}
+      className="fixed left-0 right-0 top-4 z-50 px-4"
     >
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="flex items-center justify-center h-16 gap-2">
-          
-          <div className="hidden md:flex items-center gap-1">
-            {navItems.map((item, index) => {
-              const Icon = navIcons[item.href.substring(1) as keyof typeof navIcons];
+      <div className="mx-auto max-w-7xl">
+        <div
+          className={cn(
+            "flex h-14 items-center gap-2 rounded-2xl border px-3 md:px-4 mac-dock-blur",
+            scrolled
+              ? "glass-enhanced border-border/60 shadow-card"
+              : "border-border/40 bg-glass-bg-strong/80",
+          )}
+        >
+          {/* Brand — mobile + desktop */}
+          <button
+            type="button"
+            onClick={() => handleScrollToSection("#about")}
+            className="flex shrink-0 items-center gap-2 rounded-lg px-2 py-1 text-left transition-colors hover:text-accent"
+            aria-label="Go to about section"
+          >
+            <span className="hidden items-center gap-2 md:flex" aria-hidden>
+              <span className="mac-traffic-lights">
+                <span className="close" />
+                <span className="minimize" />
+                <span className="maximize" />
+              </span>
+            </span>
+            <span className="font-mono text-xs font-medium text-muted-foreground md:text-sm">
+              <span className="text-accent md:hidden">CD</span>
+              <span className="hidden md:inline">Chaitu&apos;s Macbook</span>
+            </span>
+          </button>
+
+          {/* Desktop nav */}
+          <div className="hidden flex-1 items-center justify-center gap-1 md:flex">
+            {navItems.map((item) => {
+              const Icon =
+                navIcons[item.href.substring(1) as keyof typeof navIcons];
               const isActive = activeSection === item.href.substring(1);
-              
+
               return (
-                <motion.div
+                <motion.button
                   key={item.label}
-                  initial={prefersReducedMotion ? false : { opacity: 0, y: -20 }}
-                  animate={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
-                  transition={
-                    prefersReducedMotion
-                      ? { duration: 0 }
-                      : { duration: 0.6, delay: 0.6 + index * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
+                  type="button"
+                  onClick={() => handleScrollToSection(item.href)}
+                  whileHover={
+                    prefersReducedMotion ? undefined : { scale: 1.04, y: -1 }
                   }
+                  whileTap={prefersReducedMotion ? undefined : { scale: 0.97 }}
+                  className={cn(
+                    "relative flex items-center gap-2 rounded-full px-3 py-2 text-sm transition-colors",
+                    isActive
+                      ? "border border-accent/30 bg-accent/15 text-accent"
+                      : "text-muted-foreground hover:bg-accent/10 hover:text-accent",
+                  )}
                 >
-                  <motion.button
-                    onClick={() => handleScrollToSection(item.href)}
-                    whileHover={prefersReducedMotion ? undefined : { scale: 1.05, y: -2 }}
-                    whileTap={prefersReducedMotion ? undefined : { scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
-                    className={`relative flex items-center gap-2 px-4 py-2 rounded-full text-sm smooth-button group overflow-hidden ${
-                      isActive
-                        ? "bg-accent/20 text-accent smooth-glow border border-accent/30"
-                        : "text-muted-foreground hover:bg-accent/10 hover:text-accent"
-                    }`}
-                  >
-                    <div className="flex items-center gap-2 relative z-10">
-                      {Icon && <Icon className="w-4 h-4 smooth-icon" />}
-                      <span className="smooth-text">{item.label}</span>
-                    </div>
-                    {isActive && !prefersReducedMotion && (
-                      <motion.div
-                        className="absolute inset-0 rounded-full bg-gradient-to-r from-accent/20 to-accent/10"
-                        layoutId="activeTab"
-                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                      />
-                    )}
-                  </motion.button>
-                </motion.div>
+                  {Icon && <Icon className="h-4 w-4" />}
+                  <span>{item.label}</span>
+                  {isActive && !prefersReducedMotion && (
+                    <motion.div
+                      className="absolute inset-0 rounded-full bg-accent/10"
+                      layoutId="activeTab"
+                      transition={{
+                        type: "spring",
+                        stiffness: 500,
+                        damping: 30,
+                      }}
+                    />
+                  )}
+                </motion.button>
               );
             })}
+          </div>
+
+          {/* Actions */}
+          <div className="ml-auto flex items-center gap-2">
             {onContactClick && (
               <Button
                 size="sm"
-                className="ml-2 bg-accent text-accent-foreground hover:bg-accent/90"
+                className="hidden bg-accent text-accent-foreground hover:bg-accent/90 md:inline-flex"
                 onClick={onContactClick}
               >
-                <MessageCircle className="w-4 h-4 mr-1.5" />
+                <MessageCircle className="mr-1.5 h-4 w-4" />
                 Message
               </Button>
             )}
-          </div>
-          
-          <motion.div
-            initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.8 }}
-            animate={prefersReducedMotion ? undefined : { opacity: 1, scale: 1 }}
-            transition={
-              prefersReducedMotion
-                ? { duration: 0 }
-                : { duration: 0.6, delay: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }
-            }
-            className="md:hidden"
-          >
+            <ThemeToggle />
             <Button
               variant="ghost"
               size="sm"
-              className="border border-accent/30 text-accent hover:bg-accent/10 smooth-button"
-              onClick={handleToggleMenu}
+              className="border border-border/60 md:hidden"
+              onClick={() => setIsOpen((o) => !o)}
               aria-expanded={isOpen}
               aria-label={isOpen ? "Close menu" : "Open menu"}
             >
-              <motion.div
-                animate={prefersReducedMotion ? undefined : { rotate: isOpen ? 180 : 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                {isOpen ? <X className="w-5 h-5 smooth-icon" /> : <Menu className="w-5 h-5 smooth-icon" />}
-              </motion.div>
+              {isOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
             </Button>
-          </motion.div>
+          </div>
         </div>
-        
+
         <AnimatePresence>
           {isOpen && (
             <motion.div
-              initial={prefersReducedMotion ? false : { opacity: 0, height: 0, y: -20 }}
-              animate={prefersReducedMotion ? undefined : { opacity: 1, height: "auto", y: 0 }}
-              exit={prefersReducedMotion ? undefined : { opacity: 0, height: 0, y: -20 }}
-              transition={
+              initial={
                 prefersReducedMotion
-                  ? { duration: 0 }
-                  : { duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }
+                  ? false
+                  : { opacity: 0, height: 0, y: -8 }
               }
-              className="md:hidden glass-panel border-t border-accent/20 mt-2 overflow-hidden"
+              animate={
+                prefersReducedMotion
+                  ? undefined
+                  : { opacity: 1, height: "auto", y: 0 }
+              }
+              exit={
+                prefersReducedMotion
+                  ? undefined
+                  : { opacity: 0, height: 0, y: -8 }
+              }
+              transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="mt-2 overflow-hidden rounded-2xl border border-border/60 glass-panel md:hidden"
             >
-              <div className="px-4 py-4 space-y-2">
-                {navItems.map((item, index) => {
-                  const Icon = navIcons[item.href.substring(1) as keyof typeof navIcons];
+              <div className="space-y-1 p-3">
+                {navItems.map((item) => {
+                  const Icon =
+                    navIcons[item.href.substring(1) as keyof typeof navIcons];
                   const isActive = activeSection === item.href.substring(1);
-                  
+
                   return (
-                    <motion.div
+                    <button
                       key={item.label}
-                      initial={prefersReducedMotion ? false : { opacity: 0, x: -20 }}
-                      animate={prefersReducedMotion ? undefined : { opacity: 1, x: 0 }}
-                      transition={
-                        prefersReducedMotion
-                          ? { duration: 0 }
-                          : { duration: 0.4, delay: index * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }
-                      }
+                      type="button"
+                      onClick={() => handleScrollToSection(item.href)}
+                      className={cn(
+                        "flex w-full items-center gap-3 rounded-lg px-4 py-3 text-sm transition-colors",
+                        isActive
+                          ? "border border-accent/30 bg-accent/15 text-accent"
+                          : "text-muted-foreground hover:bg-accent/10",
+                      )}
                     >
-                      <motion.button
-                        onClick={() => handleScrollToSection(item.href)}
-                        whileHover={prefersReducedMotion ? undefined : { scale: 1.02, x: 4 }}
-                        whileTap={prefersReducedMotion ? undefined : { scale: 0.98 }}
-                        transition={{ duration: 0.2 }}
-                        className={`relative flex items-center gap-3 w-full text-left text-sm py-3 px-4 rounded-lg smooth-button group overflow-hidden ${
-                          isActive
-                            ? "bg-accent/20 text-accent border border-accent/30 smooth-glow"
-                            : "text-muted-foreground hover:bg-accent/10"
-                        }`}
-                      >
-                        <div className="flex items-center gap-3 relative z-10">
-                          {Icon && <Icon className="w-4 h-4 smooth-icon" />}
-                          <span className="smooth-text">{item.label}</span>
-                        </div>
-                      </motion.button>
-                    </motion.div>
+                      {Icon && <Icon className="h-4 w-4" />}
+                      {item.label}
+                    </button>
                   );
                 })}
                 {onContactClick && (
                   <Button
-                    className="w-full mt-2 bg-accent text-accent-foreground"
+                    className="mt-2 w-full bg-accent text-accent-foreground"
                     onClick={() => {
                       setIsOpen(false);
                       onContactClick();
                     }}
                   >
-                    <MessageCircle className="w-4 h-4 mr-2" />
+                    <MessageCircle className="mr-2 h-4 w-4" />
                     Send a message
                   </Button>
                 )}

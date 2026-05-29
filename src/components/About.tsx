@@ -5,6 +5,7 @@ import { Download, Github, Linkedin, MapPin } from "lucide-react";
 import GlassCard from "@/components/ui/glass-card";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 import { personalInfo, contactInfo } from "@/data/portfolio";
+import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 
 // Preview images for the photos badge (same sources as PhotoAlbum; add more in public/ as needed)
 const PHOTO_ALBUM_PREVIEW_IMAGES = [
@@ -77,28 +78,8 @@ const About = ({ onOpenPhotoAlbum }: AboutProps) => {
 
 
   return (
-    <section ref={sectionRef} id="about" className="min-h-screen flex items-center px-4 md:px-6 lg:px-8 pt-32 pb-24 relative overflow-hidden continuous-bg section-transition">
-      {/* Static Background - No scroll animations */}
-      <div className="absolute inset-0 bokeh-bg opacity-40" />
-      
-      {/* Static Glassmorphism Overlay */}
-      <div className="absolute inset-0 glass-enhanced opacity-15" />
-
-      {/* Reduced Floating Particles - Static CSS only */}
-      <div className="floating-particles z-1">
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-        <div className="particle"></div>
-      </div>
-      
-      {/* Static Background Elements - No animations */}
-      <div className="absolute inset-0 overflow-hidden z-0">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-accent opacity-5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-gold opacity-5 rounded-full blur-3xl" />
-      </div>
-
-      <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-14 items-center relative z-20">
+    <section ref={sectionRef} id="about" className="relative flex min-h-screen items-center overflow-hidden px-4 pb-24 pt-32 section-transition md:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 items-center gap-14 lg:grid-cols-2">
         {/* Left Content */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
@@ -128,14 +109,14 @@ const About = ({ onOpenPhotoAlbum }: AboutProps) => {
                 Chaitanya Dhamdhere
               </span>
             </h1>
-            <p className="text-xl md:text-2xl text-muted-foreground font-light leading-relaxed max-w-xl smooth-text">
-              Computer Engineering student · Full-stack developer
-            </p>
+            <TextGenerateEffect
+              words={personalInfo.tagline}
+              duration={0.35}
+            />
         </motion.div>
         
           <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl">
-            B.Tech at KJ Somaiya College of Engineering, Mumbai. I build web apps,
-            ship products, and love turning hard problems into clean, working software.
+            {personalInfo.description}
           </p>
 
                 {/* Status Badge */}

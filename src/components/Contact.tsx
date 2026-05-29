@@ -1,5 +1,5 @@
 import React, { useRef, useState, useCallback, useEffect } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   Mail,
   Phone,
@@ -17,9 +17,10 @@ import { contactInfo } from "@/data/portfolio";
 import { getResumeHref } from "@/lib/resume";
 import SectionMarquee from "@/components/scroll/SectionMarquee";
 import BigTypeReveal from "@/components/scroll/BigTypeReveal";
+import { useTheme } from "@/hooks/use-theme";
 
-const APPLE_MUSIC_EMBED =
-  "https://embed.music.apple.com/in/playlist/chaitu101/pl.u-AkAm81pUx87R2zE?theme=dark";
+const APPLE_MUSIC_PLAYLIST =
+  "https://embed.music.apple.com/in/playlist/chaitu101/pl.u-AkAm81pUx87R2zE";
 
 const EASE = [0.25, 0.46, 0.45, 0.94] as const;
 
@@ -46,15 +47,11 @@ interface ContactProps {
 
 const Contact: React.FC<ContactProps> = ({ onContactClick }) => {
   const sectionRef = useRef<HTMLElement>(null);
+  const { resolved } = useTheme();
   const [copied, setCopied] = useState(false);
   const resumeHref = getResumeHref();
+  const musicEmbedSrc = `${APPLE_MUSIC_PLAYLIST}?theme=${resolved === "dark" ? "dark" : "light"}`;
 
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
-
-  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "12%"]);
   const [reducedMotion, setReducedMotion] = useState(false);
   const musicSectionRef = useRef<HTMLDivElement>(null);
   const [musicInView, setMusicInView] = useState(false);
@@ -97,18 +94,9 @@ const Contact: React.FC<ContactProps> = ({ onContactClick }) => {
     <section
       ref={sectionRef}
       id="contact"
-      className="py-20 px-4 relative overflow-hidden continuous-bg section-transition"
+      className="relative overflow-hidden px-4 py-20 section-transition"
     >
-      <motion.div
-        className="absolute inset-0 bokeh-bg opacity-30 pointer-events-none"
-        style={reducedMotion ? undefined : { y: bgY }}
-      />
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/3 right-1/4 w-80 h-80 bg-gradient-accent opacity-5 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/3 left-1/4 w-96 h-96 bg-gradient-gold opacity-5 rounded-full blur-3xl" />
-      </div>
-
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="relative z-10 mx-auto max-w-7xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -140,7 +128,7 @@ const Contact: React.FC<ContactProps> = ({ onContactClick }) => {
           {/* Contact channels */}
           <motion.div
             variants={tileVariants}
-            className="contact-tile contact-tile-channels rounded-2xl glass-enhanced border border-accent/20 shadow-2xl p-6 md:p-7"
+            className="contact-tile contact-tile-channels rounded-2xl border border-glass-border glass-panel p-6 shadow-card md:p-7"
           >
             <p className="font-mono text-xs text-accent/70 mb-4">01 — Direct</p>
             <div className="space-y-5">
@@ -190,7 +178,7 @@ const Contact: React.FC<ContactProps> = ({ onContactClick }) => {
           <motion.div
             ref={musicSectionRef}
             variants={tileVariants}
-            className="contact-tile contact-tile-music rounded-2xl glass-enhanced border border-accent/20 shadow-2xl overflow-hidden flex flex-col min-h-[320px] lg:min-h-[380px]"
+            className="contact-tile contact-tile-music flex min-h-[320px] flex-col overflow-hidden rounded-2xl border border-glass-border glass-panel shadow-card lg:min-h-[380px]"
           >
             <div className="p-3 border-b border-accent/10 flex items-center gap-2 shrink-0">
               <Music className="h-5 w-5 text-accent shrink-0" />
@@ -207,7 +195,7 @@ const Contact: React.FC<ContactProps> = ({ onContactClick }) => {
                   allow="autoplay *; encrypted-media *; fullscreen *; clipboard-write"
                   sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation-by-user-activation allow-pointer-lock"
                   className="w-full h-full min-h-[280px] border-0"
-                  src={APPLE_MUSIC_EMBED}
+                  src={musicEmbedSrc}
                   loading="lazy"
                 />
               ) : (
@@ -227,7 +215,7 @@ const Contact: React.FC<ContactProps> = ({ onContactClick }) => {
               href={contactInfo.githubUrl}
               target="_blank"
               rel="noreferrer"
-              className="rounded-2xl glass-enhanced border border-accent/20 p-5 flex flex-col items-center gap-2 text-center group hover:border-accent/40 transition-all"
+              className="group flex flex-col items-center gap-2 rounded-2xl border border-glass-border glass-panel p-5 text-center shadow-card transition-all hover:border-accent/40 hover:shadow-card-hover"
             >
               <Github className="h-7 w-7 text-muted-foreground group-hover:text-accent transition-colors" />
               <span className="font-semibold text-foreground">GitHub</span>
@@ -237,7 +225,7 @@ const Contact: React.FC<ContactProps> = ({ onContactClick }) => {
               href={contactInfo.linkedinUrl}
               target="_blank"
               rel="noreferrer"
-              className="rounded-2xl glass-enhanced border border-accent/20 p-5 flex flex-col items-center gap-2 text-center group hover:border-accent/40 transition-all"
+              className="group flex flex-col items-center gap-2 rounded-2xl border border-glass-border glass-panel p-5 text-center shadow-card transition-all hover:border-accent/40 hover:shadow-card-hover"
             >
               <Linkedin className="h-7 w-7 text-blue-400 group-hover:text-blue-300 transition-colors" />
               <span className="font-semibold text-foreground">LinkedIn</span>
@@ -247,7 +235,7 @@ const Contact: React.FC<ContactProps> = ({ onContactClick }) => {
               href={resumeHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-2xl glass-enhanced border border-accent/20 p-5 flex flex-col items-center gap-2 text-center group hover:border-accent/40 transition-all"
+              className="group flex flex-col items-center gap-2 rounded-2xl border border-glass-border glass-panel p-5 text-center shadow-card transition-all hover:border-accent/40 hover:shadow-card-hover"
             >
               <FileText className="h-7 w-7 text-accent" />
               <span className="font-semibold text-foreground">Resume</span>
@@ -258,7 +246,7 @@ const Contact: React.FC<ContactProps> = ({ onContactClick }) => {
           {/* CTA row */}
           <motion.div
             variants={tileVariants}
-            className="contact-tile contact-tile-cta flex flex-col sm:flex-row items-stretch sm:items-center gap-4 p-6 rounded-2xl glass-enhanced border border-accent/20"
+            className="contact-tile contact-tile-cta flex flex-col items-stretch gap-4 rounded-2xl border border-glass-border glass-panel p-6 shadow-card sm:flex-row sm:items-center"
           >
             <Button
               size="lg"
