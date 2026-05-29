@@ -16,7 +16,7 @@ export function KeyboardDemo({
   showIdleHint = true,
 }: KeyboardDemoProps) {
   return (
-    <div className="flex min-h-[20rem] w-full items-center justify-center py-6 sm:min-h-[24rem] sm:py-8 md:min-h-[32rem] md:py-10">
+    <div className="flex min-h-[14rem] w-full items-center justify-center py-4 sm:min-h-[22rem] sm:py-8 md:min-h-[30rem] md:py-10">
       <Keyboard
         enableSound={enableSound}
         showPreview

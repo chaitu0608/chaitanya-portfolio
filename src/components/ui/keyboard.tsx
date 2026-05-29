@@ -725,24 +725,24 @@ const Key = ({
   const isPressed = keyCode ? pressedKeys.has(keyCode) : false;
   const isEnter = keyCode === "Enter";
 
-  const handleMouseDown = () => {
-    if (keyCode) {
-      playSoundDown(keyCode);
-      setPressed(keyCode);
-      if (keyCode === "Enter") {
-        triggerEnter();
-      }
+  const handlePointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (!keyCode) return;
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+    playSoundDown(keyCode);
+    setPressed(keyCode);
+    if (keyCode === "Enter") {
+      triggerEnter();
     }
   };
 
-  const handleMouseUp = () => {
+  const handlePointerUp = () => {
     if (keyCode && isPressed) {
       playSoundUp(keyCode);
       setReleased(keyCode);
     }
   };
 
-  const handleMouseLeave = () => {
+  const handlePointerCancel = () => {
     if (keyCode && isPressed) {
       setReleased(keyCode);
     }
@@ -774,11 +774,13 @@ const Key = ({
       <button
         type="button"
         data-key={keyCode}
-        onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseLeave}
+        onPointerDown={handlePointerDown}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerCancel}
+        onPointerLeave={handlePointerCancel}
+        style={{ touchAction: "manipulation" }}
         className={cn(
-          "relative flex h-6 w-6 cursor-pointer items-center justify-center rounded-[3.5px] bg-gray-100 shadow-[0px_0px_1px_0px_rgba(0,0,0,0.5),0px_1px_1px_0px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(255,255,255,1)_inset] transition-transform duration-75 active:scale-[0.98]",
+          "relative flex h-6 w-6 cursor-pointer items-center justify-center rounded-[3.5px] bg-gray-100 shadow-[0px_0px_1px_0px_rgba(0,0,0,0.5),0px_1px_1px_0px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(255,255,255,1)_inset] transition-transform duration-75 select-none active:scale-[0.98]",
           isPressed &&
             "scale-[0.98] bg-gray-100/80 shadow-[0px_0px_1px_0px_rgba(0,0,0,0.5),0px_1px_1px_0px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(255,255,255,0.5)]",
           isEnter && "bg-amber-50 ring-2 ring-amber-400 ring-inset",
@@ -820,24 +822,24 @@ const ModifierKey = ({
   } = useKeyboardSound();
   const isPressed = keyCode ? pressedKeys.has(keyCode) : false;
 
-  const handleMouseDown = () => {
-    if (keyCode) {
-      playSoundDown(keyCode);
-      setPressed(keyCode);
-      if (keyCode === "Enter") {
-        triggerEnter();
-      }
+  const handlePointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (!keyCode) return;
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+    playSoundDown(keyCode);
+    setPressed(keyCode);
+    if (keyCode === "Enter") {
+      triggerEnter();
     }
   };
 
-  const handleMouseUp = () => {
+  const handlePointerUp = () => {
     if (keyCode && isPressed) {
       playSoundUp(keyCode);
       setReleased(keyCode);
     }
   };
 
-  const handleMouseLeave = () => {
+  const handlePointerCancel = () => {
     if (keyCode && isPressed) {
       setReleased(keyCode);
     }
@@ -848,11 +850,13 @@ const ModifierKey = ({
       <button
         type="button"
         data-key={keyCode}
-        onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseLeave}
+        onPointerDown={handlePointerDown}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerCancel}
+        onPointerLeave={handlePointerCancel}
+        style={{ touchAction: "manipulation" }}
         className={cn(
-          "flex h-6 w-6 cursor-pointer items-center justify-center rounded-[3.5px] bg-gray-100 shadow-[0px_0px_1px_0px_rgba(0,0,0,0.5),0px_1px_1px_0px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(255,255,255,1)_inset] transition-transform duration-75 active:scale-[0.98]",
+          "flex h-6 w-6 cursor-pointer items-center justify-center rounded-[3.5px] bg-gray-100 shadow-[0px_0px_1px_0px_rgba(0,0,0,0.5),0px_1px_1px_0px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(255,255,255,1)_inset] transition-transform duration-75 select-none active:scale-[0.98]",
           isPressed &&
             "scale-[0.98] bg-gray-100/80 shadow-[0px_0px_1px_0px_rgba(0,0,0,0.5),0px_1px_1px_0px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(255,255,255,0.5)]",
           className,

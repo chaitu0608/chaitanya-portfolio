@@ -4,6 +4,8 @@ import { Penflow } from "penflow/react";
 import { BackgroundBeams } from "@/components/ui/background-beams";
 import { KeyboardDemo } from "@/components/loader/keyboard-demo";
 import { EnterSignaturePointer } from "@/components/loader/enter-signature-pointer";
+import { MobileBootCTA } from "@/components/loader/mobile-boot-cta";
+import { useCoarsePointer } from "@/hooks/use-coarse-pointer";
 
 const SIGNATURE_FONT = "/fonts/GreatVibes-Regular.ttf";
 
@@ -15,6 +17,7 @@ const BootGate: React.FC<BootGateProps> = ({ onStartBoot }) => {
   const started = useRef(false);
   const keyboardStageRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
+  const isCoarsePointer = useCoarsePointer();
 
   const handleEnter = useCallback(() => {
     if (started.current) return;
@@ -36,7 +39,7 @@ const BootGate: React.FC<BootGateProps> = ({ onStartBoot }) => {
   return (
     <div
       className="relative flex h-full min-h-0 w-full flex-col overflow-hidden bg-neutral-950"
-      aria-label="Press Enter to start"
+      aria-label={isCoarsePointer ? "Tap return to start" : "Press Enter to start"}
     >
       <BackgroundBeams className="absolute inset-0 h-full w-full opacity-40" />
 
@@ -51,7 +54,7 @@ const BootGate: React.FC<BootGateProps> = ({ onStartBoot }) => {
         >
           <div className="mx-auto flex min-h-[2.5rem] w-full max-w-xs items-center justify-center sm:max-w-sm">
             <Penflow
-              text="press enter"
+              text={isCoarsePointer ? "tap return" : "press enter"}
               fontUrl={SIGNATURE_FONT}
               color="#fafafa"
               size={42}
@@ -62,25 +65,31 @@ const BootGate: React.FC<BootGateProps> = ({ onStartBoot }) => {
               className="w-full"
             />
           </div>
-          <p className="mx-auto mt-2 max-w-sm text-sm text-neutral-500">
-            Tap the <span className="text-neutral-300">return</span> key on the
-            keyboard
-          </p>
+          {!isCoarsePointer && (
+            <p className="mx-auto mt-2 max-w-sm text-sm text-neutral-500">
+              Tap the <span className="text-neutral-300">return</span> key on
+              the keyboard
+            </p>
+          )}
         </motion.header>
 
         <div className="flex min-h-0 flex-1 items-center justify-center overflow-x-auto overflow-y-auto px-2 sm:px-4">
-          <div
-            ref={keyboardStageRef}
-            className="relative inline-flex max-w-full items-center justify-center"
-          >
-            <EnterSignaturePointer containerRef={keyboardStageRef} />
-            <KeyboardDemo
-              enableSound
-              alwaysListen
-              showIdleHint={false}
-              onEnter={handleEnter}
-            />
-          </div>
+          {isCoarsePointer ? (
+            <MobileBootCTA onTap={handleEnter} />
+          ) : (
+            <div
+              ref={keyboardStageRef}
+              className="relative inline-flex max-w-full items-center justify-center"
+            >
+              <EnterSignaturePointer containerRef={keyboardStageRef} />
+              <KeyboardDemo
+                enableSound
+                alwaysListen
+                showIdleHint={false}
+                onEnter={handleEnter}
+              />
+            </div>
+          )}
         </div>
 
         <p className="shrink-0 pb-6 text-center font-mono text-[10px] uppercase tracking-[0.28em] text-neutral-600 sm:text-xs">
