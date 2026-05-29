@@ -190,6 +190,9 @@ const Navigation: React.FC<NavigationProps> = ({ onContactClick }) => {
               </Button>
             )}
             <ThemeToggle />
+            <kbd className="hidden rounded border border-border/60 px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground lg:inline">
+              ⌘K
+            </kbd>
 
             {/* Mobile drawer — shadcn Sheet */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>

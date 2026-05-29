@@ -6,6 +6,7 @@ import { experiences } from "@/data/portfolio";
 import { ChevronDown, ExternalLink, Sparkles } from "lucide-react";
 import SectionMarquee from "@/components/scroll/SectionMarquee";
 import BigTypeReveal from "@/components/scroll/BigTypeReveal";
+import { SectionHeader } from "@/components/ui/section-header";
 import type { Experience as ExperienceItem } from "@/types";
 import { cn } from "@/lib/utils";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
@@ -267,20 +268,16 @@ const Experience: React.FC = () => {
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-6"
-        >
-          <h2 className="text-4xl md:text-5xl font-display font-bold mb-3">
-            The path I <span className="text-gradient">took</span>
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Roles that shaped how I ship, collaborate, and lead execution.
-          </p>
-        </motion.div>
+        <SectionHeader
+          eyebrow="Experience"
+          title={
+            <>
+              The path I <span className="text-gradient">took</span>
+            </>
+          }
+          description="Internships and leadership roles that shaped how I ship, collaborate, and execute at scale."
+          className="mb-6"
+        />
 
         <SectionMarquee text="EXPERIENCE · ROLES · IMPACT · " className="mb-8" repeat={8} />
 

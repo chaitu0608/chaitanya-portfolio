@@ -12,9 +12,17 @@ export const personalInfo = {
   name: "Chaitanya Dhamdhere",
   title: "Full Stack Developer & Problem Solver",
   description:
-    "Computer Engineering student passionate about building innovative web applications and solving complex problems through code.",
-  tagline: "Building the future, one line of code at a time.",
+    "Computer Engineering student at KJSCE who ships production web apps end-to-end — from React/TypeScript frontends and Node APIs to deployment on Vercel. Previously interned at Jio; core team at KJSCE CodeCell.",
+  tagline: "I design, build, and ship software that people actually use.",
 };
+
+/** Recruiter-facing credibility strip in the hero */
+export const heroStats = [
+  { value: "10+", label: "Projects shipped" },
+  { value: "3", label: "Internships & roles" },
+  { value: "500+", label: "Hackathon reach" },
+  { value: "2027", label: "Graduating" },
+] as const;
 
 // Contact Information
 export const contactInfo: ContactInfo = {
@@ -100,6 +108,19 @@ export const projects: Project[] = [
     subtitle: "Advanced Threat Detection System",
     description:
       "Production-ready, full-stack cyberattack detection and visualization platform that identifies, analyzes, and classifies 12+ URL-based attacks in real time. Built for SIH 2025 | Team ShieldEye. Detects SQL Injection (error/union/time/blind), XSS (reflected/stored/DOM), SSRF, Directory Traversal, Command Injection, LFI/RFI, XXE, Web Shell Upload, Credential Stuffing, Brute Force, HTTP Parameter Pollution, and Typosquatting.",
+    problem:
+      "Security teams need fast, explainable URL threat analysis without spinning up heavy enterprise tooling.",
+    solution:
+      "Built a full-stack detector with real-time classification, attack dashboards, and ML-assisted pattern matching across 12+ attack vectors.",
+    impact: [
+      "12+ attack types detected in real time with visual breakdowns",
+      "Deployed production instance on Vercel for demos and SIH judging",
+      "End-to-end stack: scanning engine, API layer, and interactive UI",
+    ],
+    highlights: [
+      "Unified detection pipeline for SQLi, XSS, SSRF, and traversal variants",
+      "Attack visualization for non-technical stakeholders",
+    ],
     tech: ["Full-Stack", "Real-time", "Security", "AI/ML", "Visualization"],
     type: "Web Application",
     thumbnail: "/shieldeye.png",
@@ -111,6 +132,15 @@ export const projects: Project[] = [
     subtitle: "Free AI Spend Audit Tool",
     description:
       "Free AI tool spend audit — list your tools, plans, seats and monthly spend, get an instant shareable report with downgrades, seat fixes and savings math. Benchmarks 8 vendors (Cursor, Copilot, Claude, ChatGPT, Anthropic API, OpenAI API, Gemini, Windsurf) against public list pricing. Rule-based math, no login, under 3 minutes.",
+    problem:
+      "Teams overspend on overlapping AI subscriptions with no quick way to benchmark seats and plans.",
+    solution:
+      "Shipped a zero-login audit flow with vendor benchmarks, savings math, and shareable OG reports.",
+    impact: [
+      "8 AI vendors benchmarked against public list pricing",
+      "Shareable report generated in under 3 minutes",
+      "No auth required — frictionless lead-gen style UX",
+    ],
     tech: ["Next.js", "TypeScript", "Tailwind CSS", "Vercel", "Product Analytics", "Vercel OG"],
     type: "Web Application",
     thumbnail: "https://credex-intern.vercel.app/opengraph-image?619e52654fdd82d8",
@@ -122,6 +152,15 @@ export const projects: Project[] = [
     subtitle: "Secure Data Wiping System",
     description:
       "Designed a secure wiping engine implementing NIST SP 800-88 standards with overwrite, secure-erase, and crypto-erase methods. Developed a user-friendly React frontend for easy interaction and status monitoring. Built a robust Node.js backend to manage wipe requests, schedule tasks, and log activities.",
+    problem:
+      "Organizations need verifiable, standards-compliant data erasure before device resale or disposal.",
+    solution:
+      "Engineered a NIST SP 800-88 compliant wipe engine with overwrite, secure-erase, and crypto-erase paths plus a React + Electron control UI.",
+    impact: [
+      "Multiple wipe methods aligned to NIST SP 800-88",
+      "Cross-platform desktop shell with status monitoring",
+      "Open-source on GitHub with live demo deployment",
+    ],
     tech: ["C++", "Python", "Kotlin", "Swift", "Electron", "Node.js", "Express", "PostgreSQL", "MongoDB", "Firebase", "OpenSSL"],
     type: "Desktop Application",
     thumbnail: "/trustwipe.jpg",
@@ -158,7 +197,7 @@ export const projects: Project[] = [
     type: "Web Application",
     thumbnail: "/padhle.png",
     githubUrl: "https://github.com/chaitu0608/padhle",
-    liveUrl: "https://padhle-demo.com",
+    liveUrl: undefined,
   },
   {
     title: "Vertex Cover Simulator",
@@ -181,7 +220,6 @@ export const projects: Project[] = [
     tech: ["Next.js", "TypeScript", "MongoDB", "Authentication", "Tailwind CSS", "Prisma", "NextAuth.js"],
     type: "Full Stack Application",
     githubUrl: "https://github.com/chaitu0608/next-ama-app",
-    liveUrl: "https://next-ama-demo.com",
   },
   {
     title: "JournalMate",
@@ -202,7 +240,6 @@ export const projects: Project[] = [
     tech: ["React", "JavaScript", "API Integration", "Chart.js", "CSS3", "Responsive Design"],
     type: "Web Application",
     githubUrl: "https://github.com/chaitu0608/weather-app",
-    liveUrl: "https://weather-app-demo.com",
   },
 ];
 

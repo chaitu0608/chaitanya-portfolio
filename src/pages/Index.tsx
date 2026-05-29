@@ -16,6 +16,11 @@ const Footer = lazy(() => import("@/components/Footer"));
 const Contact = lazy(() => import("@/components/Contact"));
 const ContactModal = lazy(() => import("@/components/ContactModal"));
 const PhotoAlbum = lazy(() => import("@/components/PhotoAlbum"));
+const CommandPalette = lazy(() =>
+  import("@/components/CommandPalette").then((m) => ({
+    default: m.CommandPalette,
+  })),
+);
 
 const SectionLoader = () => (
   <div className="min-h-[400px] flex items-center justify-center">
@@ -49,6 +54,12 @@ const Index = () => {
 
   return (
     <ScrollProvider enabled={smoothScroll}>
+    <a
+      href="#about"
+      className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100001] focus:rounded-lg focus:bg-accent focus:px-4 focus:py-2 focus:text-accent-foreground"
+    >
+      Skip to content
+    </a>
     <div className="min-h-screen gradient-primary transition-colors duration-500">
       <Suspense fallback={null}>
         <PageAmbient />
@@ -89,12 +100,18 @@ const Index = () => {
 
         <FloatingDock onContactClick={handleContactClick} />
 
+        <Suspense fallback={null}>
+          <CommandPalette onContactClick={handleContactClick} />
+        </Suspense>
+
         {/* Crawlers: semantic content when sections are below fold */}
         <div className="sr-only">
           <h1>Chaitanya Dhamdhere — Full Stack Developer Portfolio</h1>
           <p>
-            Projects, experience, skills, and contact for Chaitanya Dhamdhere,
-            computer engineering student in Mumbai.
+            Chaitanya Dhamdhere is a Full Stack Developer and Computer
+            Engineering student at K. J. Somaiya College of Engineering, Mumbai.
+            Skills include React, TypeScript, Node.js, Next.js, MongoDB, and
+            PostgreSQL. Experience at Jio Platforms and KJSCE CodeCell.
           </p>
         </div>
       </motion.div>

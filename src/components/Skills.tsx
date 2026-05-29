@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { techCategories } from "@/data/portfolio";
 import { SkillIcon } from "@/lib/skill-icons";
+import { SectionHeader } from "@/components/ui/section-header";
 
 const CATEGORY_ACCENT: Record<string, string> = {
   Languages: "border-l-teal-500 bg-teal-500/5",
@@ -23,20 +24,16 @@ const Skills = () => {
       className="relative overflow-hidden px-4 py-20 section-transition"
     >
       <div className="relative z-10 mx-auto max-w-7xl">
-        <motion.div
-          initial={prefersReducedMotion ? false : { opacity: 0, y: 20 }}
-          whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
-            Skills & <span className="text-gradient">Technologies</span>
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Tools and technologies I use to build and ship products.
-          </p>
-        </motion.div>
+        <SectionHeader
+          eyebrow="Stack"
+          title={
+            <>
+              Skills & <span className="text-gradient">Technologies</span>
+            </>
+          }
+          description="Languages, frameworks, and tools I reach for when shipping production software."
+          className="mb-16"
+        />
 
         <motion.div
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 max-w-6xl mx-auto"

@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Download, Github, Linkedin, MapPin } from "lucide-react";
+import { ArrowDown, Download, Github, Linkedin, MapPin } from "lucide-react";
 import GlassCard from "@/components/ui/glass-card";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
-import { personalInfo, contactInfo } from "@/data/portfolio";
+import { personalInfo, contactInfo, heroStats } from "@/data/portfolio";
+import { scrollToSection } from "@/utils/animations";
 import { TextGenerateEffect } from "@/components/ui/text-generate-effect";
 
 // Preview images for the photos badge (same sources as PhotoAlbum; add more in public/ as needed)
@@ -109,6 +110,9 @@ const About = ({ onOpenPhotoAlbum }: AboutProps) => {
                 Chaitanya Dhamdhere
               </span>
             </h1>
+            <p className="text-lg font-medium text-foreground/90 md:text-xl">
+              {personalInfo.title}
+            </p>
             <TextGenerateEffect
               words={personalInfo.tagline}
               duration={0.35}
@@ -118,6 +122,22 @@ const About = ({ onOpenPhotoAlbum }: AboutProps) => {
           <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl">
             {personalInfo.description}
           </p>
+
+          <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+            {heroStats.map((stat) => (
+              <div
+                key={stat.label}
+                className="rounded-xl border border-accent/15 bg-accent/5 px-3 py-3 text-center sm:px-4"
+              >
+                <dt className="font-display text-xl font-bold text-accent md:text-2xl">
+                  {stat.value}
+                </dt>
+                <dd className="mt-0.5 font-mono text-[10px] uppercase tracking-wider text-muted-foreground sm:text-xs">
+                  {stat.label}
+                </dd>
+              </div>
+            ))}
+          </dl>
 
                 {/* Status Badge */}
                 <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full glass-panel border border-accent/20">
@@ -133,6 +153,14 @@ const About = ({ onOpenPhotoAlbum }: AboutProps) => {
 
           {/* Action Buttons */}
           <div className="flex flex-wrap gap-3 items-center">
+            <Button
+              size="lg"
+              className="bg-accent text-accent-foreground hover:bg-accent/90"
+              onClick={() => scrollToSection("#projects")}
+            >
+              View my work
+              <ArrowDown className="ml-2 h-4 w-4" />
+            </Button>
             <a
               href={resumeHref}
               target="_blank"
@@ -197,7 +225,7 @@ const About = ({ onOpenPhotoAlbum }: AboutProps) => {
               {/* Main Image Card */}
               <GlassCard className="p-4 premium-glow relative overflow-hidden">
                 {/* Bigger Image Container */}
-                <div className="w-[28rem] h-[28rem] md:w-[32rem] md:h-[32rem] lg:w-[36rem] lg:h-[36rem] relative">
+                <div className="relative h-[min(72vw,22rem)] w-[min(72vw,22rem)] sm:h-[26rem] sm:w-[26rem] md:h-[32rem] md:w-[32rem] lg:h-[36rem] lg:w-[36rem]">
                   {/* Background Pattern */}
                   <div className="absolute inset-0 bg-gradient-to-br from-accent/10 via-background to-accent/5 rounded-2xl"></div>
                   

@@ -5,6 +5,22 @@
 /* Premium Dark Portfolio Design System */
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
   :root {
     /* Light theme (default when .dark is absent) */
     --background: 0 0% 98%;

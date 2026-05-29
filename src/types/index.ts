@@ -34,6 +34,14 @@ export interface Project {
   liveUrl?: string;
   imageUrl?: string;
   thumbnail?: string;
+  /** Case-study: what problem this project solves */
+  problem?: string;
+  /** Case-study: how you solved it */
+  solution?: string;
+  /** Case-study: measurable or qualitative outcomes */
+  impact?: string[];
+  /** Case-study: technical challenges overcome */
+  highlights?: string[];
 }
 
 export interface TechCategory {

@@ -12,6 +12,9 @@ import { projects } from "@/data/portfolio";
 import type { Project, ProjectSize } from "@/types";
 import { cn } from "@/lib/utils";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
+import { SectionHeader } from "@/components/ui/section-header";
+import { ProjectCaseStudyDialog } from "@/components/ProjectCaseStudyDialog";
+import { Button } from "@/components/ui/button";
 
 const MARQUEE_TEXT = "PROJECTS · BUILD · SHIP · ";
 const GITHUB_PROFILE = "https://github.com/chaitu0608";
@@ -135,9 +138,15 @@ interface BentoTileProps {
   project: Project;
   index: number;
   onOpenLink: (url: string) => void;
+  onOpenCaseStudy: (project: Project) => void;
 }
 
-const BentoTile: React.FC<BentoTileProps> = ({ project, index, onOpenLink }) => {
+const BentoTile: React.FC<BentoTileProps> = ({
+  project,
+  index,
+  onOpenLink,
+  onOpenCaseStudy,
+}) => {
   const prefersReducedMotion = useReducedMotion();
   const size = project.size ?? "third";
   const visibleTech = project.tech.slice(0, 4);
@@ -152,10 +161,19 @@ const BentoTile: React.FC<BentoTileProps> = ({ project, index, onOpenLink }) => 
       transition={{ duration: 0.5, delay: index * 0.05 }}
       whileHover={prefersReducedMotion ? undefined : { y: -4 }}
       data-bento-index={index}
+      role="button"
+      tabIndex={0}
+      onClick={() => onOpenCaseStudy(project)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onOpenCaseStudy(project);
+        }
+      }}
       className={cn(
-        "bento-tile group glass-panel rounded-2xl border border-glass-border",
+        "bento-tile group glass-panel rounded-2xl border border-glass-border cursor-pointer",
         "hover:border-accent/40 hover:shadow-card-hover",
-        "transition-colors duration-300",
+        "transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50",
         SIZE_CLASS[size]
       )}
     >
@@ -210,25 +228,43 @@ const BentoTile: React.FC<BentoTileProps> = ({ project, index, onOpenLink }) => 
           )}
         </div>
 
-        <div className="flex items-center gap-2 mt-auto">
+        <div className="mt-auto flex flex-wrap items-center gap-2">
+          <Button
+            type="button"
+            variant="secondary"
+            size="sm"
+            className="h-8 border border-accent/20 bg-background/60 text-xs hover:bg-accent/10"
+            onClick={(e) => {
+              e.stopPropagation();
+              onOpenCaseStudy(project);
+            }}
+          >
+            Case study
+          </Button>
           {project.githubUrl && (
             <button
               type="button"
-              onClick={() => onOpenLink(project.githubUrl!)}
-              className="p-2 rounded-lg bg-background/60 border border-glass-border hover:border-accent/50 hover:text-accent transition-colors"
+              onClick={(e) => {
+                e.stopPropagation();
+                onOpenLink(project.githubUrl!);
+              }}
+              className="rounded-lg border border-glass-border bg-background/60 p-2 transition-colors hover:border-accent/50 hover:text-accent"
               aria-label={`${project.title} on GitHub`}
             >
-              <Github className="w-4 h-4" />
+              <Github className="h-4 w-4" />
             </button>
           )}
           {project.liveUrl && (
             <button
               type="button"
-              onClick={() => onOpenLink(project.liveUrl!)}
-              className="p-2 rounded-lg bg-background/60 border border-glass-border hover:border-accent/50 hover:text-accent transition-colors"
+              onClick={(e) => {
+                e.stopPropagation();
+                onOpenLink(project.liveUrl!);
+              }}
+              className="rounded-lg border border-glass-border bg-background/60 p-2 transition-colors hover:border-accent/50 hover:text-accent"
               aria-label={`${project.title} live demo`}
             >
-              <ExternalLink className="w-4 h-4" />
+              <ExternalLink className="h-4 w-4" />
             </button>
           )}
         </div>
@@ -242,6 +278,8 @@ const Projects = () => {
   const gridRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-80px" });
   const [activeIndex, setActiveIndex] = useState(0);
+  const [caseStudyProject, setCaseStudyProject] = useState<Project | null>(null);
+  const [caseStudyOpen, setCaseStudyOpen] = useState(false);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -252,6 +290,11 @@ const Projects = () => {
 
   const handleOpenLink = useCallback((url: string) => {
     window.open(url, "_blank", "noopener,noreferrer");
+  }, []);
+
+  const handleOpenCaseStudy = useCallback((project: Project) => {
+    setCaseStudyProject(project);
+    setCaseStudyOpen(true);
   }, []);
 
   React.useEffect(() => {
@@ -294,20 +337,15 @@ const Projects = () => {
       </div>
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-6"
-        >
-          <h2 className="text-4xl md:text-5xl font-display font-bold mb-3">
-            The things I have <span className="text-gradient">built</span>
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Selected work — tap a tile for code or live demos.
-          </p>
-        </motion.div>
+        <SectionHeader
+          eyebrow="Selected work"
+          title={
+            <>
+              The things I have <span className="text-gradient">built</span>
+            </>
+          }
+          description="Production apps, hackathon wins, and full-stack experiments — open a tile for the case study, or jump straight to code and live demos."
+        />
 
         <MarqueeHeader />
 
@@ -328,6 +366,7 @@ const Projects = () => {
               project={project}
               index={index}
               onOpenLink={handleOpenLink}
+              onOpenCaseStudy={handleOpenCaseStudy}
             />
           ))}
 
@@ -361,10 +400,17 @@ const Projects = () => {
             transition={{ delay: 0.8 }}
             className="text-center text-sm text-muted-foreground mt-10"
           >
-            Hover tech chips for context · {projects.length} featured projects
+            Click any tile for the full case study · {projects.length} featured
+            projects
           </motion.p>
         )}
       </div>
+
+      <ProjectCaseStudyDialog
+        project={caseStudyProject}
+        open={caseStudyOpen}
+        onOpenChange={setCaseStudyOpen}
+      />
     </section>
   );
 };
