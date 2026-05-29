@@ -17,6 +17,7 @@ import { contactInfo } from "@/data/portfolio";
 import { getResumeHref } from "@/lib/resume";
 import SectionMarquee from "@/components/scroll/SectionMarquee";
 import BigTypeReveal from "@/components/scroll/BigTypeReveal";
+import { SectionHeader } from "@/components/ui/section-header";
 import { useTheme } from "@/hooks/use-theme";
 
 const APPLE_MUSIC_PLAYLIST =
@@ -97,20 +98,16 @@ const Contact: React.FC<ContactProps> = ({ onContactClick }) => {
       className="relative overflow-hidden px-4 py-20 section-transition"
     >
       <div className="relative z-10 mx-auto max-w-7xl">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="text-center mb-8"
-        >
-          <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
-            Let&apos;s <span className="text-gradient">connect</span>
-          </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Have an opportunity, idea, or question? I&apos;d love to hear from you.
-          </p>
-        </motion.div>
+        <SectionHeader
+          eyebrow="Contact"
+          title={
+            <>
+              Let&apos;s <span className="text-gradient">connect</span>
+            </>
+          }
+          description="Open to internships, full-time roles, and collaborations. I usually reply within 24 hours."
+          className="mb-8"
+        />
 
         <SectionMarquee text="CONNECT · REACH OUT · BUILD TOGETHER · " className="mb-8" />
 

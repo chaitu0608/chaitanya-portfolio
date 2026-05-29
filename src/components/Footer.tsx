@@ -19,9 +19,13 @@ const Footer: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const batteryApi = (
-      navigator as Navigator & { getBattery?: () => Promise<BatteryManager> }
-    ).getBattery;
+    type NavBattery = Navigator & {
+      getBattery?: () => Promise<{
+        level: number;
+        addEventListener: (type: string, listener: () => void) => void;
+      }>;
+    };
+    const batteryApi = (navigator as NavBattery).getBattery;
     if (batteryApi && typeof batteryApi === "function") {
       batteryApi()
         .then((battery) => {
