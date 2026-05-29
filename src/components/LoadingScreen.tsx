@@ -5,6 +5,7 @@ import { Terminal } from "@/components/ui/terminal";
 import {
   unlockTerminalAudio,
   preloadStartupChime,
+  preloadKeyboardSprite,
   playStartupChime,
 } from "@/lib/terminal-audio";
 import { LOADER_COMMANDS, LOADER_OUTPUTS } from "@/lib/loader-terminal";
@@ -96,6 +97,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
     if (bootStarted.current) return;
     bootStarted.current = true;
     unlockTerminalAudio();
+    void preloadKeyboardSprite();
     void preloadStartupChime();
     void preloadPortfolio();
     onBootStart?.();
@@ -188,9 +190,9 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
                       username="Chaitu's Macbook"
                       commands={LOADER_COMMANDS}
                       outputs={LOADER_OUTPUTS}
-                      typingSpeed={26}
-                      delayBetweenCommands={320}
-                      initialDelay={150}
+                      typingSpeed={12}
+                      delayBetweenCommands={150}
+                      initialDelay={60}
                       enableSound
                       startImmediately
                       onDone={handleTerminalDone}

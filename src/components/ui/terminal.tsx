@@ -179,13 +179,16 @@ export function Terminal({
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const onDoneCalled = useRef(false);
-  const playKeyRef = useRef(() => {});
+  const playKeyRef = useRef<(char?: string) => void>(() => {});
   const observedInView = useInView(containerRef);
   const inView = startImmediately || observedInView;
 
-  const playKey = useCallback(() => {
-    if (enableSound) playTerminalKeyClick();
-  }, [enableSound]);
+  const playKey = useCallback(
+    (char?: string) => {
+      if (enableSound) playTerminalKeyClick(char);
+    },
+    [enableSound],
+  );
   playKeyRef.current = playKey;
 
   const [lines, setLines] = useState<TerminalLine[]>([]);
@@ -215,20 +218,20 @@ export function Terminal({
     if (phase !== "typing") return;
 
     if (charIdx < currentCommand.length) {
-      playKeyRef.current();
+      playKeyRef.current(currentCommand[charIdx]);
       const t = setTimeout(
         () => {
           setCurrentText(currentCommand.slice(0, charIdx + 1));
           setCharIdx((c) => c + 1);
         },
-        typingSpeed + Math.random() * 20,
+        typingSpeed + Math.random() * 12,
       );
       return () => clearTimeout(t);
     } else {
-      playKeyRef.current();
+      playKeyRef.current("\n");
       const t = setTimeout(() => {
         setPhase("executing");
-      }, 80);
+      }, 35);
       return () => clearTimeout(t);
     }
   }, [phase, charIdx, currentCommand, typingSpeed]);
@@ -259,7 +262,7 @@ export function Terminal({
           { type: "output", content: currentOutputs[outputIdx] },
         ]);
         setOutputIdx((i) => i + 1);
-      }, 150);
+      }, 70);
       return () => clearTimeout(t);
     } else if (outputIdx >= currentOutputs.length) {
       const t = setTimeout(() => {
@@ -268,7 +271,7 @@ export function Terminal({
         } else {
           setPhase("pausing");
         }
-      }, 300);
+      }, 140);
       return () => clearTimeout(t);
     }
   }, [phase, outputIdx, currentOutputs, isLastCommand]);

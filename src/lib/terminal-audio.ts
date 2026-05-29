@@ -1,12 +1,25 @@
 /**
- * Lightweight procedural keyboard clicks — no network, no sprite decode.
- * One tick per keystroke (not down+up) with throttling for smooth loader performance.
+ * Keyboard clicks for the boot-loader terminal.
+ *
+ * Primary path: play a slice of the same MacBook keyboard sprite the boot-gate
+ * keyboard uses, so the typed character "thock" matches what the user just
+ * heard from the Aceternity keyboard. If the sprite isn't ready yet we fall
+ * back to a tiny procedural click so the terminal is never silent.
  */
+
+import {
+  KEYBOARD_SPRITE_URL,
+  SOUND_DEFINES_DOWN,
+  charToKeyCode,
+} from "@/lib/keyboard-sprite";
 
 let ctx: AudioContext | null = null;
 let noiseBuffer: AudioBuffer | null = null;
+let keyboardSpriteBuffer: AudioBuffer | null = null;
+let keyboardSpritePromise: Promise<void> | null = null;
 let lastClickAt = 0;
-const MIN_INTERVAL_MS = 28;
+const MIN_INTERVAL_MS = 12;
+const SPRITE_GAIN = 0.55;
 
 function getContext(): AudioContext | null {
   if (typeof window === "undefined") return null;
@@ -42,24 +55,53 @@ export function unlockTerminalAudio(): void {
 
 export function preloadTerminalAudio(): Promise<void> {
   getContext();
-  return Promise.resolve();
+  return preloadKeyboardSprite();
 }
 
-export function playTerminalKeyClick(): void {
-  const now = performance.now();
-  if (now - lastClickAt < MIN_INTERVAL_MS) return;
-
+/**
+ * Fetch & decode the MacBook keyboard sprite into our shared AudioContext so
+ * each terminal keystroke can play the matching per-key sample. Safe to call
+ * multiple times — subsequent calls reuse the in-flight or resolved promise.
+ */
+export function preloadKeyboardSprite(
+  url = KEYBOARD_SPRITE_URL,
+): Promise<void> {
+  if (keyboardSpritePromise) return keyboardSpritePromise;
   const audio = getContext();
-  if (!audio) return;
+  if (!audio) return Promise.resolve();
 
-  if (audio.state === "suspended") {
-    void audio.resume().then(() => {
-      if (audio.state === "running") playTerminalKeyClick();
+  keyboardSpritePromise = fetch(url)
+    .then((res) => (res.ok ? res.arrayBuffer() : Promise.reject()))
+    .then((buf) => audio.decodeAudioData(buf))
+    .then((decoded) => {
+      keyboardSpriteBuffer = decoded;
+    })
+    .catch(() => {
+      // Sprite missing / decode failed → procedural fallback handles it.
     });
-    return;
-  }
 
-  lastClickAt = now;
+  return keyboardSpritePromise;
+}
+
+function playSpriteSlice(audio: AudioContext, keyCode: string): boolean {
+  if (!keyboardSpriteBuffer) return false;
+  const def = SOUND_DEFINES_DOWN[keyCode] ?? SOUND_DEFINES_DOWN.KeyA;
+  if (!def) return false;
+
+  const [startMs, durationMs] = def;
+  const src = audio.createBufferSource();
+  src.buffer = keyboardSpriteBuffer;
+
+  const gain = audio.createGain();
+  gain.gain.value = SPRITE_GAIN;
+  src.connect(gain);
+  gain.connect(audio.destination);
+
+  src.start(0, startMs / 1000, durationMs / 1000);
+  return true;
+}
+
+function playProceduralClick(audio: AudioContext): void {
   const t = audio.currentTime;
 
   const gain = audio.createGain();
@@ -84,6 +126,35 @@ export function playTerminalKeyClick(): void {
   noiseGain.connect(audio.destination);
   noise.start(t);
   noise.stop(t + 0.028);
+}
+
+/**
+ * Play a single keyboard "thock" for the terminal.
+ *
+ * @param char Optional character being typed; used to pick the matching key
+ * sample from the sprite. When omitted (or sprite unavailable) we fall back
+ * to a procedural click so the terminal is never silent.
+ */
+export function playTerminalKeyClick(char?: string): void {
+  const now = performance.now();
+  if (now - lastClickAt < MIN_INTERVAL_MS) return;
+
+  const audio = getContext();
+  if (!audio) return;
+
+  if (audio.state === "suspended") {
+    void audio.resume().then(() => {
+      if (audio.state === "running") playTerminalKeyClick(char);
+    });
+    return;
+  }
+
+  lastClickAt = now;
+
+  const keyCode = charToKeyCode(char ?? "");
+  if (playSpriteSlice(audio, keyCode)) return;
+
+  playProceduralClick(audio);
 }
 
 /* ------------------------------------------------------------------ *
@@ -227,4 +298,6 @@ export function disposeTerminalAudio(): void {
   chimeBuffer = null;
   chimeRequested = false;
   chimePlayed = false;
+  keyboardSpriteBuffer = null;
+  keyboardSpritePromise = null;
 }
