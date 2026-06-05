@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { Download, Github, ChevronDown } from "lucide-react";
-import { contactInfo, personalInfo, aboutMeta } from "@/data/portfolio";
+import { Download, Github } from "lucide-react";
+import { contactInfo, personalInfo } from "@/data/portfolio";
 import { AboutNameReveal } from "./AboutNameReveal";
 import { AboutMetaStrip } from "./AboutMetaStrip";
 import { AboutTypewriter } from "./AboutTypewriter";
@@ -151,24 +151,6 @@ export function About() {
                 <AboutSocialLinks />
               </div>
             </div>
-          </div>
-
-          <div className="about-dossier-footer flex flex-col gap-2 border-t border-zinc-800 bg-zinc-900/30 px-5 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-            <p className="font-mono text-[10px] text-zinc-600 sm:text-xs">
-              {aboutMeta.location.toLowerCase()} · {aboutMeta.school.toLowerCase()} ·{" "}
-              {aboutMeta.status}
-            </p>
-            <p className="flex items-center gap-2 font-mono text-[10px] text-zinc-500 sm:text-xs">
-              <ChevronDown className="h-3 w-3 shrink-0" />
-              scroll or press{" "}
-              <kbd className="rounded border border-zinc-700 px-1.5 py-0.5 text-[10px] text-zinc-300">
-                j
-              </kbd>
-              <span className="text-zinc-600">·</span>
-              <kbd className="hidden rounded border border-zinc-700 px-1.5 py-0.5 text-[10px] text-zinc-300 sm:inline">
-                g+w
-              </kbd>
-            </p>
           </div>
         </motion.div>
       </div>

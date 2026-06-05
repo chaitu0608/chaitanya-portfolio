@@ -14,8 +14,8 @@ export const PHOTOS: PortfolioPhoto[] = [
     id: 1,
     type: "image",
     src: "https://res.cloudinary.com/dlejfav7z/image/upload/f_auto,q_auto,w_600,c_limit/v1780516051/WhatsApp_Image_2026-06-04_at_01.09.30_ambcsl.jpg",
-    title: "ETHGlobal New Delhi",
-    description: "ETHGlobal New Delhi · 2024",
+    title: "this is me",
+    description: "hey!!this is me",
   },
   {
     id: 2,

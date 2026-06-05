@@ -33,7 +33,7 @@ export const cloudinaryAssets = {
 export const personalInfo = {
   name: "Chaitanya Dhamdhere",
   nickname: "chaitu",
-  title: "Engineer · Builder · Freelancer · Business Operator · Explorer",
+  title: "Engineer · Builder · Freelancer · Student · Business · Explorer",
   description:
     "21-year-old Computer Engineering student from Mumbai building full-stack apps, developer tools, and practical AI — from zero to something people actually use.",
   tagline: "I design, build, and ship software that people actually use.",
@@ -56,7 +56,7 @@ export const aboutLines = [
   "systems, leverage, and what it takes to ship in the real world.",
   "",
   "Also into startups, finance, and how companies get built.",
-  "> Curious by default. Allergic to the obvious answer.",
+  "> I build. I learn. I ship.",
   "Most of what I make starts as a question I couldn't drop.",
   "",
   "Currently building, learning, figuring it out — one project at a time.",

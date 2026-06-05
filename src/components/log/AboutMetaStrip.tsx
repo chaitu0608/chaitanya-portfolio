@@ -3,7 +3,7 @@ import { aboutMeta } from "@/data/portfolio";
 import { cn } from "@/lib/utils";
 
 const META_LINES = [
-  { key: "ROLE", value: aboutMeta.role },
+  { key: "ROLE", value: aboutMeta.role.toLowerCase() },
   { key: "LOC", value: aboutMeta.location.toLowerCase() },
   { key: "EDU", value: aboutMeta.school.toLowerCase() },
   { key: "STATUS", value: aboutMeta.status },

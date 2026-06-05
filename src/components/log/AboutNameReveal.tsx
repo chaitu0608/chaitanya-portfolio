@@ -62,11 +62,11 @@ export function AboutNameReveal({ className, onComplete }: AboutNameRevealProps)
         {showPromptCursor && <span className="about-name-cursor" aria-hidden />}
       </p>
 
-      <h1 className="about-name-title font-mono text-2xl font-semibold tracking-tight sm:text-3xl md:text-4xl lg:text-5xl">
+      <h1 className="about-name-title font-mono text-2xl font-semibold tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl">
         <span
           className={cn(
-            "about-name-text relative inline-block",
-            phase === "done" && "about-name-text--settled",
+            "about-name-display relative inline-flex flex-wrap items-baseline gap-x-[0.55em] sm:gap-x-[0.65em]",
+            phase === "done" && "about-name-display--settled",
           )}
         >
           {phase === "done" || nameLen > firstName.length ? (
@@ -74,7 +74,7 @@ export function AboutNameReveal({ className, onComplete }: AboutNameRevealProps)
               <span className="about-name-first">{firstName}</span>
               {nameLen > firstName.length && (
                 <span className="about-name-last">
-                  {visibleName.slice(firstName.length)}
+                  {visibleName.slice(firstName.length).trimStart()}
                 </span>
               )}
             </>
@@ -86,10 +86,10 @@ export function AboutNameReveal({ className, onComplete }: AboutNameRevealProps)
           )}
           {phase === "done" && (
             <motion.span
-              className="about-name-shimmer pointer-events-none absolute inset-0"
-              initial={{ opacity: 0, x: "-100%" }}
-              animate={{ opacity: [0, 0.4, 0], x: "100%" }}
-              transition={{ duration: 1.1, ease: "easeInOut", delay: 0.12 }}
+              className="about-name-scanline"
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 0.55, ease: [0.25, 0.46, 0.45, 0.94], delay: 0.12 }}
               aria-hidden
             />
           )}
