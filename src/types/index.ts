@@ -34,6 +34,8 @@ export interface Project {
   liveUrl?: string;
   imageUrl?: string;
   thumbnail?: string;
+  /** Short card blurb — one line, shown on project tiles */
+  summary?: string;
   /** Case-study: what problem this project solves */
   problem?: string;
   /** Case-study: how you solved it */

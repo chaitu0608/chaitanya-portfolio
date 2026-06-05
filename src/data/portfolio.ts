@@ -7,21 +7,61 @@ import {
   NavItem,
 } from "@/types";
 
+/** Cloudinary-hosted static assets (migrated from public/) */
+export const cloudinaryAssets = {
+  og: "https://res.cloudinary.com/dlejfav7z/image/upload/v1780658985/og_s8bgi5.png",
+  jio: "https://res.cloudinary.com/dlejfav7z/image/upload/v1780658902/jio_w3g71c.png",
+  codecell:
+    "https://res.cloudinary.com/dlejfav7z/image/upload/v1780658847/codecell_vipmzf.png",
+  padhle:
+    "https://res.cloudinary.com/dlejfav7z/image/upload/v1780658989/padhle_c9ruf7.png",
+  starQuest:
+    "https://res.cloudinary.com/dlejfav7z/image/upload/v1780659033/StarQuest_myyvff.jpg",
+  trustwipe:
+    "https://res.cloudinary.com/dlejfav7z/image/upload/v1780659095/trustwipe_jnfpug.jpg",
+  tutelage:
+    "https://res.cloudinary.com/dlejfav7z/image/upload/v1780659130/tutelage_ddgcra.png",
+  vertexSimulator:
+    "https://res.cloudinary.com/dlejfav7z/image/upload/v1780659152/Vertex-Simulator_qmgeh3.png",
+  shieldeye:
+    "https://res.cloudinary.com/dlejfav7z/image/upload/v1780659718/shieldeye_pxr70b.png",
+  zkMultiCloud:
+    "https://res.cloudinary.com/dlejfav7z/image/upload/v1780666318/Screenshot_2026-06-05_at_7.01.23_PM_zxo7rg.png",
+} as const;
+
 // Personal Information
 export const personalInfo = {
   name: "Chaitanya Dhamdhere",
-  title: "Full Stack Developer & Problem Solver",
+  nickname: "chaitu",
+  title: "Engineer · Builder · Freelancer · Business Operator · Explorer",
   description:
-    "Computer Engineering student at KJSCE who ships production web apps end-to-end — from React/TypeScript frontends and Node APIs to deployment on Vercel. Previously interned at Jio; core team at KJSCE CodeCell.",
+    "21-year-old Computer Engineering student from Mumbai building full-stack apps, developer tools, and practical AI — from zero to something people actually use.",
   tagline: "I design, build, and ship software that people actually use.",
 };
 
-/** Recruiter-facing credibility strip in the hero */
-export const heroStats = [
-  { value: "10+", label: "Projects shipped" },
-  { value: "3", label: "Internships & roles" },
-  { value: "500+", label: "Hackathon reach" },
-  { value: "2027", label: "Graduating" },
+/** About section — typed in about.txt; `##` sections, `>` pull quotes, `//` comments */
+export const aboutLines = [
+  "## what i ship",
+  "I build *full-stack apps*, developer tools, and practical AI —",
+  "taking ideas from zero to something people actually use.",
+  "",
+  "## outside the terminal",
+  "Outside code: my family's fruit trading business at *APMC*.",
+  "Wholesale, retail, export — *mangoes*, strawberries, real logistics.",
+  "That side taught me supply chains, margins, and trust",
+  "no tutorial could.",
+  "",
+  "## how i think",
+  "Engineering + entrepreneurship shaped how I think:",
+  "systems, leverage, and what it takes to ship in the real world.",
+  "",
+  "Also into startups, finance, and how companies get built.",
+  "> Curious by default. Allergic to the obvious answer.",
+  "Most of what I make starts as a question I couldn't drop.",
+  "",
+  "Currently building, learning, figuring it out — one project at a time.",
+  "",
+  "// always up for good conversations, good food, good business ideas and obv good mangoes.",
 ] as const;
 
 // Contact Information
@@ -34,6 +74,14 @@ export const contactInfo: ContactInfo = {
   twitterUrl: "https://twitter.com/chaitu0608",
   resumeUrl: "/ChaitanyaResume.pdf",
 };
+
+/** Recruiter-facing meta — rendered as env vars in About identity pane */
+export const aboutMeta = {
+  role: personalInfo.title,
+  location: contactInfo.location,
+  status: "open to internships & collaborations",
+  school: "KJ Somaiya College of Engineering, Mumbai · Computer Engineering",
+} as const;
 
 // Navigation Items
 export const navItems: NavItem[] = [
@@ -51,7 +99,7 @@ export const experiences: Experience[] = [
     company: "Jio Platforms Limited",
     location: "Mumbai, India",
     period: "2024",
-    logo: "/jio.png",
+    logo: cloudinaryAssets.jio,
     description:
       "My role with the Jio-Events team involved studying their webinar platform to understand enterprise UI architecture, data flow, and development lifecycles. I also contributed to frontend and interaction design for AI-driven learning games under Spectrum Jio. The internship concluded with KanbanFlow, a full-stack capstone project showcasing end-to-end application development and system design.",
     achievements: [
@@ -66,7 +114,7 @@ export const experiences: Experience[] = [
     company: "KJSCE CodeCell",
     location: "Mumbai, India",
     period: "July 2024 - Present",
-    logo: "/codecell.png",
+    logo: cloudinaryAssets.codecell,
     website: "https://kjssecodecell.com/",
     description: "Technical community at K. J. Somaiya College of Engineering focused on fostering coding culture through workshops, hackathons, and competitive programming.",
     achievements: [
@@ -106,6 +154,8 @@ export const projects: Project[] = [
     title: "ShieldEye",
     size: "hero",
     subtitle: "Advanced Threat Detection System",
+    summary:
+      "Real-time URL threat scanner that detects and visualizes 12+ attack types.",
     description:
       "Production-ready, full-stack cyberattack detection and visualization platform that identifies, analyzes, and classifies 12+ URL-based attacks in real time. Built for SIH 2025 | Team ShieldEye. Detects SQL Injection (error/union/time/blind), XSS (reflected/stored/DOM), SSRF, Directory Traversal, Command Injection, LFI/RFI, XXE, Web Shell Upload, Credential Stuffing, Brute Force, HTTP Parameter Pollution, and Typosquatting.",
     problem:
@@ -123,13 +173,15 @@ export const projects: Project[] = [
     ],
     tech: ["Full-Stack", "Real-time", "Security", "AI/ML", "Visualization"],
     type: "Web Application",
-    thumbnail: "/shieldeye.png",
+    thumbnail: cloudinaryAssets.shieldeye,
     liveUrl: "https://shieldeye.vercel.app",
   },
   {
     title: "SpendSense",
     size: "tall",
     subtitle: "Free AI Spend Audit Tool",
+    summary:
+      "No-login audit that benchmarks AI subscriptions and surfaces instant savings.",
     description:
       "Free AI tool spend audit — list your tools, plans, seats and monthly spend, get an instant shareable report with downgrades, seat fixes and savings math. Benchmarks 8 vendors (Cursor, Copilot, Claude, ChatGPT, Anthropic API, OpenAI API, Gemini, Windsurf) against public list pricing. Rule-based math, no login, under 3 minutes.",
     problem:
@@ -147,9 +199,38 @@ export const projects: Project[] = [
     liveUrl: "https://credex-intern.vercel.app/",
   },
   {
+    title: "ZkMultiCloud",
+    size: "wide",
+    subtitle: "Zero-Trust DevSecOps Multi-Cloud Platform",
+    summary:
+      "Visual platform to design and deploy secure CI/CD pipelines across AWS, Azure, and GCP.",
+    description:
+      "Web-based Zero-Trust DevSecOps platform to visually design, automate, and deploy multi-cloud CI/CD pipelines across AWS, Azure, and GCP using Terraform-based Infrastructure as Code.",
+    problem:
+      "Teams struggle to standardize secure CI/CD pipelines across multiple cloud providers without building separate tooling per environment.",
+    solution:
+      "Built a unified TypeScript platform with visual pipeline composition and Terraform-driven deployment workflows for AWS, Azure, and Google Cloud.",
+    impact: [
+      "Single workflow for multi-cloud pipeline design and delivery",
+      "Zero-Trust DevSecOps framing for safer cloud operations",
+      "Live web app deployed for portfolio demos and validation",
+    ],
+    highlights: [
+      "Visual pipeline orchestration with IaC automation",
+      "Cloud-agnostic flow covering AWS, Azure, and GCP",
+    ],
+    tech: ["TypeScript", "Terraform", "DevSecOps", "CI/CD", "AWS", "Azure", "GCP"],
+    type: "Web Application",
+    githubUrl: "https://github.com/chaitu0608/ZkMultiCloud",
+    liveUrl: "https://zk-multi-cloud-frontend.vercel.app",
+    thumbnail: cloudinaryAssets.zkMultiCloud,
+  },
+  {
     title: "TrustWipe",
     size: "wide",
     subtitle: "Secure Data Wiping System",
+    summary:
+      "NIST SP 800-88 compliant wiping engine with a cross-platform control UI.",
     description:
       "Designed a secure wiping engine implementing NIST SP 800-88 standards with overwrite, secure-erase, and crypto-erase methods. Developed a user-friendly React frontend for easy interaction and status monitoring. Built a robust Node.js backend to manage wipe requests, schedule tasks, and log activities.",
     problem:
@@ -163,7 +244,7 @@ export const projects: Project[] = [
     ],
     tech: ["C++", "Python", "Kotlin", "Swift", "Electron", "Node.js", "Express", "PostgreSQL", "MongoDB", "Firebase", "OpenSSL"],
     type: "Desktop Application",
-    thumbnail: "/trustwipe.jpg",
+    thumbnail: cloudinaryAssets.trustwipe,
     githubUrl: "https://github.com/chaitu0608/trustwipe",
     liveUrl: "https://trustwipe.vercel.app/",
   },
@@ -171,21 +252,25 @@ export const projects: Project[] = [
     title: "Tutelage",
     size: "half",
     subtitle: "Educational Social Platform",
+    summary:
+      "Mobile social app for CA, CS, and CMA students to share study materials.",
     description:
       "Full-featured educational social platform for Indian professional certification students (CA, CS, CMA). Allows users to share study materials, organize content by books and topics, build personalized learning feeds, connect with mentors, and interact via likes, comments, and bookmarks. Mobile app built with React Native + Expo, backend with Node.js/Express and MongoDB, OTP-based auth, AWS S3 storage and extensive post/topic models.",
     tech: ["React Native", "Expo", "TypeScript", "Node.js", "Express", "MongoDB", "AWS S3"],
     type: "Mobile Application",
-    thumbnail: "/tutelage.png",
+    thumbnail: cloudinaryAssets.tutelage,
   },
   {
     title: "StarQuest",
     size: "half",
     subtitle: "ETHGlobal Project",
+    summary:
+      "Hackathon Web3 app with smart contracts, wallet auth, and on-chain flows.",
     description:
       "A decentralized application built for ETHGlobal hackathon focusing on blockchain integration and smart contract development. Features include user authentication, transaction management, and real-time updates.",
     tech: ["React", "Solidity", "Web3.js", "Ethereum", "IPFS", "MetaMask"],
     type: "Web3 Application",
-    thumbnail: "/StarQuest.jpeg",
+    thumbnail: cloudinaryAssets.starQuest,
   },
   {
     title: "Padhle",
@@ -195,7 +280,7 @@ export const projects: Project[] = [
       "Role-based system with attendance tracking and course management. AJAX-powered interface with real-time updates. Secure session management and SQL injection prevention.",
     tech: ["AJAX", "PHP", "MySQL", "JavaScript", "HTML/CSS"],
     type: "Web Application",
-    thumbnail: "/padhle.png",
+    thumbnail: cloudinaryAssets.padhle,
     githubUrl: "https://github.com/chaitu0608/padhle",
     liveUrl: undefined,
   },
@@ -207,7 +292,7 @@ export const projects: Project[] = [
       "Interactive visualization tool for understanding vertex cover algorithms. Features step-by-step execution, performance metrics, and educational content for computer science students.",
     tech: ["JavaScript", "D3.js", "HTML5", "CSS3", "Algorithm Visualization"],
     type: "Web Application",
-    thumbnail: "/Vertex-Simulator.png",
+    thumbnail: cloudinaryAssets.vertexSimulator,
     githubUrl: "https://github.com/chaitu0608/vertex-cover-simulator",
     liveUrl: "https://bhoumishgrover.github.io/Vertex-Cover-Simulator/",
   },

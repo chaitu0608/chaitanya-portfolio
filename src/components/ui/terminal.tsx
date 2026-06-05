@@ -124,8 +124,8 @@ const tokenColors: Record<TokenType, string> = {
   operator: "text-red-400",
   path: "text-cyan-300",
   variable: "text-pink-400",
-  comment: "text-neutral-500",
-  default: "text-neutral-300",
+  comment: "text-zinc-500",
+  default: "text-zinc-300",
 };
 
 function SyntaxHighlightedText({ text }: { text: string }) {
@@ -150,7 +150,9 @@ interface TerminalLine {
 export interface TerminalProps {
   commands: string[];
   outputs?: Record<number, string[]>;
+  /** @deprecated Use windowTitle instead */
   username?: string;
+  windowTitle?: string;
   className?: string;
   typingSpeed?: number;
   delayBetweenCommands?: number;
@@ -163,10 +165,22 @@ export interface TerminalProps {
   contentClassName?: string;
 }
 
+function TerminalCursor({ visible }: { visible: boolean }) {
+  return (
+    <span
+      className={cn(
+        "log-terminal-cursor ml-0.5 inline-block h-4 w-2 align-middle bg-emerald-400 shadow-[0_0_8px_rgba(74,222,128,0.65)] transition-opacity duration-100",
+        !visible && "opacity-0",
+      )}
+      aria-hidden
+    />
+  );
+}
+
 export function Terminal({
   commands = ["npx shadcn@latest init"],
   outputs = {},
-  username = "Manus-Macbook",
+  windowTitle = "~/boot.sh",
   className,
   typingSpeed = 50,
   delayBetweenCommands = 800,
@@ -305,81 +319,72 @@ export function Terminal({
     }
   }, [phase, onDone]);
 
-  const prompt = (
-    <span className="text-neutral-500">
-      <span className="text-sky-500">{username}</span>
-      <span className="text-emerald-600">:</span>
-      <span className="text-sky-400">~</span>
-      <span className="text-neutral-500">$</span>{" "}
-    </span>
-  );
+  const prompt = <span className="text-emerald-400">$ </span>;
 
   return (
     <div
       ref={containerRef}
-      className={cn(
-        "mx-auto w-full max-w-xl px-4 font-mono text-xs",
-        className,
-      )}
+      className={cn("mx-auto w-full max-w-xl px-4 font-mono text-xs", className)}
     >
-      <div className="overflow-hidden rounded-lg border border-neutral-800 bg-neutral-900 shadow-2xl">
-        {/* Title Bar */}
-        <div className="flex items-center gap-2 bg-neutral-800 px-4 py-3">
-          <div className="flex items-center gap-1.5">
-            <div className="h-3 w-3 rounded-full bg-red-500 transition-colors hover:bg-red-600" />
-            <div className="h-3 w-3 rounded-full bg-yellow-500 transition-colors hover:bg-yellow-600" />
-            <div className="h-3 w-3 rounded-full bg-green-500 transition-colors hover:bg-green-600" />
+      <div className="about-dossier log-terminal overflow-hidden rounded-lg border border-zinc-800 bg-zinc-950/60 shadow-2xl">
+        <div className="flex items-center gap-3 border-b border-zinc-800 bg-zinc-900/50 px-4 py-2.5 sm:px-5">
+          <div className="flex items-center gap-1.5" aria-hidden>
+            <span className="h-2.5 w-2.5 rounded-full bg-red-500/75" />
+            <span className="h-2.5 w-2.5 rounded-full bg-amber-500/75" />
+            <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/75" />
           </div>
-          <div className="flex-1 text-center">
-            <span className="truncate text-xs text-neutral-400">
-              {username} — bash
-            </span>
-          </div>
-          <div className="w-[52px]" />
+          <span className="font-mono text-xs text-zinc-500 sm:text-sm">
+            {windowTitle}
+          </span>
         </div>
 
-        {/* Terminal Content */}
-        <div
-          ref={contentRef}
-          className={cn(
-            "no-visible-scrollbar h-80 overflow-y-auto p-4 font-mono",
-            contentClassName,
-          )}
-        >
-          {lines.map((line, i) => (
-            <div key={i} className="leading-relaxed whitespace-pre-wrap">
-              {line.type === "command" ? (
-                <span>
-                  {prompt}
-                  <SyntaxHighlightedText text={line.content} />
-                </span>
-              ) : (
-                <span className="text-neutral-400">{line.content}</span>
-              )}
-            </div>
-          ))}
+        <div className="about-terminal-body relative">
+          <div
+            className="about-terminal-scanline pointer-events-none absolute inset-0 z-[1]"
+            aria-hidden
+          />
+          <div
+            className="about-terminal-glow pointer-events-none absolute inset-0 z-[1]"
+            aria-hidden
+          />
 
-          {phase === "typing" && (
-            <div className="leading-relaxed whitespace-pre-wrap">
-              {prompt}
-              <SyntaxHighlightedText text={currentText} />
-              <span className="ml-0.5 inline-block h-4 w-2 bg-neutral-300 align-middle" />
-            </div>
-          )}
-
-          {(phase === "done" ||
-            phase === "pausing" ||
-            phase === "outputting") && (
-            <div className="leading-relaxed whitespace-pre-wrap">
-              {prompt}
-              <span
-                className={cn(
-                  "inline-block h-4 w-2 bg-neutral-300 align-middle transition-opacity duration-100",
-                  !cursorVisible && "opacity-0",
+          <div
+            ref={contentRef}
+            className={cn(
+              "no-visible-scrollbar relative z-[2] h-80 overflow-y-auto p-4 font-mono text-zinc-300",
+              contentClassName,
+            )}
+          >
+            {lines.map((line, i) => (
+              <div key={i} className="leading-relaxed whitespace-pre-wrap">
+                {line.type === "command" ? (
+                  <span>
+                    {prompt}
+                    <SyntaxHighlightedText text={line.content} />
+                  </span>
+                ) : (
+                  <span className="text-zinc-400">{line.content}</span>
                 )}
-              />
-            </div>
-          )}
+              </div>
+            ))}
+
+            {phase === "typing" && (
+              <div className="leading-relaxed whitespace-pre-wrap">
+                {prompt}
+                <SyntaxHighlightedText text={currentText} />
+                <TerminalCursor visible />
+              </div>
+            )}
+
+            {(phase === "done" ||
+              phase === "pausing" ||
+              phase === "outputting") && (
+              <div className="leading-relaxed whitespace-pre-wrap">
+                {prompt}
+                <TerminalCursor visible={cursorVisible} />
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

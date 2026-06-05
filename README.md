@@ -109,6 +109,22 @@ Place assets in `public/` (e.g. `profile-photo.png`, project thumbnails). Compon
 
 `vercel.json` is included for SPA routing.
 
+### Contact form email notifications
+
+The contact modal POSTs to `/api/contact` (Vercel serverless + [Resend](https://resend.com)). Without env vars it falls back to opening the visitor's mail app (`mailto:`), which does **not** notify you unless they actually send.
+
+In Vercel → **Settings → Environment Variables**, add (see `.env.example`):
+
+| Variable | Purpose |
+|----------|---------|
+| `RESEND_API_KEY` | Resend API key |
+| `CONTACT_TO_EMAIL` | Your inbox (e.g. `c.dhamdhere@somaiya.edu`) |
+| `CONTACT_FROM_EMAIL` | Verified sender (use `onboarding@resend.dev` until domain is verified) |
+
+Redeploy after adding variables. Test with **Send message** in the contact modal on the live site.
+
+Local API testing: run `npx vercel dev` (not plain `npm run dev`).
+
 ## Contact
 
 **Chaitanya Dhamdhere**

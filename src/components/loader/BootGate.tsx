@@ -38,7 +38,7 @@ const BootGate: React.FC<BootGateProps> = ({ onStartBoot }) => {
 
   return (
     <div
-      className="relative flex h-full min-h-0 w-full flex-col overflow-hidden bg-neutral-950"
+      className="relative flex h-full min-h-0 w-full flex-col overflow-hidden bg-[#0a0a0a]"
       aria-label={isCoarsePointer ? "Tap return to start" : "Press Enter to start"}
     >
       <BackgroundBeams className="absolute inset-0 h-full w-full opacity-40" />

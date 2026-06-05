@@ -12,8 +12,6 @@ import { LOADER_COMMANDS, LOADER_OUTPUTS } from "@/lib/loader-terminal";
 import { preloadPortfolio } from "@/lib/preload-portfolio";
 import { hideBootShell, removeBootShell } from "@/lib/boot-shell";
 import BootGate from "@/components/loader/BootGate";
-import { cn } from "@/lib/utils";
-
 const LOADER_WATCHDOG_MS = 12_000;
 const TRANSITION_MS = 720;
 
@@ -130,7 +128,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.35, ease: [0.25, 0.46, 0.45, 0.94] }}
-          className="fixed inset-0 z-[99999] flex items-center justify-center bg-neutral-950 select-none"
+          className="fixed inset-0 z-[99999] flex items-center justify-center bg-[#0a0a0a] select-none"
           style={{ isolation: "isolate", pointerEvents: "all" }}
           role="status"
           aria-live="polite"
@@ -147,12 +145,11 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
           )}
 
           <div
-            className={cn(
-              "relative z-10 flex h-full w-full flex-col items-center justify-center",
+            className={
               phase === "gate"
-                ? "max-w-none p-0"
-                : "max-w-2xl p-4 sm:p-6",
-            )}
+                ? "relative z-10 flex h-full w-full max-w-none flex-col items-center justify-center p-0"
+                : "relative z-10 flex h-full w-full max-w-2xl flex-col items-center justify-center p-4 sm:p-6"
+            }
           >
             <AnimatePresence mode="wait">
               {phase === "gate" && (
@@ -187,7 +184,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
                 >
                   {phase === "terminal" && (
                     <Terminal
-                      username="Chaitu's Macbook"
+                      windowTitle="~/boot.sh"
                       commands={LOADER_COMMANDS}
                       outputs={LOADER_OUTPUTS}
                       typingSpeed={12}
@@ -196,29 +193,38 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
                       enableSound
                       startImmediately
                       onDone={handleTerminalDone}
-                      contentClassName="h-64 sm:h-72 md:h-80 p-5 text-sm sm:text-[15px] leading-relaxed"
-                      className={cn(
-                        "w-full max-w-2xl px-0",
-                        "[&>div]:rounded-2xl [&>div]:border-2 [&>div]:border-emerald-500/35",
-                        "[&>div]:shadow-2xl [&>div]:shadow-black/50 [&>div]:ring-1 [&>div]:ring-emerald-500/15",
-                        "[&>div>div:first-child]:px-4 [&>div>div:first-child]:py-3",
-                        "[&>div>div:first-child_span]:text-sm",
-                      )}
+                      contentClassName="h-64 bg-zinc-950/40 p-5 text-sm leading-relaxed sm:h-72 sm:text-[15px] md:h-80"
+                      className="w-full max-w-2xl px-0"
                     />
                   )}
 
                   {phase === "transition" && (
                     <div
-                      className="w-full max-w-2xl rounded-2xl border-2 border-emerald-500/25 bg-neutral-900/80 p-12 text-center font-mono text-sm text-slate-500"
+                      className="about-dossier w-full max-w-2xl overflow-hidden rounded-lg border border-zinc-800 bg-zinc-950/60"
                       aria-hidden
                     >
-                      Initializing terminal…
+                      <div className="flex items-center gap-3 border-b border-zinc-800 bg-zinc-900/50 px-4 py-2.5 sm:px-5">
+                        <div className="flex items-center gap-1.5">
+                          <span className="h-2.5 w-2.5 rounded-full bg-red-500/75" />
+                          <span className="h-2.5 w-2.5 rounded-full bg-amber-500/75" />
+                          <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/75" />
+                        </div>
+                        <span className="font-mono text-xs text-zinc-500 sm:text-sm">
+                          ~/boot.sh
+                        </span>
+                      </div>
+                      <p className="px-5 py-12 text-center font-mono text-sm text-zinc-500">
+                        <span className="text-emerald-400">$</span> initializing
+                        terminal…
+                      </p>
                     </div>
                   )}
 
                   {phase === "terminal" && (
-                    <p className="font-display text-sm font-medium text-slate-500">
-                      Chaitu · Chaitanya Dhamdhere
+                    <p className="font-mono text-sm text-zinc-500">
+                      <span className="text-zinc-300">Chaitanya Dhamdhere</span>
+                      <span className="text-zinc-600"> · </span>
+                      <span className="text-zinc-500">// aka chaitu</span>
                     </p>
                   )}
                 </motion.div>

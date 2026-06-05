@@ -23,6 +23,7 @@ export default {
 				'sans': ['-apple-system', 'BlinkMacSystemFont', 'Inter', 'system-ui', 'sans-serif'],
 				'display': ['Poppins', '-apple-system', 'system-ui', 'sans-serif'],
 				'mono': ['JetBrains Mono', 'ui-monospace', 'monospace'],
+				'sketch': ['Caveat', 'Segoe Print', 'Bradley Hand', 'cursive'],
 			},
 			backgroundImage: {
 				'gradient-primary': 'var(--gradient-primary)',
