@@ -1,9 +1,11 @@
-import { scrollToTarget } from "@/lib/scroll/lenis";
-
-const NAV_OFFSET = 100;
+import {
+  SCROLL_DURATION,
+  SCROLL_OFFSET,
+  scrollToTarget,
+} from "@/lib/scroll/lenis";
 
 export const scrollToSection = (href: string) => {
-  scrollToTarget(href, { offset: NAV_OFFSET, duration: 1.2 });
+  scrollToTarget(href, { offset: SCROLL_OFFSET, duration: SCROLL_DURATION });
 };
 
 export const createIntersectionObserver = (

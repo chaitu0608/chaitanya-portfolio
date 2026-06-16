@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { useReducedMotion } from "framer-motion";
+import { scrollToSection } from "@/utils/animations";
 
-const SECTION_IDS = ["about", "work", "now", "experience", "stack", "contact"];
+const SECTION_IDS = ["about", "experience", "work", "skills", "contact"];
 
 function findActiveIndex(): number {
   const fromTop = window.scrollY + window.innerHeight * 0.3;
@@ -15,8 +16,7 @@ function findActiveIndex(): number {
 
 function scrollToIndex(i: number) {
   const clamped = Math.max(0, Math.min(SECTION_IDS.length - 1, i));
-  const el = document.getElementById(SECTION_IDS[clamped]);
-  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  scrollToSection(`#${SECTION_IDS[clamped]}`);
 }
 
 export function useVimKeys() {
@@ -44,16 +44,15 @@ export function useVimKeys() {
       if (e.key === "/") {
         e.preventDefault();
         window.dispatchEvent(new CustomEvent("open-command-palette"));
-      } else if (pendingG && ["w", "a", "e", "s", "c", "n"].includes(e.key)) {
+      } else if (pendingG && ["w", "a", "e", "s", "c"].includes(e.key)) {
         e.preventDefault();
         pendingG = false;
         const map: Record<string, string> = {
           w: "work",
           a: "about",
           e: "experience",
-          s: "stack",
+          s: "skills",
           c: "contact",
-          n: "now",
         };
         const id = map[e.key];
         const idx = SECTION_IDS.findIndex((x) => x === id);

@@ -3,10 +3,9 @@ import { useSectionSpy } from "./useSectionSpy";
 
 const SECTIONS = [
   { id: "about", label: "about" },
-  { id: "work", label: "work" },
-  { id: "now", label: "now" },
   { id: "experience", label: "experience" },
-  { id: "stack", label: "stack" },
+  { id: "work", label: "work" },
+  { id: "skills", label: "skills" },
   { id: "contact", label: "contact" },
 ] as const;
 
@@ -38,8 +37,8 @@ export function StatusBar() {
       className="pointer-events-none fixed bottom-0 left-0 right-0 z-40 hidden border-t border-zinc-900 bg-[#0a0a0a]/95 backdrop-blur-sm md:flex"
       aria-hidden
     >
-      <div className="mx-auto flex h-6 max-w-6xl items-center justify-between gap-4 px-4 font-mono text-[10px] text-zinc-500">
-        <span className="shrink-0 rounded border border-emerald-500/30 bg-emerald-500/5 px-1.5 py-px-0.5 text-emerald-400">
+      <div className="mx-auto flex h-9 max-w-6xl items-center justify-between gap-4 px-5 font-mono text-xs text-zinc-500 sm:text-sm">
+        <span className="shrink-0 rounded border border-emerald-500/35 bg-emerald-500/8 px-2 py-0.5 text-xs font-medium text-emerald-400 sm:text-sm">
           NORMAL
         </span>
         <span className="min-w-0 truncate">

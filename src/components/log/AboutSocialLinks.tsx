@@ -2,6 +2,7 @@ import { Github, Mail } from "lucide-react";
 import {
   IconBrandLinkedin,
   IconBrandWhatsapp,
+  IconBrandX,
 } from "@tabler/icons-react";
 import { contactInfo } from "@/data/portfolio";
 import { cn } from "@/lib/utils";
@@ -23,6 +24,12 @@ const LINKS = [
     href: contactInfo.linkedinUrl,
     label: "linkedin",
     icon: IconBrandLinkedin,
+  },
+  {
+    id: "twitter",
+    href: contactInfo.twitterUrl ?? "https://twitter.com/chaitu0608",
+    label: "twitter",
+    icon: IconBrandX,
   },
   {
     id: "mail",

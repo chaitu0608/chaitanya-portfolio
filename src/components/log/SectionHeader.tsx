@@ -25,7 +25,7 @@ export function SectionHeader({
   return (
     <header
       className={cn(
-        pathOnly ? "mb-6" : large ? "mb-12 md:mb-16" : "mb-10 md:mb-14",
+        pathOnly ? "mb-5 sm:mb-6" : large ? "mb-8 sm:mb-12 md:mb-16" : "mb-8 sm:mb-10 md:mb-14",
       )}
     >
       <p

@@ -36,10 +36,10 @@ function applyTheme(resolved: "light" | "dark") {
   const root = document.documentElement;
   root.classList.toggle("dark", resolved === "dark");
   root.style.colorScheme = resolved;
-  const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) {
-    meta.setAttribute("content", resolved === "dark" ? "#0a0a0a" : "#f5f5f7");
-  }
+  const color = resolved === "dark" ? "#0a0a0a" : "#f5f5f7";
+  document
+    .querySelectorAll('meta[name="theme-color"]')
+    .forEach((meta) => meta.setAttribute("content", color));
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
@@ -106,5 +106,5 @@ export function useTheme() {
 
 /** Inline script for index.html — prevents theme flash on load. */
 export function getInitialThemeScript(): string {
-  return `(function(){try{var k='${STORAGE_KEY}';var s=localStorage.getItem(k);var d=s==='dark'||(s!=='light'&&(s==='system'?matchMedia('(prefers-color-scheme: dark)').matches:s!=='light'));if(s===undefined||s===null)d=true;document.documentElement.classList.toggle('dark',d);document.documentElement.style.colorScheme=d?'dark':'light';}catch(e){document.documentElement.classList.add('dark');}})();`;
+  return `(function(){try{var k='${STORAGE_KEY}';var s=localStorage.getItem(k);var d;if(s==='light')d=false;else if(s==='dark')d=true;else if(s==='system')d=matchMedia('(prefers-color-scheme: dark)').matches;else d=true;document.documentElement.classList.toggle('dark',d);document.documentElement.style.colorScheme=d?'dark':'light';}catch(e){document.documentElement.classList.add('dark');}})();`;
 }

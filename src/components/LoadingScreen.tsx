@@ -193,7 +193,7 @@ const LoadingScreen: React.FC<LoadingScreenProps> = ({
                       enableSound
                       startImmediately
                       onDone={handleTerminalDone}
-                      contentClassName="h-64 bg-zinc-950/40 p-5 text-sm leading-relaxed sm:h-72 sm:text-[15px] md:h-80"
+                      contentClassName="min-h-[11rem] max-h-[42dvh] bg-zinc-950/40 p-4 text-sm leading-relaxed sm:min-h-0 sm:max-h-none sm:h-72 sm:p-5 sm:text-[15px] md:h-80"
                       className="w-full max-w-2xl px-0"
                     />
                   )}

@@ -34,9 +34,10 @@ export function MusicPill() {
   return (
     <div
       className={cn(
-        "music-showcase fixed right-4 z-50 pb-safe",
-        "bottom-4 md:bottom-10",
-        expanded ? "w-[min(calc(100vw-2rem),420px)]" : "w-auto",
+        "music-showcase fixed z-50",
+        expanded
+          ? "inset-x-3 bottom-safe w-auto sm:inset-x-auto sm:right-4 sm:w-[min(calc(100dvw-2rem),420px)]"
+          : "bottom-safe right-3 w-auto sm:right-4",
       )}
     >
       <motion.button

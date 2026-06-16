@@ -350,6 +350,7 @@ export function Terminal({
 
           <div
             ref={contentRef}
+            data-lenis-prevent
             className={cn(
               "no-visible-scrollbar relative z-[2] h-80 overflow-y-auto p-4 font-mono text-zinc-300",
               contentClassName,

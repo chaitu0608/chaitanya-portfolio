@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type CSSProperties } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { PolaroidMedia } from "@/components/log/PolaroidMedia";
 import {
@@ -53,6 +53,9 @@ export function PolaroidFrame({
     () => getCachedAspect(src) ?? DEFAULT_ASPECT,
   );
   const [rootPx, setRootPx] = useState(16);
+  const [viewportWidth, setViewportWidth] = useState(
+    () => (typeof window !== "undefined" ? window.innerWidth : 1024),
+  );
   const imageAnim = reduced ? imageMotion.reduced : imageMotion.full;
 
   useEffect(() => {
@@ -66,6 +69,7 @@ export function PolaroidFrame({
       setRootPx(
         parseFloat(getComputedStyle(document.documentElement).fontSize) || 16,
       );
+      setViewportWidth(window.innerWidth);
     };
     update();
     window.addEventListener("resize", update);
@@ -73,9 +77,21 @@ export function PolaroidFrame({
   }, []);
 
   const clamped = clampAspect(aspect);
+  const frameOpts = useMemo(() => {
+    if (viewportWidth < 400) {
+      return { maxWidthRem: 15, maxHeightRem: 20, minWidthRem: 8.5 };
+    }
+    if (viewportWidth < 640) {
+      return { maxWidthRem: 17, maxHeightRem: 22, minWidthRem: 9.5 };
+    }
+    if (viewportWidth < 1024) {
+      return { maxWidthRem: 20, maxHeightRem: 26, minWidthRem: 11 };
+    }
+    return undefined;
+  }, [viewportWidth]);
   const frame = useMemo(
-    () => computePolaroidFrameSize(clamped, rootPx),
-    [clamped, rootPx],
+    () => computePolaroidFrameSize(clamped, rootPx, frameOpts),
+    [clamped, rootPx, frameOpts],
   );
 
   useEffect(() => {
@@ -93,13 +109,15 @@ export function PolaroidFrame({
     <motion.div
       layout={!reduced}
       className={cn("polaroid-window relative mx-auto overflow-hidden", className)}
-      style={{
-        width: frame.width,
-        height: frame.height,
-        maxWidth: "100%",
-        "--polaroid-w": `${frame.width}px`,
-        "--polaroid-h": `${frame.height}px`,
-      }}
+      style={
+        {
+          width: frame.width,
+          height: frame.height,
+          maxWidth: "100%",
+          "--polaroid-w": `${frame.width}px`,
+          "--polaroid-h": `${frame.height}px`,
+        } as CSSProperties
+      }
       transition={{ duration: reduced ? 0 : 0.28, ease: [0.25, 0.46, 0.45, 0.94] }}
     >
       <AnimatePresence mode="wait">

@@ -40,16 +40,16 @@ const SIZE_STYLES: Record<
   medium: {
     maxW: "max-w-full sm:max-w-[300px]",
     viewport: "aspect-[16/10] w-full",
-    chrome: "h-4 px-1.5 text-[7px]",
+    chrome: "h-5 px-2 text-[10px]",
     dots: "h-1.5 w-1.5",
-    label: "text-[7px]",
+    label: "text-[10px]",
   },
   compact: {
     maxW: "max-w-full sm:max-w-[220px]",
     viewport: "aspect-[16/10] w-full",
-    chrome: "h-4 px-1.5 text-[7px]",
-    dots: "h-1 w-1",
-    label: "text-[6px]",
+    chrome: "h-5 px-2 text-[10px]",
+    dots: "h-1.5 w-1.5",
+    label: "text-[10px]",
   },
 };
 
@@ -151,6 +151,7 @@ export function LivePreview({
       <div
         role={hasLive ? "button" : undefined}
         tabIndex={hasLive ? 0 : undefined}
+        aria-label={hasLive ? `Open live site: ${title}` : undefined}
         onClick={openLive}
         onKeyDown={(e) => {
           if (hasLive && (e.key === "Enter" || e.key === " ")) {
@@ -251,23 +252,25 @@ export function LivePreview({
                 }}
                 loading="lazy"
                 referrerPolicy="no-referrer"
-                sandbox="allow-scripts allow-same-origin"
+                sandbox="allow-scripts"
                 onLoad={() => setIframeReady(true)}
               />
             </>
           )}
 
           {hasLive && (
-            <a
-              href={liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
               className="absolute inset-0 flex items-center justify-center gap-1 bg-black/75 font-mono text-xs text-emerald-400/90 opacity-0 transition-opacity [@media(hover:none)]:opacity-100 sm:hidden"
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.stopPropagation();
+                openLive();
+              }}
+              aria-label={`Open live site: ${title}`}
             >
-              <ExternalLink className="h-3 w-3" />
+              <ExternalLink className="h-3 w-3" aria-hidden />
               open live
-            </a>
+            </button>
           )}
         </div>
       </div>

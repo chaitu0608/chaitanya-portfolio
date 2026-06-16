@@ -62,7 +62,7 @@ export function AboutNameReveal({ className, onComplete }: AboutNameRevealProps)
         {showPromptCursor && <span className="about-name-cursor" aria-hidden />}
       </p>
 
-      <h1 className="about-name-title font-mono text-2xl font-semibold tracking-tighter sm:text-3xl md:text-4xl lg:text-5xl">
+      <h1 className="about-name-title font-mono text-[1.65rem] font-semibold leading-tight tracking-tight sm:text-3xl sm:tracking-tighter md:text-4xl lg:text-5xl">
         <span
           className={cn(
             "about-name-display relative inline-flex flex-wrap items-baseline gap-x-[0.55em] sm:gap-x-[0.65em]",

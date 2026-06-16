@@ -11,7 +11,19 @@
   }
 
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto;
+  }
+
+  html.lenis {
+    height: auto;
+  }
+
+  html.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  html.lenis body {
+    height: auto;
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -158,6 +170,28 @@
     @apply inline-flex items-center rounded border border-zinc-800 bg-zinc-900/40 px-2 py-0.5 text-xs text-zinc-300 transition-colors hover:border-zinc-600 hover:text-zinc-100;
   }
 
+  .skills-marquee {
+    animation: skills-marquee 42s linear infinite;
+  }
+
+  .skills-marquee-reverse {
+    animation: skills-marquee-reverse 48s linear infinite;
+  }
+
+  .skills-marquee-row:hover .skills-marquee,
+  .skills-marquee-row:hover .skills-marquee-reverse {
+    animation-play-state: paused;
+  }
+
+  .skill-pill {
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .skill-pill:hover {
+    border-color: rgb(63 63 70);
+    background-color: rgb(24 24 27 / 0.7);
+  }
+
   /* Mono link with green underline on hover */
   .log-link {
     @apply text-zinc-200 transition-colors hover:text-emerald-400;
@@ -171,12 +205,12 @@
 
   /* Section anchor offset for sticky nav + status bar */
   .log-section {
-    scroll-margin-top: 4rem;
+    scroll-margin-top: 5rem;
   }
 
   @media (min-width: 768px) {
     .log-section {
-      scroll-margin-bottom: 2rem;
+      scroll-margin-bottom: 2.5rem;
     }
   }
 
@@ -209,8 +243,17 @@
 
   /* About dossier shell + boot terminal */
   .about-dossier,
+  .log-dossier,
   .log-terminal {
     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.02);
+  }
+
+  .log-prose {
+    @apply max-w-3xl font-mono text-sm leading-relaxed text-zinc-400;
+  }
+
+  .log-prose-meta {
+    @apply font-mono text-xs text-zinc-500 sm:text-sm;
   }
 
   .log-terminal-cursor {
@@ -254,14 +297,30 @@
 
   .about-name-title {
     position: relative;
-    overflow: visible;
+    overflow: hidden;
     margin: 0.1rem 0 0;
     padding-bottom: 0.2rem;
   }
 
+  @media (min-width: 640px) {
+    .about-name-title {
+      overflow: visible;
+    }
+  }
+
   .about-name-display {
+    position: relative;
     z-index: 1;
     line-height: 1.15;
+    transition:
+      border-color 0.45s ease,
+      padding-left 0.45s ease;
+  }
+
+  .about-name-display--settled {
+    padding-left: 0.65rem;
+    border-left: 2px solid rgba(74, 222, 128, 0.55);
+    box-shadow: -8px 0 24px -12px rgba(74, 222, 128, 0.35);
   }
 
   .about-name-display--settled .about-name-first {
@@ -273,104 +332,33 @@
     z-index: 0;
     font-weight: 700;
     color: #fafafa;
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.12);
-  }
-
-  /* Chaitanya — upper white highlight, lower green */
-  .about-name-first::before {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    left: -0.1em;
-    right: -0.12em;
-    top: 0.06em;
-    height: 50%;
-    border-radius: 2px 2px 0 0;
-    background: linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.3) 0%,
-      rgba(255, 255, 255, 0.18) 55%,
-      rgba(255, 255, 255, 0.1) 100%
-    );
-  }
-
-  .about-name-first::after {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    left: -0.1em;
-    right: -0.12em;
-    bottom: 0.04em;
-    height: 50%;
-    border-radius: 0 0 2px 2px;
-    background: linear-gradient(
-      90deg,
-      rgba(74, 222, 128, 0.34) 0%,
-      rgba(74, 222, 128, 0.2) 55%,
-      rgba(74, 222, 128, 0.12) 100%
-    );
   }
 
   .about-name-last {
     position: relative;
     z-index: 0;
     font-weight: 700;
-    color: #4ade80;
-    text-shadow:
-      0 0 24px rgba(74, 222, 128, 0.22),
-      0 0 48px rgba(74, 222, 128, 0.08);
-  }
-
-  /* Dhamdhere — upper green highlight, lower white (yin-yang) */
-  .about-name-last::before {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    left: -0.1em;
-    right: -0.12em;
-    top: 0.06em;
-    height: 50%;
-    border-radius: 2px 2px 0 0;
-    background: linear-gradient(
-      90deg,
-      rgba(74, 222, 128, 0.34) 0%,
-      rgba(74, 222, 128, 0.2) 55%,
-      rgba(74, 222, 128, 0.12) 100%
-    );
-  }
-
-  .about-name-last::after {
-    content: "";
-    position: absolute;
-    z-index: -1;
-    left: -0.1em;
-    right: -0.12em;
-    bottom: 0.04em;
-    height: 50%;
-    border-radius: 0 0 2px 2px;
-    background: linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.3) 0%,
-      rgba(255, 255, 255, 0.18) 55%,
-      rgba(255, 255, 255, 0.1) 100%
-    );
+    background: linear-gradient(120deg, #6ee7b7 0%, #4ade80 45%, #34d399 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 18px rgba(74, 222, 128, 0.28));
   }
 
   .about-name-scanline {
     position: absolute;
     left: 0;
     right: 0;
-    bottom: -0.2rem;
-    height: 2px;
+    bottom: -0.35rem;
+    height: 1px;
     transform-origin: left center;
     border-radius: 999px;
     background: linear-gradient(
       90deg,
-      rgba(251, 191, 36, 0.85) 0%,
-      rgba(74, 222, 128, 0.75) 55%,
+      rgba(74, 222, 128, 0.9) 0%,
+      rgba(74, 222, 128, 0.35) 42%,
       transparent 100%
     );
-    box-shadow: 0 0 10px rgba(74, 222, 128, 0.35);
   }
 
   .about-name-cursor {
@@ -717,7 +705,11 @@
 
 /* Safe-area padding for fixed bottom UI (iOS home indicator) */
 .pb-safe {
-  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-bottom: max(0.75rem, env(safe-area-inset-bottom, 0px));
+}
+
+.bottom-safe {
+  bottom: max(1rem, env(safe-area-inset-bottom, 0px));
 }
 
 /* Apple Music mini player */
@@ -732,4 +724,29 @@
   background: rgba(20, 20, 20, 0.6);
   backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+@keyframes skills-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes skills-marquee-reverse {
+  from {
+    transform: translateX(-50%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skills-marquee,
+  .skills-marquee-reverse {
+    animation: none;
+  }
 }

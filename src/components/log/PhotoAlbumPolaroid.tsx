@@ -39,7 +39,7 @@ export function PhotoAlbumPolaroid({
       ref={ref}
       className={cn(
         "relative z-30 mx-auto w-full overflow-visible",
-        embedded ? "max-w-[28rem]" : "max-w-[32rem]",
+        embedded ? "max-w-full sm:max-w-[28rem]" : "max-w-full sm:max-w-[32rem]",
         className,
       )}
       style={
@@ -59,8 +59,8 @@ export function PhotoAlbumPolaroid({
             : "min-h-[22rem] px-3 pb-2 pt-8 sm:px-5 sm:pb-3 sm:pt-10 lg:px-6 lg:pt-9",
         )}
       >
-        <div className="relative z-30 mx-auto w-fit max-w-full overflow-visible">
-          <PolaroidSketches compact={embedded} />
+        <div className="relative z-30 mx-auto w-fit max-w-full overflow-hidden sm:overflow-visible">
+          <PolaroidSketches compact={embedded} className="max-sm:hidden" />
           <PhotoCard
             className="relative z-10"
             variant="featured"
@@ -68,6 +68,9 @@ export function PhotoAlbumPolaroid({
             onFrameSizeChange={handleFrameChange}
             onStepChange={onStepChange}
           />
+          <p className="mt-3 text-center font-mono text-[11px] text-zinc-500 sm:hidden">
+            tap photo to browse
+          </p>
         </div>
       </div>
     </div>

@@ -46,12 +46,6 @@ export interface Project {
   highlights?: string[];
 }
 
-export interface TechCategory {
-  category: string;
-  skills: string[];
-  color: string;
-}
-
 export interface ContactInfo {
   email: string;
   phone: string;
@@ -60,9 +54,4 @@ export interface ContactInfo {
   linkedinUrl: string;
   twitterUrl?: string;
   resumeUrl?: string;
-}
-
-export interface NavItem {
-  label: string;
-  href: string;
 }

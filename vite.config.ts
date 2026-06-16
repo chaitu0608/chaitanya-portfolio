@@ -6,7 +6,7 @@ import path from "path";
 export default defineConfig({
   assetsInclude: ["**/*.pdf"],
   server: {
-    host: "::",
+    host: "localhost",
     port: 8000,
   },
   plugins: [react()],
@@ -18,10 +18,20 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ["react", "react-dom", "react-router-dom"],
-          motion: ["framer-motion"],
-          lenis: ["lenis"],
+        manualChunks(id) {
+          if (!id.includes("node_modules")) return;
+
+          if (
+            id.includes("react-dom") ||
+            id.includes("react-router") ||
+            id.includes("/react/")
+          ) {
+            return "vendor";
+          }
+          if (id.includes("framer-motion")) return "motion";
+          if (id.includes("lenis")) return "lenis";
+          if (id.includes("@tabler/icons-react")) return "icons";
+          if (id.includes("penflow") || id.includes("typr")) return "penflow";
         },
       },
     },

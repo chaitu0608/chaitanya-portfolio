@@ -1,7 +1,14 @@
 import Lenis from "lenis";
 
+/** Fixed nav clearance — keep in sync with `.log-section { scroll-margin-top }` */
+export const SCROLL_OFFSET = 80;
+
+/** Silky deceleration for section jumps */
+export const SCROLL_EASING = (t: number) => 1 - Math.pow(1 - t, 4);
+
+export const SCROLL_DURATION = 1.35;
+
 let lenisInstance: Lenis | null = null;
-let rafId: number | null = null;
 
 export function getLenis(): Lenis | null {
   return lenisInstance;
@@ -15,34 +22,41 @@ export function initLenis(): Lenis | null {
 
   if (lenisInstance) return lenisInstance;
 
-  const isMobile = window.matchMedia("(max-width: 768px)").matches;
+  const coarse = window.matchMedia("(pointer: coarse)").matches;
 
   const lenis = new Lenis({
-    duration: 1.0,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    autoRaf: true,
+    lerp: coarse ? 0.11 : 0.085,
+    duration: SCROLL_DURATION,
+    easing: SCROLL_EASING,
     smoothWheel: true,
-    touchMultiplier: isMobile ? 0.9 : 1.1,
+    wheelMultiplier: coarse ? 0.85 : 0.9,
+    touchMultiplier: 1,
+    syncTouch: coarse,
+    syncTouchLerp: 0.09,
+    autoResize: true,
+    anchors: {
+      offset: -SCROLL_OFFSET,
+      duration: SCROLL_DURATION,
+      easing: SCROLL_EASING,
+    },
+    prevent: (node) =>
+      Boolean(
+        node.closest(
+          "[data-lenis-prevent], [data-lenis-prevent-wheel], .no-visible-scrollbar, [cmdk-list], [role='dialog']",
+        ),
+      ),
   });
 
   lenis.on("scroll", () => {
     window.dispatchEvent(new Event("lenis-scroll"));
   });
 
-  const raf = (time: number) => {
-    lenis.raf(time);
-    rafId = requestAnimationFrame(raf);
-  };
-  rafId = requestAnimationFrame(raf);
-
   lenisInstance = lenis;
   return lenis;
 }
 
 export function destroyLenis(): void {
-  if (rafId !== null) {
-    cancelAnimationFrame(rafId);
-    rafId = null;
-  }
   if (!lenisInstance) return;
   lenisInstance.destroy();
   lenisInstance = null;
@@ -50,28 +64,43 @@ export function destroyLenis(): void {
 
 export function scrollToTarget(
   target: string | HTMLElement | number,
-  options?: { offset?: number; duration?: number }
+  options?: { offset?: number; duration?: number },
 ): void {
-  const offset = options?.offset ?? 100;
-  const duration = options?.duration ?? 1.2;
-
-  let top: number;
-  if (typeof target === "number") {
-    top = target;
-  } else {
-    const el =
-      typeof target === "string"
-        ? (document.querySelector(target) as HTMLElement | null)
-        : target;
-    if (!el) return;
-    top = el.getBoundingClientRect().top + window.scrollY - offset;
-  }
+  const offset = options?.offset ?? SCROLL_OFFSET;
+  const duration = options?.duration ?? SCROLL_DURATION;
 
   const lenis = getLenis();
-  if (lenis) {
-    lenis.scrollTo(top, { duration, force: true });
+
+  if (typeof target === "number") {
+    if (lenis) {
+      lenis.scrollTo(target, {
+        duration,
+        easing: SCROLL_EASING,
+        force: true,
+      });
+      return;
+    }
+    window.scrollTo({ top: target, behavior: "smooth" });
     return;
   }
 
+  const el =
+    typeof target === "string"
+      ? (document.querySelector(target) as HTMLElement | null)
+      : target;
+
+  if (!el) return;
+
+  if (lenis) {
+    lenis.scrollTo(el, {
+      offset: -offset,
+      duration,
+      easing: SCROLL_EASING,
+      force: true,
+    });
+    return;
+  }
+
+  const top = el.getBoundingClientRect().top + window.scrollY - offset;
   window.scrollTo({ top, behavior: "smooth" });
 }

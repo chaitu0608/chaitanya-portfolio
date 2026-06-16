@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -101,7 +102,9 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
       setError(data.error ?? "could not send — try again or email directly");
       setStep("form");
     } catch {
-      openMailto(name, email, message);
+      setError("network error — try again or email directly");
+      setStep("form");
+      toast.error("could not reach the server");
     }
   };
 
@@ -121,7 +124,12 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
     "log-focus w-full rounded border border-zinc-800 bg-zinc-950 px-3 py-2 font-mono text-sm text-zinc-100 placeholder:text-zinc-600 focus:border-emerald-500/50 focus:ring-1 focus:ring-emerald-500/30";
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) handleClose();
+      }}
+    >
       <DialogContent
         hideClose
         className="max-w-lg gap-0 overflow-hidden border-zinc-800 bg-[#0a0a0a] p-0 font-mono text-zinc-100"
@@ -134,8 +142,11 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
                 <span className="h-2.5 w-2.5 rounded-full bg-amber-500/80" />
                 <span className="h-2.5 w-2.5 rounded-full bg-emerald-500/80" />
               </span>
-              <span className="ml-2 text-zinc-500">~/mail · new message</span>
+              <span className="ml-2 text-zinc-500">~/mail/connect.sh · compose</span>
             </DialogTitle>
+            <DialogDescription className="sr-only">
+              Send a message to Chaitanya Dhamdhere
+            </DialogDescription>
           </DialogHeader>
           <button
             type="button"
@@ -186,6 +197,7 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
                     className={inputClass}
                     disabled={step === "sending"}
                     autoComplete="name"
+                    maxLength={120}
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -205,6 +217,7 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
                     className={inputClass}
                     disabled={step === "sending"}
                     autoComplete="email"
+                    maxLength={254}
                   />
                 </div>
                 <div className="space-y-1.5">
@@ -223,11 +236,15 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
                     rows={6}
                     className={`${inputClass} resize-none`}
                     disabled={step === "sending"}
+                    maxLength={5000}
                   />
                 </div>
 
                 {error && (
-                  <div className="flex items-center gap-2 rounded border border-red-500/30 bg-red-500/10 p-3">
+                  <div
+                    role="alert"
+                    className="flex items-center gap-2 rounded border border-red-500/30 bg-red-500/10 p-3"
+                  >
                     <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />
                     <span className="text-sm text-red-400">{error}</span>
                   </div>

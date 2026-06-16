@@ -1,14 +1,14 @@
 import { useState, useCallback, useEffect, lazy, Suspense } from "react";
-import { Toaster } from "@/components/ui/toaster";
 import { ThemeSonner } from "@/components/ThemeSonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import ErrorBoundary from "./components/ErrorBoundary";
+import { useLenisScroll } from "@/hooks/useLenisScroll";
+import { cn } from "@/lib/utils";
 
 const Index = lazy(() => import("./pages/Index"));
 const NotFound = lazy(() => import("./pages/NotFound"));
-import ErrorBoundary from "./components/ErrorBoundary";
-import LoadingScreen from "./components/LoadingScreen";
-import { cn } from "@/lib/utils";
+const LoadingScreen = lazy(() => import("./components/LoadingScreen"));
 
 const App = () => {
   const [bootStarted, setBootStarted] = useState(false);
@@ -21,6 +21,8 @@ const App = () => {
   const handleLoaderComplete = useCallback(() => {
     setAppReady(true);
   }, []);
+
+  useLenisScroll(appReady);
 
   useEffect(() => {
     if (appReady) {
@@ -39,11 +41,13 @@ const App = () => {
   return (
     <ErrorBoundary>
       {!appReady && (
-        <LoadingScreen
-          onBootStart={handleBootStart}
-          onComplete={handleLoaderComplete}
-          minDuration={600}
-        />
+        <Suspense fallback={null}>
+          <LoadingScreen
+            onBootStart={handleBootStart}
+            onComplete={handleLoaderComplete}
+            minDuration={600}
+          />
+        </Suspense>
       )}
       {bootStarted && (
         <div
@@ -54,7 +58,6 @@ const App = () => {
           aria-hidden={!appReady}
         >
           <TooltipProvider>
-            <Toaster />
             <ThemeSonner />
             <Suspense fallback={null}>
               <BrowserRouter>

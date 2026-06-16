@@ -2,14 +2,12 @@ import {
   Experience,
   Education,
   Project,
-  TechCategory,
   ContactInfo,
-  NavItem,
 } from "@/types";
 
 /** Cloudinary-hosted static assets (migrated from public/) */
 export const cloudinaryAssets = {
-  og: "https://res.cloudinary.com/dlejfav7z/image/upload/v1780658985/og_s8bgi5.png",
+  og: "https://www.cdhamdhere.xyz/og.png",
   jio: "https://res.cloudinary.com/dlejfav7z/image/upload/v1780658902/jio_w3g71c.png",
   codecell:
     "https://res.cloudinary.com/dlejfav7z/image/upload/v1780658847/codecell_vipmzf.png",
@@ -27,6 +25,14 @@ export const cloudinaryAssets = {
     "https://res.cloudinary.com/dlejfav7z/image/upload/v1780659718/shieldeye_pxr70b.png",
   zkMultiCloud:
     "https://res.cloudinary.com/dlejfav7z/image/upload/v1780666318/Screenshot_2026-06-05_at_7.01.23_PM_zxo7rg.png",
+} as const;
+
+/** Circular profile logo — sourced from PHOTOS[0] ("this is me") */
+export const brandAssets = {
+  avatar: "/avatar.png",
+  favicon: "/favicon.png",
+  avatarCloudinary:
+    "https://res.cloudinary.com/dlejfav7z/image/upload/f_auto,q_auto,w_180,h_180,c_fill,r_max/v1780516051/WhatsApp_Image_2026-06-04_at_01.09.30_ambcsl.jpg",
 } as const;
 
 // Personal Information
@@ -83,15 +89,6 @@ export const aboutMeta = {
   school: "KJ Somaiya College of Engineering, Mumbai · Computer Engineering",
 } as const;
 
-// Navigation Items
-export const navItems: NavItem[] = [
-  { label: "About", href: "#about" },
-  { label: "Projects", href: "#projects" },
-  { label: "Experience", href: "#experience" },
-  { label: "Skills", href: "#skills" },
-  { label: "Contact", href: "#contact" },
-];
-
 // Experience Data
 export const experiences: Experience[] = [
   {
@@ -101,13 +98,12 @@ export const experiences: Experience[] = [
     period: "2024",
     logo: cloudinaryAssets.jio,
     description:
-      "My role with the Jio-Events team involved studying their webinar platform to understand enterprise UI architecture, data flow, and development lifecycles. I also contributed to frontend and interaction design for AI-driven learning games under Spectrum Jio. The internship concluded with KanbanFlow, a full-stack capstone project showcasing end-to-end application development and system design.",
+      "Interned with Jio-Events and Spectrum Jio — enterprise platforms, AI learning games, and a full-stack capstone.",
     achievements: [
-      "Studied Jio-Events webinar platform to understand enterprise UI architecture, data flow, and development lifecycles.",
-      "Contributed to frontend and interaction design for AI-driven learning games under Spectrum Jio.",
-      "Built KanbanFlow as a full-stack capstone project, showcasing end-to-end application development and system design.",
+      "Studied the Jio-Events webinar platform — UI architecture, data flow, and dev lifecycles.",
+      "Designed frontend interactions for AI-driven learning games under Spectrum Jio.",
+      "Shipped KanbanFlow as an end-to-end capstone project.",
     ],
-    tech: ["React", "TypeScript", "Node.js", "UI/UX", "Full-stack"],
   },
   {
     title: "Core Team Member",
@@ -116,10 +112,11 @@ export const experiences: Experience[] = [
     period: "July 2024 - Present",
     logo: cloudinaryAssets.codecell,
     website: "https://kjssecodecell.com/",
-    description: "Technical community at K. J. Somaiya College of Engineering focused on fostering coding culture through workshops, hackathons, and competitive programming.",
+    description:
+      "Core team at KJSCE's technical community — workshops, hackathons, and competitive programming.",
     achievements: [
-      "Delivered high-impact tech sessions to 200+ attendees on Competitive Programming, Development, and Web3, improving engagement and technical proficiency by designing beginner-friendly workshops and interactive contests.",
-      "Led the organization of national-level hackathons (KJSCE DEVOPIA, KJSCE HACK 8) with 500+ participants and 10K+ online reach by managing cross-functional teams, streamlining operations, and executing strategic marketing campaigns, ensuring maximum outreach and seamless execution.",
+      "Ran tech sessions for 200+ students across CP, dev, and Web3.",
+      "Co-led national hackathons (DEVOPIA, HACK 8) — 500+ participants, 10K+ reach.",
     ],
   },
   {
@@ -127,11 +124,12 @@ export const experiences: Experience[] = [
     company: "Fresh@Home",
     location: "Mumbai, India",
     period: "2023-24",
-    logo: "🏪",
+    logo: "",
+    description:
+      "Family fruit trading business at APMC — wholesale, retail, and export. Real logistics, margins, and supply chains outside the terminal.",
     achievements: [
-      "Spearheaded inventory and procurement strategies, significantly reducing wastage and maximizing profitability across both wholesale and retail segments",
-      "Analyzed sales trends and seasonal demand to guide data-driven purchasing decisions and maintain optimal stock levels",
-      "Sourced high-quality domestic and imported fruits while improving packaging to enhance shelf life and presentation",
+      "Managed inventory and procurement across wholesale and retail — cut wastage, improved margins.",
+      "Used sales trends and seasonal demand to guide stock and sourcing decisions.",
     ],
   },
 ];
@@ -328,75 +326,3 @@ export const projects: Project[] = [
   },
 ];
 
-// Tech Stack Data
-export const techCategories: TechCategory[] = [
-  {
-    category: "Languages",
-    skills: [
-      "C++",
-      "Python",
-      "C",
-      "Java",
-      "HTML",
-      "CSS",
-      "JavaScript",
-      "TypeScript",
-      "SQL",
-      "PHP",
-      "R",
-    ],
-    color: "bg-gradient-primary",
-  },
-  {
-    category: "Web Development",
-    skills: [
-      "React.js",
-      "Next.js",
-      "Node.js",
-      "Express.js",
-      "Web3.js",
-      "Ethers.js",
-      "Solidity",
-      "Tailwind CSS",
-      "Bootstrap",
-      "FastAPI",
-    ],
-    color: "bg-gradient-secondary",
-  },
-  {
-    category: "Cloud / Databases",
-    skills: [
-      "MongoDB",
-      "PostgreSQL",
-      "MySQL",
-      "Firebase",
-      "Supabase",
-      "Vercel",
-      "Cloudflare",
-      "Microsoft Azure",
-    ],
-    color: "bg-gradient-accent",
-  },
-  {
-    category: "Tools",
-    skills: ["Git", "GitHub", "Docker", "Arduino", "Notion"],
-    color: "bg-gradient-primary",
-  },
-  {
-    category: "Data Science & AI",
-    skills: ["NumPy", "pandas", "OpenCV", "Matplotlib", "Jupyter Notebook"],
-    color: "bg-gradient-secondary",
-  },
-  {
-    category: "Soft Skills",
-    skills: [
-      "Adaptability",
-      "Leadership",
-      "Team Collaboration",
-      "Problem Solving",
-      "Quick Learning",
-      "Presentation",
-    ],
-    color: "bg-gradient-accent",
-  },
-];

@@ -1,8 +1,24 @@
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Home } from "lucide-react";
 
 const NotFound = () => {
+  useEffect(() => {
+    const prevTitle = document.title;
+    document.title = "404 | Chaitanya Dhamdhere";
+
+    const meta = document.createElement("meta");
+    meta.name = "robots";
+    meta.content = "noindex, nofollow";
+    document.head.appendChild(meta);
+
+    return () => {
+      document.title = prevTitle;
+      document.head.removeChild(meta);
+    };
+  }, []);
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-background px-4 text-center">
       <p className="font-mono text-xs uppercase tracking-[0.28em] text-accent/80">

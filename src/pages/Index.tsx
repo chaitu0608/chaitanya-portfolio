@@ -41,12 +41,13 @@ const Index = () => {
 
       {/* SEO sr-only */}
       <div className="sr-only">
-        <h1>Chaitanya Dhamdhere — Full Stack Developer Portfolio</h1>
+        <h1>Chaitanya Dhamdhere — Engineer · Builder · Student</h1>
         <p>
-          Chaitanya Dhamdhere is a Full Stack Developer and Computer
-          Engineering student at K. J. Somaiya College of Engineering, Mumbai.
-          Skills include React, TypeScript, Node.js, Next.js, MongoDB, and
-          PostgreSQL. Experience at Jio Platforms and KJSCE CodeCell.
+          Chaitanya Dhamdhere is a Computer Engineering student at K. J. Somaiya
+          College of Engineering, Mumbai, building full-stack apps, developer
+          tools, and practical AI. Skills include React, TypeScript, Node.js,
+          Next.js, MongoDB, and PostgreSQL. Experience at Jio Platforms, KJSCE
+          CodeCell, and Fresh@Home.
         </p>
       </div>
 

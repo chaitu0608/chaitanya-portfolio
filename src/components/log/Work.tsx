@@ -1,10 +1,9 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, Github, ChevronRight } from "lucide-react";
-import { projects } from "@/data/portfolio";
+import { ExternalLink, Github } from "lucide-react";
+import { contactInfo, projects } from "@/data/portfolio";
 import type { Project } from "@/types";
 import { cn } from "@/lib/utils";
 import { SectionHeader } from "./SectionHeader";
+import { LogDossierShell, LogPaneChrome, LogTag } from "./LogDossier";
 import { LivePreview } from "./LivePreview";
 
 const FLAGSHIP = [
@@ -16,20 +15,7 @@ const FLAGSHIP = [
   "StarQuest",
 ];
 
-/** 2-column bento: full-width hero rows + paired half tiles */
-const BENTO_LAYOUT: Record<
-  string,
-  { span: string; maxTags: number }
-> = {
-  SpendSense: { span: "md:col-span-2", maxTags: 5 },
-  ShieldEye: { span: "md:col-span-1", maxTags: 3 },
-  ZkMultiCloud: { span: "md:col-span-1", maxTags: 3 },
-  TrustWipe: { span: "md:col-span-2", maxTags: 5 },
-  Tutelage: { span: "md:col-span-1", maxTags: 3 },
-  StarQuest: { span: "md:col-span-1", maxTags: 3 },
-};
-
-const DEFAULT_BENTO = { span: "md:col-span-1", maxTags: 3 };
+const MAX_TAGS = 6;
 
 function isLive(p: Project) {
   return Boolean(p.liveUrl);
@@ -41,109 +27,63 @@ function projectSummary(project: Project): string {
   return project.description.split(".")[0] + ".";
 }
 
+function projectSlug(title: string): string {
+  return title.replace(/\s+/g, "").toLowerCase();
+}
+
 export function Work() {
   const flagship = FLAGSHIP.map((title) =>
     projects.find((p) => p.title === title),
   ).filter((p): p is Project => p !== undefined);
-  const older = projects.filter((p) => !FLAGSHIP.includes(p.title));
-  const [showOlder, setShowOlder] = useState(false);
+  const githubReposUrl = `${contactInfo.githubUrl}?tab=repositories`;
 
   return (
     <section
       id="work"
-      className="log-section border-t border-zinc-900 px-4 py-16 sm:px-6 sm:py-24"
+      className="log-section border-t border-zinc-900 px-4 py-12 sm:px-6 sm:py-24"
     >
-      <div className="mx-auto max-w-4xl">
-        <SectionHeader
-          index="02_work"
-          path="./selected_projects"
-          title="selected work"
-        />
-        <div className="-mt-6 mb-8 space-y-2 md:mb-10">
-          <p className="font-mono text-xs uppercase tracking-[0.18em] text-emerald-400">
-            SELECTED PROJECTS.
-          </p>
-          <p className="max-w-2xl font-mono text-sm text-zinc-400">
-            Projects I have worked on end-to-end.
-          </p>
-          <p className="font-mono text-xs text-zinc-500">
-            {flagship.length} flagship · {older.length} archived
-          </p>
-        </div>
+      <div className="mx-auto w-full max-w-6xl">
+        <SectionHeader index="03_work" path="./projects" pathOnly />
 
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:items-stretch">
-          {flagship.map((project) => (
-            <ProjectCard key={project.title} project={project} />
-          ))}
-        </div>
+        <LogDossierShell windowPath="~/projects/">
+          <div className="border-b border-zinc-800 bg-zinc-900/20">
+            <LogPaneChrome path="~/projects/readme.md" />
+            <div className="space-y-2 p-5 sm:p-6 lg:p-8">
+              <p className="font-mono text-xs uppercase tracking-[0.14em] text-emerald-400">
+                selected projects
+              </p>
+              <p className="log-prose">
+                Projects I have worked on end-to-end — from idea to something people
+                can use.
+              </p>
+            </div>
+          </div>
 
-        <div className="mt-8">
-          <button
-            type="button"
-            onClick={() => setShowOlder((s) => !s)}
-            className="log-focus flex items-center gap-2 rounded font-mono text-sm text-zinc-400 transition-colors hover:text-emerald-400"
-          >
-            <ChevronRight
-              className={cn(
-                "h-4 w-4 transition-transform",
-                showOlder && "rotate-90",
-              )}
-            />
-            {showOlder ? "hide" : "show"} {older.length} older project
-            {older.length === 1 ? "" : "s"}
-          </button>
+          <div className="border-b border-zinc-800">
+            <LogPaneChrome path="~/projects/flagship/" />
+            <div className="flex flex-col gap-4 p-5 sm:p-6 lg:p-8">
+              {flagship.map((project) => (
+                <ProjectCard key={project.title} project={project} />
+              ))}
+            </div>
+          </div>
 
-          <AnimatePresence initial={false}>
-            {showOlder && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }}
-                animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="overflow-hidden"
+          <div className="bg-zinc-900/20">
+            <LogPaneChrome path="~/projects/archive.txt" />
+            <div className="p-5 sm:p-6 lg:p-8">
+              <a
+                href={githubReposUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="log-focus inline-flex items-center gap-2.5 font-mono text-base text-emerald-400/90 transition-colors hover:text-emerald-300 sm:text-lg"
               >
-                <div className="mt-4 space-y-2 border border-zinc-800 bg-zinc-950/40 p-4">
-                  {older.map((p) => (
-                    <div
-                      key={p.title}
-                      className="flex flex-wrap items-baseline gap-x-3 gap-y-1 border-b border-dashed border-zinc-900 pb-2 font-mono text-sm last:border-b-0 last:pb-0"
-                    >
-                      <span className="text-zinc-100">{p.title}</span>
-                      <span className="text-zinc-600">·</span>
-                      <span className="text-zinc-500">{p.type}</span>
-                      <span className="text-zinc-600">·</span>
-                      <span className="text-xs text-zinc-500">
-                        {p.tech.slice(0, 3).join(" · ")}
-                      </span>
-                      <span className="ml-auto flex gap-3">
-                        {p.githubUrl && (
-                          <a
-                            href={p.githubUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-xs text-zinc-400 hover:text-emerald-400"
-                          >
-                            repo ↗
-                          </a>
-                        )}
-                        {p.liveUrl && (
-                          <a
-                            href={p.liveUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-xs text-zinc-400 hover:text-emerald-400"
-                          >
-                            live ↗
-                          </a>
-                        )}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
+                <Github className="h-5 w-5 sm:h-6 sm:w-6" />
+                show more projects on github
+                <ExternalLink className="h-4 w-4 opacity-70 sm:h-5 sm:w-5" />
+              </a>
+            </div>
+          </div>
+        </LogDossierShell>
       </div>
     </section>
   );
@@ -151,88 +91,24 @@ export function Work() {
 
 function ProjectCard({ project }: { project: Project }) {
   const live = isLive(project);
-  const bento = BENTO_LAYOUT[project.title] ?? DEFAULT_BENTO;
-  const fullWidth = bento.span.includes("col-span-2");
+  const slug = projectSlug(project.title);
 
   return (
-    <article
-      className={cn(
-        "group flex h-full min-w-0 flex-col overflow-hidden rounded-lg border border-zinc-800 bg-gradient-to-b from-zinc-950/70 to-zinc-950/30 transition-all duration-200 hover:border-emerald-500/35",
-        bento.span,
-      )}
-    >
-      <div className="flex h-full flex-col p-3 sm:p-4">
-        <div className="flex items-start gap-2">
-          <span
-            className={cn(
-              "mt-1 inline-block h-1.5 w-1.5 shrink-0 rounded-full",
-              live
-                ? "bg-emerald-500 shadow-[0_0_6px_rgba(74,222,128,0.45)]"
-                : "border border-zinc-500",
-            )}
-            aria-hidden
-          />
-          <div className="min-w-0 flex-1">
-            <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-              <h3 className="break-words font-mono text-sm font-semibold leading-snug text-zinc-100">
-                {project.title}
-              </h3>
-              <span
-                className={cn(
-                  "rounded border px-1.5 py-px font-mono text-[9px] uppercase tracking-wider",
-                  live
-                    ? "border-emerald-500/40 text-emerald-400"
-                    : "border-zinc-700 text-zinc-400",
-                )}
-              >
-                {live ? "live" : "wip"}
-              </span>
-            </div>
-            <p className="mt-0.5 font-mono text-[11px] text-zinc-500">
-              {project.subtitle}
-            </p>
-          </div>
-        </div>
-
-        <LivePreview
-          liveUrl={project.liveUrl}
-          thumbnail={project.thumbnail}
-          title={project.title}
-          size={fullWidth ? "medium" : "compact"}
-          className="mt-2.5 w-full"
-        />
-
-        <p
-          className={cn(
-            "mt-2.5 font-mono text-[11px] leading-snug text-zinc-400",
-            fullWidth ? "line-clamp-2" : "line-clamp-3",
-          )}
-        >
-          {projectSummary(project)}
+    <article className="group overflow-hidden rounded-lg border border-zinc-800 bg-zinc-900/20 transition-colors duration-200 hover:border-emerald-500/35 hover:bg-zinc-900/30">
+      <div className="flex flex-col gap-2 border-b border-zinc-800/80 bg-zinc-950/40 px-4 py-2.5 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-5">
+        <p className="min-w-0 truncate font-mono text-[10px] text-zinc-600 sm:text-xs">
+          ~/projects/{slug}.md
         </p>
-
-        <div className="mt-2 flex flex-wrap gap-1 font-mono text-[10px]">
-          {project.tech.slice(0, bento.maxTags).map((t) => (
-            <span key={t} className="log-chip">
-              {t.toLowerCase()}
-            </span>
-          ))}
-          {project.tech.length > bento.maxTags && (
-            <span className="text-zinc-500">
-              +{project.tech.length - bento.maxTags}
-            </span>
-          )}
-        </div>
-
-        <div className="mt-auto flex flex-wrap gap-2 pt-3">
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
           {project.liveUrl && (
             <a
               href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="log-focus inline-flex items-center gap-1 rounded border border-zinc-700 px-2.5 py-1 font-mono text-xs text-zinc-300 transition-colors hover:border-emerald-500/40 hover:text-emerald-400"
+              className="log-focus inline-flex items-center gap-1.5 rounded border border-emerald-500/45 bg-emerald-500/10 px-2.5 py-1 font-mono text-xs font-medium text-emerald-400 transition-colors hover:border-emerald-400/60 hover:bg-emerald-500/15 hover:text-emerald-300"
             >
-              <ExternalLink className="h-3 w-3" /> live
+              <ExternalLink className="h-3 w-3" />
+              live
             </a>
           )}
           {project.githubUrl && (
@@ -240,11 +116,73 @@ function ProjectCard({ project }: { project: Project }) {
               href={project.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="log-focus inline-flex items-center gap-1 rounded border border-zinc-700 px-2.5 py-1 font-mono text-xs text-zinc-300 transition-colors hover:border-emerald-500/40 hover:text-emerald-400"
+              className="log-focus inline-flex items-center gap-1.5 rounded border border-zinc-700 px-2.5 py-1 font-mono text-xs text-zinc-400 transition-colors hover:border-zinc-500 hover:text-zinc-200"
             >
-              <Github className="h-3 w-3" /> repo
+              <Github className="h-3 w-3" />
+              repo
             </a>
           )}
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 p-4 sm:gap-5 sm:p-5 lg:grid-cols-2 lg:items-start lg:gap-6">
+        <div className="flex min-w-0 flex-col">
+          <div className="flex items-start gap-2">
+            <span
+              className={cn(
+                "mt-1.5 inline-block h-1.5 w-1.5 shrink-0 rounded-full",
+                live
+                  ? "bg-emerald-500 shadow-[0_0_6px_rgba(74,222,128,0.45)]"
+                  : "border border-zinc-500",
+              )}
+              aria-hidden
+            />
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                <h3 className="break-words font-mono text-base font-semibold leading-snug text-zinc-100 sm:text-lg">
+                  {project.title}
+                </h3>
+                <span
+                  className={cn(
+                    "rounded border px-1.5 py-px font-mono text-[10px] uppercase tracking-wider",
+                    live
+                      ? "border-emerald-500/40 text-emerald-400"
+                      : "border-zinc-700 text-zinc-400",
+                  )}
+                >
+                  {live ? "live" : "wip"}
+                </span>
+              </div>
+              <p className="mt-1 font-mono text-xs text-zinc-500 sm:text-sm">
+                {project.subtitle}
+              </p>
+            </div>
+          </div>
+
+          <p className="mt-3 font-mono text-sm leading-relaxed text-zinc-400">
+            {projectSummary(project)}
+          </p>
+
+          <div className="mt-3 flex flex-wrap gap-2">
+            {project.tech.slice(0, MAX_TAGS).map((t) => (
+              <LogTag key={t}>{t.toLowerCase()}</LogTag>
+            ))}
+            {project.tech.length > MAX_TAGS && (
+              <span className="font-mono text-xs text-zinc-500">
+                +{project.tech.length - MAX_TAGS}
+              </span>
+            )}
+          </div>
+        </div>
+
+        <div className="flex min-w-0 items-start lg:justify-end">
+          <LivePreview
+            liveUrl={project.liveUrl}
+            thumbnail={project.thumbnail}
+            title={project.title}
+            size="large"
+            className="w-full lg:max-w-[340px]"
+          />
         </div>
       </div>
     </article>

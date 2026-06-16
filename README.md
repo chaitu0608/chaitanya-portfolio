@@ -1,134 +1,88 @@
 # Chaitanya Dhamdhere — Portfolio
 
-A modern single-page portfolio built with React, TypeScript, Vite, and Tailwind CSS. Features glassmorphism UI, Framer Motion animations, Lenis smooth scrolling, and a bento-style projects grid.
+Terminal-inspired engineer log portfolio built with React, Vite, TypeScript, and Tailwind CSS.
 
-**Live:** [cdhamdhere.xyz](https://www.cdhamdhere.xyz/)
+**Live:** [cdhamdhere.xyz](https://www.cdhamdhere.xyz)
 
-## Features
+## Sections
 
-- **Sections:** About (hero), Projects, Experience, Skills, Contact
-- **UI:** Dark theme, glass panels, section marquees, scroll progress rails
-- **Interactions:** Contact modal (mailto), photo album, floating dock navigation
-- **Performance:** Lazy-loaded sections, optimized fonts, local skill icons
-- **Content:** Centralized in `src/data/portfolio.ts`
+- **About** — identity dossier, typewriter bio, polaroid photos
+- **Experience** — roles + education
+- **Projects** — flagship work with live previews
+- **Skills** — logo marquee by category
+- **Contact** — email, socials, message form
 
-## Tech Stack
+## Tech stack
 
-| Layer | Tools |
-|-------|--------|
-| Framework | React 19, TypeScript |
-| Build | Vite 5, SWC |
-| Styling | Tailwind CSS 3, shadcn/ui (Radix) |
-| Animation | Framer Motion |
-| Scroll | Lenis |
-| Deploy | Vercel |
+- React 19 + Vite 5 + TypeScript
+- Tailwind CSS + Framer Motion
+- React Router (SPA)
+- Vercel Analytics
+- Vercel serverless `/api/contact` + Resend
 
-## Getting Started
-
-### Prerequisites
-
-- Node.js 18+
-- npm
-
-### Install & run
-
-```bash
-git clone <repository-url>
-cd chaitu-portfolio
-npm install
-npm run dev
-```
-
-Open [http://localhost:8000](http://localhost:8000) (port configured in `vite.config.ts`).
-
-### Scripts
-
-| Command | Description |
-|---------|-------------|
-| `npm run dev` | Start dev server |
-| `npm run build` | Production build → `dist/` |
-| `npm run preview` | Preview production build |
-| `npm run lint` | Run ESLint |
-
-## Project Structure
+## Project structure
 
 ```
 src/
-├── components/       # Page sections + UI
-│   ├── About.tsx
-│   ├── Projects.tsx
-│   ├── Experience.tsx
-│   ├── Skills.tsx
-│   ├── Contact.tsx
-│   ├── Navigation.tsx
-│   ├── Footer.tsx
-│   ├── LoadingScreen.tsx
+├── components/
+│   ├── log/          # Main sections (About, Work, Experience, Skills, Contact, LogNav, …)
+│   ├── loader/       # Boot gate + pen signature
+│   ├── ui/           # shadcn-style primitives
 │   ├── ContactModal.tsx
-│   ├── PhotoAlbum.tsx
-│   └── ui/           # shadcn primitives
-├── context/          # ScrollProvider (Lenis)
+│   └── CommandPalette.tsx
 ├── data/
-│   └── portfolio.ts  # All content (projects, experience, skills, contact)
-├── hooks/
-├── lib/              # Utils, scroll, resume href, image fallbacks
+│   ├── portfolio.ts  # Personal info, experience, projects
+│   ├── skills.ts     # Skill categories
+│   └── photos.ts     # Polaroid album
+├── lib/
+│   └── resume.ts     # Resume URL helpers
 ├── pages/
-│   ├── Index.tsx     # Main page
+│   ├── Index.tsx
 │   └── NotFound.tsx
-├── App.tsx
-├── main.tsx
-└── index.css         # Design tokens & global styles
+api/
+└── contact.ts        # Resend email handler
 public/
-├── og.png
-├── ChaitanyaResume.pdf
-├── robots.txt
-└── sitemap.xml
+└── ChaitanyaResume.pdf
 ```
 
-## Content Management
+## Local development
 
-Edit **`src/data/portfolio.ts`** for:
+```bash
+npm install --legacy-peer-deps
+npm run dev          # http://localhost:8000
+npm run build
+npm run typecheck
+npm run lint
+```
 
-- `personalInfo` — name, title, description
-- `contactInfo` — email, phone, social links, resume path
-- `projects` — bento grid (use `size`: hero | tall | wide | half | third)
-- `experiences` — roles and achievements
-- `techCategories` — skills grouped by category
-- `navItems` — section navigation
+**Contact API locally:** `npx vercel dev` (plain `npm run dev` does not serve `/api/contact`).
 
-### Adding images
+## Deployment (Vercel)
 
-Place assets in `public/` (e.g. `profile-photo.png`, project thumbnails). Components use graceful fallbacks (initials / placeholders) when files are missing.
+1. Connect repo to Vercel
+2. Build: `npm run build` · Output: `dist`
+3. [`vercel.json`](vercel.json) includes SPA rewrites and security headers
 
-## Deployment
+### Contact form env vars
 
-### Vercel (recommended)
-
-1. Connect the GitHub repo to Vercel
-2. Build command: `npm run build`
-3. Output directory: `dist`
-
-`vercel.json` is included for SPA routing.
-
-### Contact form email notifications
-
-The contact modal POSTs to `/api/contact` (Vercel serverless + [Resend](https://resend.com)). Without env vars it falls back to opening the visitor's mail app (`mailto:`), which does **not** notify you unless they actually send.
-
-In Vercel → **Settings → Environment Variables**, add (see `.env.example`):
+Add in Vercel → Settings → Environment Variables (see [`.env.example`](.env.example)):
 
 | Variable | Purpose |
 |----------|---------|
 | `RESEND_API_KEY` | Resend API key |
-| `CONTACT_TO_EMAIL` | Your inbox (e.g. `c.dhamdhere@somaiya.edu`) |
-| `CONTACT_FROM_EMAIL` | Verified sender (use `onboarding@resend.dev` until domain is verified) |
+| `CONTACT_TO_EMAIL` | Your inbox |
+| `CONTACT_FROM_EMAIL` | Verified sender |
 
-Redeploy after adding variables. Test with **Send message** in the contact modal on the live site.
+Redeploy after adding variables. Test **Send a message** on the live site.
 
-Local API testing: run `npx vercel dev` (not plain `npm run dev`).
+## Keyboard shortcuts
 
-## Contact
+| Key | Action |
+|-----|--------|
+| `⌘K` / `/` | Command palette |
+| `j` / `k` | Next / prev section |
+| `g` then `a/w/e/s/c` | Jump to about / work / experience / skills / contact |
 
-**Chaitanya Dhamdhere**
+## License
 
-- Email: c.dhamdhere@somaiya.edu
-- GitHub: [@chaitu0608](https://github.com/chaitu0608)
-- LinkedIn: [chaitanya-dhamdhere](https://www.linkedin.com/in/chaitanya-dhamdhere/)
+Private — © Chaitanya Dhamdhere

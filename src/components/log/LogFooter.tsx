@@ -21,7 +21,7 @@ export function LogFooter() {
   }, []);
 
   return (
-    <footer className="border-t border-zinc-900 px-6 py-10 pb-6 font-mono text-sm md:pb-4">
+    <footer className="border-t border-zinc-900 px-4 py-10 pb-28 font-mono text-sm sm:px-6 md:py-8 md:pb-3">
       <div className="mx-auto max-w-6xl">
         <button
           type="button"
@@ -32,7 +32,7 @@ export function LogFooter() {
           <p className="text-emerald-400 transition-colors hover:text-emerald-300">
             $ fortune
           </p>
-          <blockquote className="mt-2 max-w-2xl pl-4">
+          <blockquote className="mt-2 max-w-2xl pl-2 pr-16 sm:pl-4 sm:pr-0">
             <AnimatePresence mode="wait">
               <motion.div
                 key={fortune.quote}
@@ -55,7 +55,7 @@ export function LogFooter() {
           <kbd className="rounded border border-zinc-800 bg-zinc-900/60 px-1 py-px text-zinc-500">
             ⌘K
           </kbd>{" "}
-          to jump · use g+w g+n g+e
+          to jump · use g+w g+s g+e
         </p>
 
         <div className="mt-8 log-divider" />

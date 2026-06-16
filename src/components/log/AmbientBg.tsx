@@ -10,10 +10,9 @@ const HALO_OPACITY_MULT = 0.12;
 
 const SECTION_IDS = [
   "about",
-  "work",
-  "now",
   "experience",
-  "stack",
+  "work",
+  "skills",
   "contact",
 ] as const;
 
@@ -21,10 +20,9 @@ const SECTION_TINTS: Record<string, string> = {
   about:
     "radial-gradient(ellipse 90% 70% at 20% 15%, rgba(74, 222, 128, 0.08) 0%, transparent 55%), radial-gradient(ellipse 80% 60% at 75% 20%, rgba(161, 161, 170, 0.07) 0%, transparent 50%), radial-gradient(ellipse 60% 50% at 30% 80%, rgba(251, 191, 36, 0.04) 0%, transparent 45%)",
   work: "radial-gradient(ellipse 85% 65% at 80% 30%, rgba(96, 165, 250, 0.06) 0%, transparent 50%), radial-gradient(ellipse 70% 55% at 15% 70%, rgba(113, 113, 122, 0.05) 0%, transparent 45%)",
-  now: "radial-gradient(ellipse 75% 60% at 50% 40%, rgba(45, 212, 191, 0.07) 0%, transparent 55%)",
   experience:
     "radial-gradient(ellipse 80% 65% at 25% 50%, rgba(251, 191, 36, 0.06) 0%, transparent 50%), radial-gradient(ellipse 60% 45% at 85% 80%, rgba(113, 113, 122, 0.05) 0%, transparent 40%)",
-  stack:
+  skills:
     "radial-gradient(ellipse 70% 55% at 60% 30%, rgba(161, 161, 170, 0.06) 0%, transparent 50%)",
   contact:
     "radial-gradient(ellipse 85% 70% at 50% 60%, rgba(74, 222, 128, 0.09) 0%, transparent 55%)",

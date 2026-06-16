@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Menu, ExternalLink } from "lucide-react";
 import { contactInfo, personalInfo } from "@/data/portfolio";
+import { getResumePath, RESUME_DOWNLOAD_NAME } from "@/lib/resume";
 import { scrollToSection } from "@/utils/animations";
 import {
   Sheet,
@@ -16,19 +17,17 @@ import { SiteLogo } from "./SiteLogo";
 
 const NAV_LINKS = [
   { label: "about", href: "#about" },
-  { label: "work", href: "#work" },
-  { label: "now", href: "#now" },
   { label: "experience", href: "#experience" },
-  { label: "stack", href: "#stack" },
+  { label: "work", href: "#work" },
+  { label: "skills", href: "#skills" },
   { label: "contact", href: "#contact" },
 ] as const;
 
 const SECTION_IDS = [
   "about",
-  "work",
-  "now",
   "experience",
-  "stack",
+  "work",
+  "skills",
   "contact",
 ] as const;
 
@@ -43,7 +42,11 @@ export function LogNav() {
     };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    window.addEventListener("lenis-scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("lenis-scroll", onScroll);
+    };
   }, []);
 
   const go = (href: string) => {
@@ -93,9 +96,12 @@ export function LogNav() {
             const isActive = active === id;
             return (
               <li key={link.href}>
-                <button
-                  type="button"
-                  onClick={() => go(link.href)}
+                <a
+                  href={link.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    go(link.href);
+                  }}
                   className={navLinkClass(id)}
                 >
                   {link.label}
@@ -105,7 +111,7 @@ export function LogNav() {
                       className="mt-0.5 block h-px w-full bg-emerald-400"
                     />
                   )}
-                </button>
+                </a>
               </li>
             );
           })}
@@ -120,7 +126,8 @@ export function LogNav() {
           </kbd>
 
           <a
-            href={contactInfo.resumeUrl ?? "/ChaitanyaResume.pdf"}
+            href={getResumePath()}
+            download={RESUME_DOWNLOAD_NAME}
             target="_blank"
             rel="noopener noreferrer"
             className="log-focus hidden items-center gap-1.5 rounded border border-emerald-500/40 px-3 py-1.5 font-mono text-xs text-emerald-400 transition-colors hover:bg-emerald-500/10 hover:text-emerald-300 sm:inline-flex"
@@ -145,7 +152,7 @@ export function LogNav() {
               className="border-zinc-800 bg-[#0a0a0a] text-zinc-100"
             >
               <SheetHeader>
-                <SheetTitle className="font-mono text-emerald-400">
+                <SheetTitle className="break-all font-mono text-sm text-emerald-400 sm:text-base">
                   ~/chaitanya_dhamdhere
                 </SheetTitle>
               </SheetHeader>
@@ -155,22 +162,26 @@ export function LogNav() {
                   const isActive = active === id;
                   return (
                     <li key={link.href}>
-                      <button
-                        type="button"
-                        onClick={() => go(link.href)}
+                      <a
+                        href={link.href}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          go(link.href);
+                        }}
                         className={navLinkClass(id, true)}
                       >
                         {link.label}
                         {isActive && (
                           <span className="mt-1 block h-px w-8 bg-emerald-400" />
                         )}
-                      </button>
+                      </a>
                     </li>
                   );
                 })}
                 <li>
                   <a
-                    href={contactInfo.resumeUrl ?? "/ChaitanyaResume.pdf"}
+                    href={getResumePath()}
+                    download={RESUME_DOWNLOAD_NAME}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="log-focus mt-4 inline-flex items-center gap-1.5 rounded border border-emerald-500/40 px-3 py-1.5 text-sm text-emerald-400"
