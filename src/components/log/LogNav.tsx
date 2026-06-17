@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Menu, ExternalLink } from "lucide-react";
 import { contactInfo, personalInfo } from "@/data/portfolio";
-import { getResumePath, RESUME_DOWNLOAD_NAME } from "@/lib/resume";
+import { getResumePath } from "@/lib/resume";
 import { scrollToSection } from "@/utils/animations";
 import {
   Sheet,
@@ -127,12 +127,9 @@ export function LogNav() {
 
           <a
             href={getResumePath()}
-            download={RESUME_DOWNLOAD_NAME}
-            target="_blank"
-            rel="noopener noreferrer"
             className="log-focus hidden items-center gap-1.5 rounded border border-emerald-500/40 px-3 py-1.5 font-mono text-xs text-emerald-400 transition-colors hover:bg-emerald-500/10 hover:text-emerald-300 sm:inline-flex"
           >
-            [ resume.pdf
+            [ resume
             <ExternalLink className="h-3 w-3" />
             ]
           </a>
@@ -181,12 +178,9 @@ export function LogNav() {
                 <li>
                   <a
                     href={getResumePath()}
-                    download={RESUME_DOWNLOAD_NAME}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className="log-focus mt-4 inline-flex items-center gap-1.5 rounded border border-emerald-500/40 px-3 py-1.5 text-sm text-emerald-400"
                   >
-                    [ resume.pdf
+                    [ resume
                     <ExternalLink className="h-3 w-3" />
                     ]
                   </a>

@@ -146,12 +146,12 @@ export function CommandPalette({ onContactClick }: CommandPaletteProps) {
             className="mt-2 px-2 py-1.5 text-[10px] uppercase tracking-wider text-zinc-500"
           >
             <Command.Item
-              value="resume download"
+              value="resume view"
               onSelect={openResume}
               className="flex cursor-pointer items-center gap-3 rounded px-3 py-2 text-sm text-zinc-300 aria-selected:bg-emerald-500/10 aria-selected:text-emerald-400"
             >
               <Download className="h-4 w-4 shrink-0 opacity-70" />
-              download resume
+              view resume
             </Command.Item>
             <Command.Item
               value="github"

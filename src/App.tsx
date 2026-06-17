@@ -8,9 +8,35 @@ import { cn } from "@/lib/utils";
 
 const Index = lazy(() => import("./pages/Index"));
 const NotFound = lazy(() => import("./pages/NotFound"));
+const Resume = lazy(() => import("./pages/Resume"));
+const Meet = lazy(() => import("./pages/Meet"));
 const LoadingScreen = lazy(() => import("./components/LoadingScreen"));
 
+const UTILITY_ROUTES = new Set(["/resume", "/meet"]);
+
+function isUtilityRoute(): boolean {
+  if (typeof window === "undefined") return false;
+  return UTILITY_ROUTES.has(window.location.pathname);
+}
+
+function UtilityRoutes() {
+  return (
+    <ErrorBoundary>
+      <Suspense fallback={null}>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/resume" element={<Resume />} />
+            <Route path="/meet" element={<Meet />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </Suspense>
+    </ErrorBoundary>
+  );
+}
+
 const App = () => {
+  const [utilityRoute] = useState(isUtilityRoute);
   const [bootStarted, setBootStarted] = useState(false);
   const [appReady, setAppReady] = useState(false);
 
@@ -22,21 +48,27 @@ const App = () => {
     setAppReady(true);
   }, []);
 
-  useLenisScroll(appReady);
+  useLenisScroll(appReady && !utilityRoute);
 
   useEffect(() => {
-    if (appReady) {
+    if (utilityRoute || appReady) {
       document.body.style.overflow = "";
       document.body.classList.remove("boot-loading");
-    } else {
-      document.body.style.overflow = "hidden";
-      document.body.classList.add("boot-loading");
+      return;
     }
+
+    document.body.style.overflow = "hidden";
+    document.body.classList.add("boot-loading");
+
     return () => {
       document.body.style.overflow = "";
       document.body.classList.remove("boot-loading");
     };
-  }, [appReady]);
+  }, [appReady, utilityRoute]);
+
+  if (utilityRoute) {
+    return <UtilityRoutes />;
+  }
 
   return (
     <ErrorBoundary>

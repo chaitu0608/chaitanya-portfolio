@@ -53,5 +53,12 @@ export interface ContactInfo {
   githubUrl: string;
   linkedinUrl: string;
   twitterUrl?: string;
+  /** In-browser viewer route, e.g. /resume */
   resumeUrl?: string;
+  /** Direct PDF download path */
+  resumeDownloadUrl?: string;
+  /** Google Drive share link for embedded resume viewer */
+  resumeDriveUrl?: string;
+  /** Google Meet link for /meet redirect */
+  meetUrl: string;
 }

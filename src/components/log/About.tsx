@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { Download, Github } from "lucide-react";
+import { FileText, Github } from "lucide-react";
 import { contactInfo, personalInfo } from "@/data/portfolio";
-import { getResumePath, RESUME_DOWNLOAD_NAME } from "@/lib/resume";
+import { getResumePath } from "@/lib/resume";
 import { AboutNameReveal } from "./AboutNameReveal";
 import { AboutMetaStrip } from "./AboutMetaStrip";
 import { AboutTypewriter } from "./AboutTypewriter";
@@ -56,13 +56,10 @@ export function About() {
               <div className="flex shrink-0 flex-col gap-3 sm:flex-row lg:pt-1">
                 <a
                   href={getResumePath()}
-                  download={RESUME_DOWNLOAD_NAME}
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="log-focus inline-flex w-full items-center justify-center gap-2 rounded border border-emerald-500/40 bg-emerald-500/5 px-4 py-2 font-mono text-sm text-emerald-400 transition-colors hover:bg-emerald-500/10 hover:text-emerald-300 sm:w-auto"
                 >
-                  <Download className="h-4 w-4" />
-                  [ download resume ]
+                  <FileText className="h-4 w-4" />
+                  [ view resume ]
                 </a>
                 <a
                   href={contactInfo.githubUrl}

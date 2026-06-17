@@ -78,7 +78,9 @@ export const contactInfo: ContactInfo = {
   githubUrl: "https://github.com/chaitu0608",
   linkedinUrl: "https://www.linkedin.com/in/chaitanya-dhamdhere/",
   twitterUrl: "https://twitter.com/chaitu0608",
-  resumeUrl: "/ChaitanyaResume.pdf",
+  resumeUrl: "/resume",
+  resumeDownloadUrl: "/ChaitanyaResume.pdf",
+  meetUrl: "https://meet.google.com/lookup/c.dhamdhere@somaiya.edu",
 };
 
 /** Recruiter-facing meta — rendered as env vars in About identity pane */
