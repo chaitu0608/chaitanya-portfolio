@@ -10,6 +10,7 @@ import {
 } from "./LogDossier";
 
 function experiencePanePath(company: string): string {
+  if (company.includes("RxGPT")) return "~/experience/rxgpt.md";
   if (company.includes("Jio")) return "~/experience/jio.md";
   if (company.includes("CodeCell")) return "~/experience/codecell.md";
   if (company.includes("Fresh")) return "~/experience/fresh@home.md";
@@ -27,11 +28,29 @@ function companyInitials(company: string): string {
     .toUpperCase();
 }
 
-function CompanyLogo({ logo, company }: { logo: string; company: string }) {
+const LOGO_FRAME =
+  "relative shrink-0 overflow-hidden rounded-xl border border-zinc-700/80 bg-zinc-900 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.04)]";
+
+const LOGO_SIZE = "h-20 w-20 sm:h-24 sm:w-24 lg:h-28 lg:w-28";
+
+function CompanyLogo({
+  logo,
+  company,
+  logoFit = "cover",
+  logoBg = "dark",
+}: {
+  logo: string;
+  company: string;
+  logoFit?: "cover" | "contain";
+  logoBg?: "dark" | "light";
+}) {
+  const bgClass = logoBg === "light" ? "bg-white" : "bg-zinc-950";
+  const fitClass = logoFit === "contain" ? "object-contain p-1.5" : "object-cover object-center";
+
   if (!logo) {
     return (
       <span
-        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-zinc-800 bg-zinc-900/80 font-mono text-xs font-medium text-zinc-400 sm:h-12 sm:w-12"
+        className={`${LOGO_FRAME} ${LOGO_SIZE} flex items-center justify-center font-mono text-sm font-medium text-zinc-400`}
         aria-hidden
       >
         {companyInitials(company)}
@@ -39,12 +58,12 @@ function CompanyLogo({ logo, company }: { logo: string; company: string }) {
     );
   }
 
-  const isEmoji = !logo.startsWith("http");
+  const isEmoji = !logo.startsWith("http") && !logo.startsWith("/");
 
   if (isEmoji) {
     return (
       <span
-        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-zinc-800 bg-zinc-900/80 text-xl sm:h-12 sm:w-12"
+        className={`${LOGO_FRAME} ${LOGO_SIZE} flex items-center justify-center text-3xl sm:text-4xl`}
         aria-hidden
       >
         {logo}
@@ -53,12 +72,14 @@ function CompanyLogo({ logo, company }: { logo: string; company: string }) {
   }
 
   return (
-    <div className="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-md border border-zinc-800 bg-white p-1.5 sm:h-12 sm:w-12">
+    <div className={`${LOGO_FRAME} ${LOGO_SIZE} ${bgClass}`}>
       <img
         src={logo}
         alt={`${company} logo`}
-        className="h-full w-full object-contain"
+        className={`block h-full w-full ${fitClass}`}
         loading="lazy"
+        decoding="async"
+        draggable={false}
       />
     </div>
   );
@@ -83,12 +104,17 @@ function ExperienceCard({
     >
       <LogPaneChrome path={experiencePanePath(exp.company)} />
 
-      <div className="flex flex-1 flex-col gap-5 p-5 sm:p-6 lg:p-8">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-5">
-          <CompanyLogo logo={exp.logo} company={exp.company} />
+      <div className="flex flex-1 flex-col gap-6 p-5 sm:p-7 lg:p-8">
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-7 lg:gap-8">
+          <CompanyLogo
+            logo={exp.logo}
+            company={exp.company}
+            logoFit={exp.logoFit}
+            logoBg={exp.logoBg}
+          />
 
-          <div className="min-w-0 flex-1 space-y-2">
-            <h3 className="font-mono text-base font-semibold text-zinc-100 sm:text-lg">
+          <div className="min-w-0 flex-1 space-y-2.5 sm:pt-1">
+            <h3 className="font-mono text-lg font-semibold leading-snug text-zinc-50 sm:text-xl">
               {exp.title}
             </h3>
             {exp.website ? (
@@ -96,36 +122,46 @@ function ExperienceCard({
                 href={exp.website}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="log-focus inline-flex items-center gap-1 font-mono text-sm text-emerald-400/90 transition-colors hover:text-emerald-300"
+                className="log-focus inline-flex items-center gap-1.5 font-mono text-base text-emerald-400 transition-colors hover:text-emerald-300"
               >
                 {exp.company}
-                <ExternalLink className="h-3 w-3" />
+                <ExternalLink className="h-3.5 w-3.5 shrink-0" />
               </a>
             ) : (
-              <p className="font-mono text-sm text-emerald-400/90">{exp.company}</p>
+              <p className="font-mono text-base text-emerald-400/95">
+                {exp.company}
+              </p>
             )}
-            <p className="log-prose-meta">
-              {exp.period.toLowerCase()} · {exp.location.toLowerCase()}
+            <p className="font-mono text-sm text-zinc-400 sm:text-[0.9375rem]">
+              <span className="text-zinc-300">{exp.period}</span>
+              <span className="text-zinc-600"> · </span>
+              <span>{exp.location}</span>
             </p>
           </div>
         </div>
 
-        {exp.description ? <p className="log-prose">{exp.description}</p> : null}
+        {exp.description ? (
+          <p className="max-w-3xl font-mono text-sm leading-relaxed text-zinc-300 sm:text-base sm:leading-7">
+            {exp.description}
+          </p>
+        ) : null}
 
-        <ul className="max-w-3xl space-y-2.5">
-          {exp.achievements.map((item) => (
-            <li
-              key={item}
-              className="flex gap-3 font-mono text-sm leading-relaxed text-zinc-300"
-            >
-              <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500/80" />
-              <span className="min-w-0 break-words">{item}</span>
-            </li>
-          ))}
-        </ul>
+        {exp.achievements.length > 0 ? (
+          <ul className="max-w-3xl space-y-3 border-l border-emerald-500/20 pl-4 sm:space-y-3.5 sm:pl-5">
+            {exp.achievements.map((item) => (
+              <li
+                key={item}
+                className="flex gap-3 font-mono text-sm leading-relaxed text-zinc-200 sm:text-[0.9375rem] sm:leading-7"
+              >
+                <span className="mt-2.5 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
+                <span className="min-w-0 break-words">{item}</span>
+              </li>
+            ))}
+          </ul>
+        ) : null}
 
         {exp.tech && exp.tech.length > 0 ? (
-          <div className="flex flex-wrap gap-2 pt-1">
+          <div className="flex flex-wrap gap-2 pt-0.5">
             {exp.tech.map((tag) => (
               <LogTag key={tag}>{tag.toLowerCase()}</LogTag>
             ))}
@@ -154,17 +190,19 @@ export function Experience() {
 
           <div className="border-t border-zinc-800 bg-zinc-900/20">
             <LogPaneChrome path="~/education.txt" />
-            <div className="space-y-4 p-5 sm:p-6 lg:p-8">
+            <div className="space-y-5 p-5 sm:p-7 lg:p-8">
               {education.map((entry) => (
-                <div key={entry.degree} className="max-w-3xl space-y-1.5">
-                  <p className="font-mono text-base font-semibold text-zinc-100 sm:text-lg">
+                <div key={entry.degree} className="max-w-3xl space-y-2">
+                  <p className="font-mono text-lg font-semibold text-zinc-50 sm:text-xl">
                     {entry.degree}
                   </p>
-                  <p className="font-mono text-sm text-zinc-400">
-                    {entry.institution} · {entry.location.toLowerCase()}
+                  <p className="font-mono text-base text-zinc-400">
+                    {entry.institution} · {entry.location}
                   </p>
-                  <p className="log-prose-meta">
-                    {entry.period.toLowerCase()} · {entry.gpa.toLowerCase()}
+                  <p className="font-mono text-sm text-zinc-400 sm:text-[0.9375rem]">
+                    <span className="text-zinc-300">{entry.period}</span>
+                    <span className="text-zinc-600"> · </span>
+                    <span>{entry.gpa}</span>
                   </p>
                 </div>
               ))}

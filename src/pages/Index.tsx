@@ -45,9 +45,11 @@ const Index = () => {
         <p>
           Chaitanya Dhamdhere is a Computer Engineering student at K. J. Somaiya
           College of Engineering, Mumbai, building full-stack apps, developer
-          tools, and practical AI. Skills include React, TypeScript, Node.js,
-          Next.js, MongoDB, and PostgreSQL. Experience at Jio Platforms, KJSCE
-          CodeCell, and Fresh@Home.
+          tools, and practical AI. Full Stack Developer Intern at RxGPT (Jun–Aug
+          2026). Former Software Development Intern at Jio Platforms (Dec 2025–Jan
+          2026). Core team at KJSCE CodeCell. Projects include Verifyr, ShieldEye,
+          SpendSense, ZkMultiCloud, and TrustWipe. Skills include React,
+          TypeScript, Python, FastAPI, Node.js, MongoDB, and PostgreSQL.
         </p>
       </div>
 

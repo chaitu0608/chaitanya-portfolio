@@ -9,7 +9,7 @@
     <title>Chaitanya Dhamdhere | Engineer · Builder · Student</title>
     <meta
       name="description"
-      content="Portfolio of Chaitanya Dhamdhere — Computer Engineering student from Mumbai building full-stack apps, developer tools, and practical AI. Projects, experience, skills, and contact."
+      content="Portfolio of Chaitanya Dhamdhere — full-stack engineer and Computer Engineering student in Mumbai. RxGPT intern, Jio alum, builder of Verifyr, ShieldEye, SpendSense, and more."
     />
     <meta name="author" content="Chaitanya Dhamdhere" />
     <meta name="robots" content="index, follow" />
@@ -45,12 +45,36 @@
         "name": "Chaitanya Dhamdhere",
         "url": "https://www.cdhamdhere.xyz/",
         "image": "https://www.cdhamdhere.xyz/avatar.png",
-        "jobTitle": "Engineer · Builder · Student",
+        "jobTitle": "Full Stack Developer Intern",
         "email": "c.dhamdhere@somaiya.edu",
         "address": {
           "@type": "PostalAddress",
           "addressLocality": "Mumbai",
           "addressCountry": "IN"
+        },
+        "alumniOf": {
+          "@type": "CollegeOrUniversity",
+          "name": "K.J. Somaiya College of Engineering",
+          "url": "https://kjsce.somaiya.edu/"
+        },
+        "worksFor": {
+          "@type": "Organization",
+          "name": "RxGPT",
+          "url": "https://www.linkedin.com/company/rxgpt/"
+        },
+        "knowsAbout": [
+          "Full-Stack Development",
+          "React",
+          "TypeScript",
+          "Python",
+          "FastAPI",
+          "Mobile QA Automation",
+          "DevSecOps"
+        ],
+        "subjectOf": {
+          "@type": "DigitalDocument",
+          "name": "Chaitanya Dhamdhere Resume",
+          "url": "https://www.cdhamdhere.xyz/ChaitanyaResumeEngg.pdf"
         },
         "sameAs": [
           "https://github.com/chaitu0608",
@@ -67,7 +91,7 @@
     <meta property="og:title" content="Chaitanya Dhamdhere | Engineer · Builder · Student" />
     <meta
       property="og:description"
-      content="Portfolio of Chaitanya Dhamdhere — Computer Engineering student from Mumbai building full-stack apps, developer tools, and practical AI. Projects, experience, skills, and contact."
+      content="Portfolio of Chaitanya Dhamdhere — full-stack engineer and Computer Engineering student in Mumbai. RxGPT intern, Jio alum, builder of Verifyr, ShieldEye, SpendSense, and more."
     />
     <meta property="og:locale" content="en_IN" />
     <meta property="og:image" content="https://www.cdhamdhere.xyz/og.png" />
@@ -87,7 +111,7 @@
     <meta name="twitter:title" content="Chaitanya Dhamdhere | Engineer · Builder · Student" />
     <meta
       name="twitter:description"
-      content="Portfolio of Chaitanya Dhamdhere — Computer Engineering student from Mumbai building full-stack apps, developer tools, and practical AI. Projects, experience, skills, and contact."
+      content="Portfolio of Chaitanya Dhamdhere — full-stack engineer and Computer Engineering student in Mumbai. RxGPT intern, Jio alum, builder of Verifyr, ShieldEye, SpendSense, and more."
     />
     <meta name="twitter:image" content="https://www.cdhamdhere.xyz/og.png" />
     <meta
@@ -136,6 +160,29 @@
       }
     </style>
     <script>
+      (function () {
+        try {
+          if (sessionStorage.getItem("portfolio-boot-seen") === "1") {
+            document.documentElement.classList.remove("boot-loading");
+            document.addEventListener("DOMContentLoaded", function () {
+              document.body.classList.remove("boot-loading");
+              var shell = document.getElementById("boot-shell");
+              if (shell) shell.remove();
+            });
+          }
+        } catch (e) {}
+      })();
+      (function () {
+        var path = window.location.pathname;
+        if (path === "/resume" || path === "/meet" || path === "/meet/") {
+          document.documentElement.classList.remove("boot-loading");
+          document.addEventListener("DOMContentLoaded", function () {
+            document.body.classList.remove("boot-loading");
+            var shell = document.getElementById("boot-shell");
+            if (shell) shell.remove();
+          });
+        }
+      })();
       (function(){try{var k='portfolio-theme';var s=localStorage.getItem(k);var d;if(s==='light')d=false;else if(s==='dark')d=true;else if(s==='system')d=matchMedia('(prefers-color-scheme: dark)').matches;else d=true;document.documentElement.classList.toggle('dark',d);document.documentElement.style.colorScheme=d?'dark':'light';}catch(e){document.documentElement.classList.add('dark');}})();
       document.documentElement.classList.add("boot-loading");
       document.addEventListener("DOMContentLoaded", function () {

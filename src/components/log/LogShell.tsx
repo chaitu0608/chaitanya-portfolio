@@ -23,7 +23,14 @@ interface LogShellProps {
 }
 
 function SectionFallback() {
-  return <div className="min-h-[40vh]" aria-hidden />;
+  return (
+    <div className="border-t border-zinc-900 px-4 py-12 sm:px-6 sm:py-24" aria-hidden>
+      <div className="mx-auto max-w-6xl animate-pulse space-y-4">
+        <div className="h-4 w-32 rounded bg-zinc-800" />
+        <div className="h-48 rounded-lg border border-zinc-800 bg-zinc-900/40" />
+      </div>
+    </div>
+  );
 }
 
 export function LogShell({ onContactClick }: LogShellProps) {

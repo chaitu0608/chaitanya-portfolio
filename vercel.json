@@ -3,6 +3,23 @@
   "installCommand": "npm install --legacy-peer-deps",
   "framework": "vite",
   "outputDirectory": "dist",
+  "redirects": [
+    {
+      "source": "/resume",
+      "destination": "/ChaitanyaResumeEngg.pdf",
+      "permanent": false
+    },
+    {
+      "source": "/ChaitanyaResume.pdf",
+      "destination": "/ChaitanyaResumeEngg.pdf",
+      "permanent": true
+    },
+    {
+      "source": "/meet",
+      "destination": "https://meet.google.com/ceq-zewb-sit",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     {
       "source": "/((?!api/|.*\\..*).*)",
@@ -24,6 +41,13 @@
           "key": "Strict-Transport-Security",
           "value": "max-age=63072000; includeSubDomains; preload"
         }
+      ]
+    },
+    {
+      "source": "/(.*)\\.pdf",
+      "headers": [
+        { "key": "X-Frame-Options", "value": "SAMEORIGIN" },
+        { "key": "Content-Disposition", "value": "inline" }
       ]
     }
   ]

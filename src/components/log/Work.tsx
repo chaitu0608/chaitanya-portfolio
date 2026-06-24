@@ -1,24 +1,26 @@
 import { ExternalLink, Github } from "lucide-react";
-import { contactInfo, projects } from "@/data/portfolio";
+import {
+  archiveProjects,
+  contactInfo,
+  featuredProjects,
+  githubOgPreview,
+} from "@/data/portfolio";
 import type { Project } from "@/types";
 import { cn } from "@/lib/utils";
 import { SectionHeader } from "./SectionHeader";
 import { LogDossierShell, LogPaneChrome, LogTag } from "./LogDossier";
 import { LivePreview } from "./LivePreview";
 
-const FLAGSHIP = [
-  "SpendSense",
-  "ShieldEye",
-  "ZkMultiCloud",
-  "TrustWipe",
-  "Tutelage",
-  "StarQuest",
-];
-
 const MAX_TAGS = 6;
 
 function isLive(p: Project) {
   return Boolean(p.liveUrl);
+}
+
+function projectStatus(project: Project): { label: string; live: boolean } {
+  if (project.liveUrl) return { label: "live", live: true };
+  if (project.githubUrl) return { label: "repo", live: false };
+  return { label: "wip", live: false };
 }
 
 function projectSummary(project: Project): string {
@@ -31,10 +33,31 @@ function projectSlug(title: string): string {
   return title.replace(/\s+/g, "").toLowerCase();
 }
 
+function projectHref(project: Project): string | undefined {
+  return project.liveUrl ?? project.githubUrl;
+}
+
+function projectThumb(project: Project): string | undefined {
+  if (project.thumbnail) return project.thumbnail;
+  const href = project.githubUrl;
+  if (!href) return undefined;
+  const match = href.match(/github\.com\/([^/]+)\/([^/]+)/);
+  if (!match) return undefined;
+  return githubOgPreview(match[1], match[2]);
+}
+
+function projectInitials(title: string): string {
+  return title
+    .replace(/[^a-zA-Z0-9\s]/g, " ")
+    .split(/\s+/)
+    .filter(Boolean)
+    .map((w) => w[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+}
+
 export function Work() {
-  const flagship = FLAGSHIP.map((title) =>
-    projects.find((p) => p.title === title),
-  ).filter((p): p is Project => p !== undefined);
   const githubReposUrl = `${contactInfo.githubUrl}?tab=repositories`;
 
   return (
@@ -62,14 +85,23 @@ export function Work() {
           <div className="border-b border-zinc-800">
             <LogPaneChrome path="~/projects/flagship/" />
             <div className="flex flex-col gap-4 p-5 sm:p-6 lg:p-8">
-              {flagship.map((project) => (
+              {featuredProjects.map((project) => (
                 <ProjectCard key={project.title} project={project} />
               ))}
             </div>
           </div>
 
+          <div className="border-b border-zinc-800 bg-zinc-900/10">
+            <LogPaneChrome path="~/projects/archive/" />
+            <div className="grid gap-3 p-5 sm:grid-cols-2 sm:p-6 lg:grid-cols-3 lg:p-8">
+              {archiveProjects.map((project) => (
+                <ArchiveProjectCard key={project.title} project={project} />
+              ))}
+            </div>
+          </div>
+
           <div className="bg-zinc-900/20">
-            <LogPaneChrome path="~/projects/archive.txt" />
+            <LogPaneChrome path="~/projects/more.txt" />
             <div className="p-5 sm:p-6 lg:p-8">
               <a
                 href={githubReposUrl}
@@ -89,8 +121,70 @@ export function Work() {
   );
 }
 
+function ArchiveProjectCard({ project }: { project: Project }) {
+  const href = projectHref(project);
+  const thumb = projectThumb(project);
+  const { label } = projectStatus(project);
+  const slug = projectSlug(project.title);
+
+  const inner = (
+    <>
+      {thumb ? (
+        <span className="relative h-10 w-10 shrink-0 overflow-hidden rounded-lg border border-zinc-700/80 bg-zinc-900">
+          <img
+            src={thumb}
+            alt=""
+            className="block h-full w-full object-cover object-center"
+            loading="lazy"
+            decoding="async"
+            draggable={false}
+          />
+        </span>
+      ) : (
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-zinc-700/80 bg-zinc-800 font-mono text-xs text-zinc-300">
+          {projectInitials(project.title)}
+        </span>
+      )}
+      <div className="min-w-0 flex-1">
+        <p className="truncate font-mono text-sm font-medium text-zinc-100">
+          {project.title}
+        </p>
+        <p className="truncate font-mono text-xs text-zinc-500">
+          {project.subtitle}
+        </p>
+      </div>
+      <span className="shrink-0 rounded border border-zinc-700 px-1.5 py-px font-mono text-[10px] uppercase tracking-wider text-zinc-500">
+        {label}
+      </span>
+    </>
+  );
+
+  const className =
+    "flex items-center gap-3 rounded-lg border border-zinc-800 bg-zinc-900/30 p-3 transition-colors hover:border-emerald-500/30 hover:bg-zinc-900/50";
+
+  if (href) {
+    return (
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={cn(className, "log-focus")}
+        aria-label={`Open ${project.title}`}
+      >
+        {inner}
+      </a>
+    );
+  }
+
+  return (
+    <article className={className} aria-label={slug}>
+      {inner}
+    </article>
+  );
+}
+
 function ProjectCard({ project }: { project: Project }) {
-  const live = isLive(project);
+  const { label, live } = projectStatus(project);
   const slug = projectSlug(project.title);
 
   return (
@@ -150,7 +244,7 @@ function ProjectCard({ project }: { project: Project }) {
                       : "border-zinc-700 text-zinc-400",
                   )}
                 >
-                  {live ? "live" : "wip"}
+                  {label}
                 </span>
               </div>
               <p className="mt-1 font-mono text-xs text-zinc-500 sm:text-sm">
@@ -178,8 +272,9 @@ function ProjectCard({ project }: { project: Project }) {
         <div className="flex min-w-0 items-start lg:justify-end">
           <LivePreview
             liveUrl={project.liveUrl}
-            thumbnail={project.thumbnail}
+            thumbnail={project.thumbnail ?? projectThumb(project)}
             title={project.title}
+            fallbackUrl={project.githubUrl}
             size="large"
             className="w-full lg:max-w-[340px]"
           />

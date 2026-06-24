@@ -1,6 +1,29 @@
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
+import { MEET_URL, RESUME_PATH } from "./src/data/links";
+
+function utilityRedirects(): Plugin {
+  return {
+    name: "utility-redirects",
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const url = req.url?.split("?")[0];
+        if (url === "/meet" || url === "/meet/") {
+          res.writeHead(302, { Location: MEET_URL });
+          res.end();
+          return;
+        }
+        if (url === "/resume" || url === "/resume/") {
+          res.writeHead(302, { Location: RESUME_PATH });
+          res.end();
+          return;
+        }
+        next();
+      });
+    },
+  };
+}
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -9,7 +32,7 @@ export default defineConfig({
     host: "localhost",
     port: 8000,
   },
-  plugins: [react()],
+  plugins: [react(), utilityRedirects()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

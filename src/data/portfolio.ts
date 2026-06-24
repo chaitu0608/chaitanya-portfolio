@@ -4,11 +4,14 @@ import {
   Project,
   ContactInfo,
 } from "@/types";
+import { MEET_URL, RESUME_PATH } from "@/data/links";
 
 /** Cloudinary-hosted static assets (migrated from public/) */
 export const cloudinaryAssets = {
   og: "https://www.cdhamdhere.xyz/og.png",
   jio: "https://res.cloudinary.com/dlejfav7z/image/upload/v1780658902/jio_w3g71c.png",
+  rxgpt:
+    "https://res.cloudinary.com/dlejfav7z/image/upload/v1782286508/T09CL6WUBNU-U09CL6WUC1E-cf6b1918ac92-512_zvbvns.jpg",
   codecell:
     "https://res.cloudinary.com/dlejfav7z/image/upload/v1780658847/codecell_vipmzf.png",
   padhle:
@@ -25,7 +28,13 @@ export const cloudinaryAssets = {
     "https://res.cloudinary.com/dlejfav7z/image/upload/v1780659718/shieldeye_pxr70b.png",
   zkMultiCloud:
     "https://res.cloudinary.com/dlejfav7z/image/upload/v1780666318/Screenshot_2026-06-05_at_7.01.23_PM_zxo7rg.png",
+  verifyr: "/verifyr-preview.png",
 } as const;
+
+/** GitHub social preview for projects without a custom thumbnail */
+export function githubOgPreview(owner: string, repo: string): string {
+  return `https://opengraph.githubassets.com/1/${owner}/${repo}`;
+}
 
 /** Circular profile logo — sourced from PHOTOS[0] ("this is me") */
 export const brandAssets = {
@@ -78,9 +87,8 @@ export const contactInfo: ContactInfo = {
   githubUrl: "https://github.com/chaitu0608",
   linkedinUrl: "https://www.linkedin.com/in/chaitanya-dhamdhere/",
   twitterUrl: "https://twitter.com/chaitu0608",
-  resumeUrl: "/resume",
-  resumeDownloadUrl: "/ChaitanyaResume.pdf",
-  meetUrl: "https://meet.google.com/lookup/c.dhamdhere@somaiya.edu",
+  resumeUrl: RESUME_PATH,
+  meetUrl: MEET_URL,
 };
 
 /** Recruiter-facing meta — rendered as env vars in About identity pane */
@@ -94,11 +102,29 @@ export const aboutMeta = {
 // Experience Data
 export const experiences: Experience[] = [
   {
+    title: "Full Stack Developer Intern",
+    company: "RxGPT",
+    location: "Mumbai, India",
+    period: "Jun 2026 - Aug 2026",
+    logo: cloudinaryAssets.rxgpt,
+    logoFit: "cover",
+    logoBg: "dark",
+    website: "https://www.linkedin.com/company/rxgpt/",
+    description:
+      "Full-stack intern at RxGPT — building product features for smarter hospitals and better patient care.",
+    achievements: [
+      "Contributing across the stack on RxGPT's healthcare platform — frontend, APIs, and integrations.",
+      "Shipping intern deliverables in a fast-moving health-tech product environment.",
+    ],
+  },
+  {
     title: "Software Development Intern",
     company: "Jio Platforms Limited",
     location: "Mumbai, India",
-    period: "2024",
+    period: "Dec 2025 - Jan 2026",
     logo: cloudinaryAssets.jio,
+    logoFit: "contain",
+    logoBg: "light",
     description:
       "Interned with Jio-Events and Spectrum Jio — enterprise platforms, AI learning games, and a full-stack capstone.",
     achievements: [
@@ -113,6 +139,8 @@ export const experiences: Experience[] = [
     location: "Mumbai, India",
     period: "July 2024 - Present",
     logo: cloudinaryAssets.codecell,
+    logoFit: "contain",
+    logoBg: "light",
     website: "https://kjssecodecell.com/",
     description:
       "Core team at KJSCE's technical community — workshops, hackathons, and competitive programming.",
@@ -126,7 +154,7 @@ export const experiences: Experience[] = [
     company: "Fresh@Home",
     location: "Mumbai, India",
     period: "2023-24",
-    logo: "",
+    logo: "🥭",
     description:
       "Family fruit trading business at APMC — wholesale, retail, and export. Real logistics, margins, and supply chains outside the terminal.",
     achievements: [
@@ -151,8 +179,46 @@ export const education: Education[] = [
 // Projects Data (order + size drives bento layout in Projects.tsx)
 export const projects: Project[] = [
   {
+    title: "Verifyr",
+    size: "wide",
+    subtitle: "Autonomous Mobile QA Agent",
+    summary:
+      "Vision-language agent that drives real Android apps, verifies on-screen values, and runs web-to-mobile parity checks.",
+    description:
+      "Verifyr is an autonomous mobile QA agent that drives a real Android app on an emulator using a vision-language model: it reads each screen (screenshot + accessibility tree), decides one action at a time, executes through Appium, and repeats until the goal is reached. It can verify what the app displays against a source-of-truth value from a website or API.",
+    problem:
+      "Mobile QA teams need reliable, repeatable checks that reconcile live app UI against web and API sources of truth — without brittle manual test scripts.",
+    solution:
+      "Built an importable Python engine with CLI agent, parity checker, and a FastAPI + React dashboard — live WebSocket step streaming, scheduled checks, Supabase-backed auth and artifacts, and eval harness for Pass@N reliability.",
+    impact: [
+      "Three surfaces on one engine: CLI agent, parity checker, and web dashboard",
+      "Reliability backstops: loop detection, error tolerance, step budgets, verifier gating",
+      "Structured per-step artifacts and evaluation harness for measuring agent reliability",
+    ],
+    highlights: [
+      "VLM-driven agent loop with Appium + accessibility tree observations",
+      "Web-to-mobile parity reconciliation across web, API, and live app UI",
+      "Dockerized deployment with Supabase Auth, Postgres, and Storage",
+    ],
+    tech: [
+      "Python",
+      "FastAPI",
+      "React",
+      "TypeScript",
+      "Appium",
+      "VLM",
+      "Supabase",
+      "Docker",
+    ],
+    type: "Full Stack Application",
+    githubUrl: "https://github.com/tkshsbcue/Verifyr",
+    thumbnail: cloudinaryAssets.verifyr,
+    featured: true,
+  },
+  {
     title: "ShieldEye",
     size: "hero",
+    featured: true,
     subtitle: "Advanced Threat Detection System",
     summary:
       "Real-time URL threat scanner that detects and visualizes 12+ attack types.",
@@ -179,6 +245,7 @@ export const projects: Project[] = [
   {
     title: "SpendSense",
     size: "tall",
+    featured: true,
     subtitle: "Free AI Spend Audit Tool",
     summary:
       "No-login audit that benchmarks AI subscriptions and surfaces instant savings.",
@@ -201,6 +268,7 @@ export const projects: Project[] = [
   {
     title: "ZkMultiCloud",
     size: "wide",
+    featured: true,
     subtitle: "Zero-Trust DevSecOps Multi-Cloud Platform",
     summary:
       "Visual platform to design and deploy secure CI/CD pipelines across AWS, Azure, and GCP.",
@@ -228,6 +296,7 @@ export const projects: Project[] = [
   {
     title: "TrustWipe",
     size: "wide",
+    featured: true,
     subtitle: "Secure Data Wiping System",
     summary:
       "NIST SP 800-88 compliant wiping engine with a cross-platform control UI.",
@@ -251,6 +320,7 @@ export const projects: Project[] = [
   {
     title: "Tutelage",
     size: "half",
+    featured: true,
     subtitle: "Educational Social Platform",
     summary:
       "Mobile social app for CA, CS, and CMA students to share study materials.",
@@ -263,6 +333,7 @@ export const projects: Project[] = [
   {
     title: "StarQuest",
     size: "half",
+    featured: true,
     subtitle: "ETHGlobal Project",
     summary:
       "Hackathon Web3 app with smart contracts, wallet auth, and on-chain flows.",
@@ -305,6 +376,7 @@ export const projects: Project[] = [
     tech: ["Next.js", "TypeScript", "MongoDB", "Authentication", "Tailwind CSS", "Prisma", "NextAuth.js"],
     type: "Full Stack Application",
     githubUrl: "https://github.com/chaitu0608/next-ama-app",
+    thumbnail: githubOgPreview("chaitu0608", "next-ama-app"),
   },
   {
     title: "JournalMate",
@@ -315,6 +387,7 @@ export const projects: Project[] = [
     tech: ["JavaFX", "Java", "SQLite", "CSS", "OOPM"],
     type: "Desktop Application",
     githubUrl: "https://github.com/chaitu0608/journalmate",
+    thumbnail: githubOgPreview("chaitu0608", "journalmate"),
   },
   {
     title: "Weather App",
@@ -325,6 +398,9 @@ export const projects: Project[] = [
     tech: ["React", "JavaScript", "API Integration", "Chart.js", "CSS3", "Responsive Design"],
     type: "Web Application",
     githubUrl: "https://github.com/chaitu0608/weather-app",
+    thumbnail: githubOgPreview("chaitu0608", "weather-app"),
   },
 ];
 
+export const featuredProjects = projects.filter((p) => p.featured);
+export const archiveProjects = projects.filter((p) => !p.featured);

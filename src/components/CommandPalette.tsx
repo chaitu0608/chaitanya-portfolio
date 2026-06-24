@@ -12,13 +12,33 @@ import {
   Star,
   Sun,
   User,
+  Video,
 } from "lucide-react";
 import { IconBrandX } from "@tabler/icons-react";
 import { contactInfo } from "@/data/portfolio";
+import { MEET_URL } from "@/data/links";
 import { getResumeHref } from "@/lib/resume";
 import { scrollToSection } from "@/utils/animations";
 import { useTheme } from "@/hooks/use-theme";
 import { cn } from "@/lib/utils";
+
+const PROJECT_ACTIONS = [
+  {
+    value: "verifyr github",
+    label: "open verifyr",
+    url: "https://github.com/tkshsbcue/Verifyr",
+  },
+  {
+    value: "shieldeye live",
+    label: "open shieldeye",
+    url: "https://shieldeye.vercel.app",
+  },
+  {
+    value: "spendsense live",
+    label: "open spendsense",
+    url: "https://credex-intern.vercel.app/",
+  },
+] as const;
 
 const NAV_ITEMS = [
   { id: "about", label: "about", href: "#about", icon: User },
@@ -146,13 +166,32 @@ export function CommandPalette({ onContactClick }: CommandPaletteProps) {
             className="mt-2 px-2 py-1.5 text-[10px] uppercase tracking-wider text-zinc-500"
           >
             <Command.Item
-              value="resume view"
+              value="resume download"
               onSelect={openResume}
               className="flex cursor-pointer items-center gap-3 rounded px-3 py-2 text-sm text-zinc-300 aria-selected:bg-emerald-500/10 aria-selected:text-emerald-400"
             >
               <Download className="h-4 w-4 shrink-0 opacity-70" />
-              view resume
+              download resume
             </Command.Item>
+            <Command.Item
+              value="book meet google"
+              onSelect={() => openExternal(MEET_URL)}
+              className="flex cursor-pointer items-center gap-3 rounded px-3 py-2 text-sm text-zinc-300 aria-selected:bg-emerald-500/10 aria-selected:text-emerald-400"
+            >
+              <Video className="h-4 w-4 shrink-0 opacity-70" />
+              book a meet
+            </Command.Item>
+            {PROJECT_ACTIONS.map((item) => (
+              <Command.Item
+                key={item.value}
+                value={item.value}
+                onSelect={() => openExternal(item.url)}
+                className="flex cursor-pointer items-center gap-3 rounded px-3 py-2 text-sm text-zinc-300 aria-selected:bg-emerald-500/10 aria-selected:text-emerald-400"
+              >
+                <Code className="h-4 w-4 shrink-0 opacity-70" />
+                {item.label}
+              </Command.Item>
+            ))}
             <Command.Item
               value="github"
               onSelect={() => openExternal(contactInfo.githubUrl)}

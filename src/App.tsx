@@ -4,41 +4,18 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { useLenisScroll } from "@/hooks/useLenisScroll";
+import { hasSeenBoot } from "@/lib/boot-session";
+import { removeBootShell } from "@/lib/boot-shell";
 import { cn } from "@/lib/utils";
 
 const Index = lazy(() => import("./pages/Index"));
 const NotFound = lazy(() => import("./pages/NotFound"));
-const Resume = lazy(() => import("./pages/Resume"));
-const Meet = lazy(() => import("./pages/Meet"));
 const LoadingScreen = lazy(() => import("./components/LoadingScreen"));
 
-const UTILITY_ROUTES = new Set(["/resume", "/meet"]);
-
-function isUtilityRoute(): boolean {
-  if (typeof window === "undefined") return false;
-  return UTILITY_ROUTES.has(window.location.pathname);
-}
-
-function UtilityRoutes() {
-  return (
-    <ErrorBoundary>
-      <Suspense fallback={null}>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/resume" element={<Resume />} />
-            <Route path="/meet" element={<Meet />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </Suspense>
-    </ErrorBoundary>
-  );
-}
-
 const App = () => {
-  const [utilityRoute] = useState(isUtilityRoute);
-  const [bootStarted, setBootStarted] = useState(false);
-  const [appReady, setAppReady] = useState(false);
+  const skipBoot = hasSeenBoot();
+  const [bootStarted, setBootStarted] = useState(skipBoot);
+  const [appReady, setAppReady] = useState(skipBoot);
 
   const handleBootStart = useCallback(() => {
     setBootStarted(true);
@@ -48,31 +25,31 @@ const App = () => {
     setAppReady(true);
   }, []);
 
-  useLenisScroll(appReady && !utilityRoute);
+  useLenisScroll(appReady);
 
   useEffect(() => {
-    if (utilityRoute || appReady) {
+    if (skipBoot) {
+      removeBootShell();
+    }
+  }, [skipBoot]);
+
+  useEffect(() => {
+    if (appReady) {
       document.body.style.overflow = "";
       document.body.classList.remove("boot-loading");
-      return;
+    } else {
+      document.body.style.overflow = "hidden";
+      document.body.classList.add("boot-loading");
     }
-
-    document.body.style.overflow = "hidden";
-    document.body.classList.add("boot-loading");
-
     return () => {
       document.body.style.overflow = "";
       document.body.classList.remove("boot-loading");
     };
-  }, [appReady, utilityRoute]);
-
-  if (utilityRoute) {
-    return <UtilityRoutes />;
-  }
+  }, [appReady]);
 
   return (
     <ErrorBoundary>
-      {!appReady && (
+      {!appReady && !skipBoot && (
         <Suspense fallback={null}>
           <LoadingScreen
             onBootStart={handleBootStart}

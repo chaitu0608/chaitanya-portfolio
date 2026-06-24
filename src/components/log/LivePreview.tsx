@@ -11,6 +11,8 @@ interface LivePreviewProps {
   liveUrl?: string;
   thumbnail?: string;
   title: string;
+  /** Opens when there is no liveUrl (e.g. GitHub repo) */
+  fallbackUrl?: string;
   size?: PreviewSize;
   /** Flush top edge when embedded in a card */
   flush?: boolean;
@@ -65,6 +67,7 @@ export function LivePreview({
   liveUrl,
   thumbnail,
   title,
+  fallbackUrl,
   size = "medium",
   flush = false,
   fill = false,
@@ -78,6 +81,8 @@ export function LivePreview({
   const viewportRef = useRef<HTMLDivElement>(null);
   const canHoverRef = useRef(false);
   const hasLive = Boolean(liveUrl);
+  const openUrl = liveUrl ?? fallbackUrl;
+  const isClickable = Boolean(openUrl);
   const styles = SIZE_STYLES[size];
 
   useEffect(() => {
@@ -132,11 +137,15 @@ export function LivePreview({
     }, 350);
   }, []);
 
-  const openLive = useCallback(() => {
-    if (hasLive && liveUrl) window.open(liveUrl, "_blank", "noopener,noreferrer");
-  }, [hasLive, liveUrl]);
+  const openPreview = useCallback(() => {
+    if (openUrl) window.open(openUrl, "_blank", "noopener,noreferrer");
+  }, [openUrl]);
 
-  const hostname = liveUrl ? getHostname(liveUrl) : "";
+  const hostname = liveUrl
+    ? getHostname(liveUrl)
+    : fallbackUrl
+      ? getHostname(fallbackUrl)
+      : "";
 
   return (
     <div
@@ -149,14 +158,20 @@ export function LivePreview({
       onMouseLeave={onLeave}
     >
       <div
-        role={hasLive ? "button" : undefined}
-        tabIndex={hasLive ? 0 : undefined}
-        aria-label={hasLive ? `Open live site: ${title}` : undefined}
-        onClick={openLive}
+        role={isClickable ? "button" : undefined}
+        tabIndex={isClickable ? 0 : undefined}
+        aria-label={
+          isClickable
+            ? hasLive
+              ? `Open live site: ${title}`
+              : `Open project: ${title}`
+            : undefined
+        }
+        onClick={isClickable ? openPreview : undefined}
         onKeyDown={(e) => {
-          if (hasLive && (e.key === "Enter" || e.key === " ")) {
+          if (isClickable && (e.key === "Enter" || e.key === " ")) {
             e.preventDefault();
-            openLive();
+            openPreview();
           }
         }}
         className={cn(
@@ -166,10 +181,10 @@ export function LivePreview({
           flush
             ? "rounded-none border-0 shadow-none"
             : "rounded-lg border border-zinc-800/80 shadow-sm",
-          hasLive &&
+          isClickable &&
             !flush &&
             "cursor-pointer hover:border-emerald-500/30 hover:shadow-[0_0_24px_rgba(74,222,128,0.1)]",
-          hasLive && flush && "cursor-pointer",
+          isClickable && flush && "cursor-pointer",
         )}
       >
         <div
@@ -183,7 +198,9 @@ export function LivePreview({
             <span className={cn("rounded-full bg-amber-500/70", styles.dots)} />
             <span className={cn("rounded-full bg-emerald-500/70", styles.dots)} />
           </span>
-          <span className="min-w-0 flex-1 truncate">{hasLive ? hostname : "local"}</span>
+          <span className="min-w-0 flex-1 truncate">
+            {hostname || "local"}
+          </span>
           {hasLive && (
             <span className={cn("shrink-0 uppercase tracking-wide text-zinc-600", styles.label)}>
               live
@@ -220,6 +237,12 @@ export function LivePreview({
             )}
 
             {!hasLive && (
+              <span className="pointer-events-none absolute bottom-2 left-2 right-2 text-center font-mono text-[9px] text-zinc-400 opacity-0 transition-opacity group-hover/preview:opacity-100 [@media(hover:none)]:hidden">
+                {fallbackUrl ? "click to open repo" : "no demo"}
+              </span>
+            )}
+
+            {!hasLive && !fallbackUrl && (
               <span className="absolute bottom-2 right-2 rounded border border-zinc-700/80 bg-black/90 px-1.5 py-0.5 font-mono text-[9px] text-zinc-500">
                 no demo
               </span>
@@ -258,18 +281,20 @@ export function LivePreview({
             </>
           )}
 
-          {hasLive && (
+          {(hasLive || fallbackUrl) && (
             <button
               type="button"
               className="absolute inset-0 flex items-center justify-center gap-1 bg-black/75 font-mono text-xs text-emerald-400/90 opacity-0 transition-opacity [@media(hover:none)]:opacity-100 sm:hidden"
               onClick={(e) => {
                 e.stopPropagation();
-                openLive();
+                openPreview();
               }}
-              aria-label={`Open live site: ${title}`}
+              aria-label={
+                hasLive ? `Open live site: ${title}` : `Open project: ${title}`
+              }
             >
               <ExternalLink className="h-3 w-3" aria-hidden />
-              open live
+              {hasLive ? "open live" : "open repo"}
             </button>
           )}
         </div>
